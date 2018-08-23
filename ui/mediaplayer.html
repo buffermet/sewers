@@ -40,48 +40,5 @@
 		<!-- Load media -->
 	</div>
 </body>
-<script src="./assets/libs/jquery.min.js"></script>
-<script type="text/javascript">
-	// Parse URL
-	var queryLine = window.location.href.replace(/.*\?/g, "")
-	var queries = queryLine.split("&")
-	var streamType = queries[0],
-			streamID = queries[1]
-			streamFile = queries[2]
-
-	// Define elements
-	var container = $("html body div.container")
-
-	// Set title
-	document.title = streamType.toUpperCase() + " " + streamID
-
-	// Load media
-	if (streamType == "mic") {
-		container.append("<audio preload autoplay controls><source src='"+
-											location.protocol+"//"+
-											location.hostname+
-											(location.port?":"+location.port:"")+
-											"/assets/audio/"+
-											streamFile+
-											"' type='audio/wav'/>Your browser does not support HTML5 media playback!</audio>")
-	} else if (streamType == "mon") {
-		container.append("<video preload autoplay controls><source src='"+
-											location.protocol+"//"+
-											location.hostname+
-											(location.port?":"+location.port:"")+
-											"/assets/video-mon/"+
-											streamFile+
-											"'/>Your browser does not support HTML5 media playback!</video>")
-	} else if (streamType == "cam") {
-		container.append("<video preload autoplay controls><source src='"+
-											location.protocol+"//"+
-											location.hostname+
-											(location.port?":"+location.port:"")+
-											"/assets/video-cam/"+
-											streamFile+
-											"'/>Your browser does not support HTML5 media playback!</video>")
-	} else {
-		container.append("<h1>No stream type specified</h1>")
-	}
-</script>
+<script type="/assets/js/mediaplayer.js"></script>
 </html>
