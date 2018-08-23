@@ -1,0 +1,671 @@
+html,
+html body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	background: #111;
+	overflow: hidden;
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+}
+html body div.background {
+	opacity: .25;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 60%;
+	height: 60%;
+	background-image: url(../images/relaysbg.svg);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+html body div.fade {
+	transition: opacity 360ms ease-in;
+	-webkit-transition: opacity 360ms ease-in;
+	-moz-transition: opacity 360ms ease-in;
+	-ms-transition: opacity 360ms ease-in;
+	-o-transition: opacity 360ms ease-in;
+	z-index: 999;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,.9);
+}
+html body div.fade.hide {
+	opacity: 0;
+	pointer-events: none;
+}
+html body div.fade div.messagebox {
+	transition: top 180ms ease-in;
+	-webkit-transition: top 180ms ease-in;
+	-moz-transition: top 180ms ease-in;
+	-ms-transition: top 180ms ease-in;
+	-o-transition: top 180ms ease-in;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -210px;
+	height: auto;
+	width: 420px;
+	padding: 20px;
+	background: rgb(24,24,24);
+	color: #FFF;
+	font-family: "OpenSans-Regular";
+	box-shadow: 0 0 6px 0 rgba(0,0,0,.75);
+}
+html body div.fade div.messagebox span.title {
+	font-family: "OpenSans-ExtraBold";
+	font-size: 20px;
+}
+html body div.fade div.messagebox div.message {
+	margin-top: 12px;
+	font-size: 14px;
+}
+html body div.fade div.messagebox div.button {
+	float: left;
+	height: 30px;
+	line-height: 30px;
+	background: rgb(42,42,42);
+	padding: 0 12px 0 12px;
+	margin-right: 12px;
+	margin-top: 20px;
+	cursor: pointer;
+}
+html body div.fade div.messagebox div.button:hover {
+	background: rgb(62,62,62);
+}
+html body div.fade div.messagebox div.button:active {
+	background: rgb(32,32,32);
+}
+html body div.fade div.messagebox div.corner {
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 100%;
+	width: 5%;
+	background-image: url(../images/message-corner.svg);
+	background-size: 100% 150%;
+	background-position: 50% 60%;
+}
+html body div.fade div.modalbox {
+	transition: top 180ms ease-in;
+	-webkit-transition: top 180ms ease-in;
+	-moz-transition: top 180ms ease-in;
+	-ms-transition: top 180ms ease-in;
+	-o-transition: top 180ms ease-in;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -375px;
+	width: 750px;
+	height: auto;
+	background: #0d0d0d;
+	box-shadow: 0 0 6px 0 rgba(0,0,0,.75);
+}
+html body div.fade div.modalbox div.optionbox {
+	position: absolute;
+	left: 0;
+	width: 200px;
+	height: 100%;
+	background: #111;
+}
+html body div.fade div.modalbox div.optionbox ul {
+	padding: 0;
+	margin: 0;
+	margin-bottom: 44px;
+	list-style-type: none;
+}
+html body div.fade div.modalbox div.optionbox ul li {
+	padding: 10px;
+	border-bottom: 1px solid #0b0b0b;
+	font-family: "OpenSans-Regular";
+	font-size: 16px;
+	color: #FFF;
+	cursor: pointer;
+}
+html body div.fade div.modalbox div.optionbox ul li:hover {
+	background: #161616;
+}
+html body div.fade div.modalbox div.optionbox ul li:active {
+	background: #0d0d0d;
+}
+html body div.fade div.modalbox div.optionbox ul li.selected {
+	background: #0d0d0d;
+}
+html body div.fade div.modalbox div.optionbox ul li:last-of-type {
+	border-bottom: none;
+}
+html body div.fade div.modalbox div.optionbox div.bottom {
+	position: absolute;
+	bottom: 0;
+	width: 200px;
+	font-family: "OpenSans-Regular";
+	font-size: 16px;
+	color: #FFF;
+	border-top: 1px solid #0b0b0b;
+	cursor: pointer;
+}
+html body div.fade div.modalbox div.optionbox div.bottom div {
+	float: left;
+	height: 100%;
+	width: 50%;
+	padding: 10px 0;
+	text-align: center;
+	background: #111;
+	border-right: 1px solid #0d0d0d;
+}
+html body div.fade div.modalbox div.optionbox div.bottom div:first-of-type {
+	width: calc(50% - 1px);
+}
+html body div.fade div.modalbox div.optionbox div.bottom div:last-of-type {
+	border-right: none;
+}
+html body div.fade div.modalbox div.optionbox div.bottom div:hover {
+	background: #141414;
+}
+html body div.fade div.modalbox div.optionbox div.bottom div:active {
+	background: #0f0f0f;
+}
+html body div.fade div.modalbox div.optionbox div.bottom div.selected {
+	background: #0d0d0d;
+}
+html body div.fade div.modalbox div.optionbox div.bottom div:hover {
+	color: #999;
+}
+html body div.fade div.modalbox div.menupage {
+	float: right;
+	padding: 24px;
+	width: calc(550px - 24px - 24px);
+	height: auto;
+	background: #0d0d0d;
+	color: #FFF;
+	font-family: "OpenSans-Regular";
+}
+html body div.scrollcontainer {
+	position: relative;
+	/*margin-top: 26px;*/
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	overflow-y: scroll;
+	transition: opacity 360ms ease-in;
+	-webkit-transition: opacity 360ms ease-in;
+	-moz-transition: opacity 360ms ease-in;
+	-ms-transition: opacity 360ms ease-in;
+	-o-transition: opacity 360ms ease-in;
+}
+html body div.scrollcontainer.hide {
+	opacity: 0;
+}
+/*html body div.scrollcontainer div.backbutton {
+	position: absolute;
+	left: 7px;
+	top: calc(15px + 26px);
+	background-color: rgba(0,0,0,.75);
+	padding: 8px;
+	cursor: pointer;
+	transition: all 200ms linear, left 400ms ease-in;
+	-webkit-transition: all 200ms linear, left 400ms ease-in;
+	-moz-transition: all 200ms linear, left 400ms ease-in;
+	-ms-transition: all 200ms linear, left 400ms ease-in;
+	-o-transition: all 200ms linear, left 400ms ease-in;
+}
+html body div.scrollcontainer div.backbutton.hide {
+	left: -170px;
+}
+html body div.scrollcontainer div.backbutton:hover {
+	background-color: rgba(255,255,255,.05);
+	transition: all 0s linear;
+	-webkit-transition: all 0s linear;
+	-moz-transition: all 0s linear;
+	-ms-transition: all 0s linear;
+	-o-transition: all 0s linear;
+}
+html body div.scrollcontainer div.backbutton:active {
+	background-color: rgba(0,0,0,1);
+}
+html body div.scrollcontainer div.backbutton div.logo {
+	opacity: .5;
+	float: left;
+	width: 20px;
+	height: 20px;
+	background-image: url(../images/relay.svg);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	margin-right: 8px;
+	transition: opacity 200ms linear;
+	-webkit-transition: opacity 200ms linear;
+	-moz-transition: opacity 200ms linear;
+	-ms-transition: opacity 200ms linear;
+	-o-transition: opacity 200ms linear;
+}
+html body div.scrollcontainer div.backbutton:hover div.logo {
+	opacity: 1;
+	transition: opacity 0s linear;
+	-webkit-transition: opacity 0s linear;
+	-moz-transition: opacity 0s linear;
+	-ms-transition: opacity 0s linear;
+	-o-transition: opacity 0s linear;
+}
+html body div.scrollcontainer div.backbutton span {
+	color: rgba(255,255,255,.25);
+	font-family: "OpenSans-Regular";
+	font-size: 14px;
+}
+html body div.scrollcontainer div.backbutton:hover span {
+	color: rgba(255,255,255,.5);
+}*/
+html body div.scrollcontainer div.container {
+	position: absolute;
+	left: 50%;
+	width: 1240px;
+	height: 100%;
+	margin-left: -620px;
+	transition: opacity 360ms ease-in;
+	-webkit-transition: opacity 360ms ease-in;
+	-moz-transition: opacity 360ms ease-in;
+	-ms-transition: opacity 360ms ease-in;
+	-o-transition: opacity 360ms ease-in;
+}
+html body div.scrollcontainer div.container.hide {
+	opacity: 0;
+}
+html body div.scrollcontainer div.container div.relaylist,
+html body div.scrollcontainer div.container div.sessionlist {
+	position: absolute;
+	left: 50%;
+	margin-left: -620px;
+	height: calc(100% - 42px);
+	width: 100%;
+}
+html body div.scrollcontainer div.container div.relaylist div.header,
+html body div.scrollcontainer div.container div.sessionlist div.header {
+	position: relative;
+	top: 26px;
+	height: auto;
+	width: 100%;
+	text-align: center;
+	font-family: "OpenSans-Regular";
+	color: #FFF;
+}
+html body div.scrollcontainer div.container div.relaylist div.header h1,
+html body div.scrollcontainer div.container div.sessionlist div.header h1 {
+	display: inline-block;
+	width: 100%;
+	margin: 0px;
+	padding: 30px 0px 0px 0px;
+}
+html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage,
+html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage {
+	display: inline-block;
+	transition: opacity 360ms ease-in;
+	-webkit-transition: opacity 360ms ease-in;
+	-moz-transition: opacity 360ms ease-in;
+	-ms-transition: opacity 360ms ease-in;
+	-o-transition: opacity 360ms ease-in;
+	width: 100%;
+	text-align: center;
+	color: rgba(255,255,255,.35);
+	margin: 0px;
+	padding: 0px 0px 40px 0px;
+}
+html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage.hide,
+html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage.hide {
+	opacity: 0;
+}
+html body div.scrollcontainer div.container div.relaylist div.relay,
+html body div.scrollcontainer div.container div.sessionlist div.session {
+	margin: 24px 12px 0 12px;
+	float: left;
+	position: relative;
+	width: 224px;
+	height: 224px;
+	background-color: rgba(0,0,0,.5);
+	background-image: url(../images/relay.svg);
+	background-repeat: no-repeat;
+	background-size: 35%;
+	background-position: 50% 50%;
+	cursor: pointer;
+	font-size: 14px;
+	color: #FFF;
+	transition: background-color 200ms linear;
+	-webkit-transition: background-color 200ms linear;
+	-moz-transition: background-color 200ms linear;
+	-ms-transition: background-color 200ms linear;
+	-o-transition: background-color 200ms linear;
+}
+html body div.scrollcontainer div.container div.sessionlist div.session {
+	background-image: none;
+}
+html body div.scrollcontainer div.container div.sessionlist div.session.unknown {
+	background-color: rgba(50,0,0,.75)
+}
+html body div.scrollcontainer div.container div.relaylist div.relay:hover,
+html body div.scrollcontainer div.container div.sessionlist div.session:hover {
+	background-color: rgba(255,255,255,.05);
+	transition: background-color 0s linear;
+	-webkit-transition: background-color 0s linear;
+	-moz-transition: background-color 0s linear;
+	-ms-transition: background-color 0s linear;
+	-o-transition: background-color 0s linear;
+}
+html body div.scrollcontainer div.container div.sessionlist div.session.unknown:hover {
+	background-color: rgba(75,25,25,.75)
+}
+html body div.scrollcontainer div.container div.relaylist div.relay:active,
+html body div.scrollcontainer div.container div.sessionlist div.session:active {
+	background-color: rgba(0,0,0,1);
+}
+html body div.scrollcontainer div.container div.sessionlist div.session.unknown:active {
+	background-color: rgba(25,0,0,1)
+}
+@-webkit-keyframes loader {
+  0%   { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -o-transform: rotate(0deg); }
+  100% { transform: rotate(360deg); -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); }
+}
+@-moz-keyframes loader {
+  0%   { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -o-transform: rotate(0deg); }
+  100% { transform: rotate(360deg); -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); }
+}
+@-o-keyframes loader {
+  0%   { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -o-transform: rotate(0deg); }
+  100% { transform: rotate(360deg); -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); }
+}
+@keyframes loader {
+  0%   { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -o-transform: rotate(0deg); }
+  100% { transform: rotate(360deg); -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); }
+}
+.loader {
+	-webkit-animation: loader 420ms infinite linear;
+	-moz-animation: loader 420ms infinite linear;
+	-o-animation: loader 420ms infinite linear;
+	animation: loader 420ms infinite linear;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -25px;
+	margin-top: -25px;
+	width: 50px;
+	height: 50px;
+	background: url(../images/loader.svg);
+	background-size: 100%;
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon {
+	margin-top: 30px;
+	width: 100%;
+	height: 100px;
+	background-size: contain !important;
+	background-position: center !important;
+	background-repeat: no-repeat !important;
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.unknown {
+	background: url(../images/unknown.svg);
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop {
+	background: url(../images/laptop.svg);
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.phone {
+	background: url(../images/phone.svg);
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.router {
+	background: url(../images/router.svg);
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.acer {
+	background: url(../images/acer.svg);
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.android {
+	background: url(../images/os_android.svg);
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.ios {
+	background: url(../images/os_ios.svg);
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.tor {
+	background: url(../images/tor.png);
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon div.logo {
+	position: absolute;
+	width: 100%;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop div.logo.acer {
+	top: 72px;
+	height: 10px;
+	background-image: url(../images/brand_acer.svg);
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.phone div.logo.android {
+	top: 71px;
+	height: 18px;
+	background-image: url(../images/os_android.svg);
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.phone div.logo.tor {
+	top: 68px;
+	height: 24px;
+	background-image: url(../images/tor.png);
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.router div.logo.tplink {
+	top: 113px;
+	left: 26px;
+	height: 4px;
+	background-image: url(../images/tplink_black.svg);
+	opacity: 0.25;
+}
+html body div.scrollcontainer div.container div.relaylist div.relay span,
+html body div.scrollcontainer div.container div.sessionlist div.session span {
+	width: 100%;
+	text-align: center;
+	max-width: 80%;
+	margin-left: 10%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+html body div.scrollcontainer div.container div.relaylist div.relay span.relaynumber {
+	position: absolute;
+	font-family: "OpenSans-ExtraBold";
+	font-size: 28px;
+	top: 25px;
+	width: 100%;
+}
+html body div.scrollcontainer div.container div.sessionlist div.session span.device {
+	bottom: 60px;
+	font-size: 10px;
+}
+html body div.scrollcontainer div.container div.relaylist div.relay span.name,
+html body div.scrollcontainer div.container div.sessionlist div.session span.id {
+	position: absolute;
+	bottom: 38px;
+	font-family: "OpenSans-ExtraBold";
+}
+html body div.scrollcontainer div.container div.relaylist div.relay span.url,
+html body div.scrollcontainer div.container div.sessionlist div.session span.hostname,
+html body div.scrollcontainer div.container div.sessionlist div.session span.device {
+	position: absolute;
+	color:rgba(255,255,255,.5);
+	font-family: "OpenSans-Regular";
+}
+html body div.scrollcontainer div.container div.relaylist div.relay span.url,
+html body div.scrollcontainer div.container div.sessionlist div.session span.hostname {
+	bottom: 18px;
+}
+html body div.scrollcontainer div.container span.nonefound {
+	font-family: "OpenSans-Regular";
+	color: rgba(255,255,255,0.1);
+	font-size: 18px;
+	text-align: center;
+	width: 100%;
+	position: absolute;
+	top: 50%;
+	margin-top: 71px;
+}
+html body div.scrollcontainer div.container div.relaylist div.space,
+html body div.scrollcontainer div.container div.sessionlist div.space {
+	display: inline-block;
+	height: 100%;
+	width: 100%;
+}
+html body div.console {
+	position: absolute;
+	bottom: 0;
+	background: black;
+	height: 142px;
+	width: 100%;
+	box-shadow: 0 0 6px 0 rgba(0,0,0,.75);
+}
+html body div.console div.clear {
+	z-index: 9;
+	position: absolute;
+	left: 0;
+	top: -19px;
+	font-family: "OpenSans-Regular";
+	font-size: 12px;
+	padding: 1px 5px;
+	color: #FFF;
+	background-color: rgba(0,0,0,.75);
+	cursor: pointer;
+	transition: background-color 200ms linear;
+	-webkit-transition: background-color 200ms linear;
+	-moz-transition: background-color 200ms linear;
+	-ms-transition: background-color 200ms linear;
+	-o-transition: background-color 200ms linear;
+}
+html body div.console div.clear:hover {
+	background-color: rgba(255,255,255,.05);
+	transition: background-color 0s linear;
+	-webkit-transition: background-color 0s linear;
+	-moz-transition: background-color 0s linear;
+	-ms-transition: background-color 0s linear;
+	-o-transition: background-color 0s linear;
+}
+html body div.console div.clear:active {
+	background-color: rgba(0,0,0,1);
+}
+html body div.console div.topbar {
+	position: absolute;
+	bottom: 0;
+	height: 1px;
+	width: 100%;
+	background: rgb(60,60,60);
+	cursor: ns-resize;
+}
+html body div.console div.topbar div.padding {
+	position: absolute;
+	height: 10px;
+	width: 100%;
+}
+html body div.console div.topbar div.padding:nth-of-type(1) {
+	top: -10px;
+}
+html body div.console div.topbar div.padding:nth-of-type(2) {
+	top: 0;
+}
+html body div.console div.topbar div.handle {
+	position: absolute;
+	top: -2px;
+	left: 50%;
+	margin-left: -12px;
+	width: 24px;
+	height: 5px;
+}
+html body div.console div.topbar div.handle div {
+	position: absolute;
+	height: 1px;
+	width: 100%;
+	background: rgb(60,60,60);
+}
+html body div.console div.topbar div.handle div.top {
+	top: 0;
+	border-bottom: 1px solid black;
+}
+html body div.console div.topbar div.handle div.bottom {
+	bottom: 0;
+	width: 70%;
+	left: 15%;
+	border-top: 1px solid black;
+}
+html body div.console div.consolecontainer {
+	width: calc(100% - 6px);
+	height: calc(100% - 6px);
+	padding: 3px;
+	color: #FFF;
+	font-family: monospace;
+	font-size: 12px;
+	text-shadow: 0 -1px 0px black;
+	overflow: hidden;	
+	overflow-y: scroll;
+	word-break: break-all;
+}
+.selectable {
+	user-select: text;
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	-o-user-select: text;
+}
+.displaynone {
+	display: none;
+}
+.nopointerevents {
+	pointer-events: none;
+}
+.up {
+	top: -50% !important;
+}
+.down {
+	top: 150% !important;
+}
+
+@media(max-width: 1276px) {
+	html body div.scrollcontainer div.container {
+		max-width: 992px;
+		margin-left: -496px;
+	}
+	html body div.scrollcontainer div.container div.relaylist,
+	html body div.scrollcontainer div.container div.sessionlist {
+		margin-left: -496px;
+	}
+}
+
+@media(max-width: 1026px) {
+	html body div.scrollcontainer div.container {
+		max-width: 744px;
+		margin-left: -372px;
+	}
+	html body div.scrollcontainer div.container div.relaylist,
+	html body div.scrollcontainer div.container div.sessionlist {
+		margin-left: -372px;
+	}
+}
+
+@media(max-width: 780px) {
+	html body div.scrollcontainer div.container {
+		max-width: 496px;
+		margin-left: -248px;
+	}
+	html body div.scrollcontainer div.container div.container {
+		margin-left: -248px;
+	}
+	html body div.scrollcontainer div.container div.relaylist,
+	html body div.scrollcontainer div.container div.sessionlist {
+		margin-left: -248px;
+	}
+}
+
+@media(max-width: 534px) {
+	html body div.scrollcontainer div.container {
+		max-width: 248px;
+		margin-left: -124px;
+	}
+	html body div.scrollcontainer div.container div.container {
+		margin-left: -124px;
+	}
+	html body div.scrollcontainer div.container div.relaylist,
+	html body div.scrollcontainer div.container div.sessionlist {
+		margin-left: -124px;
+	}
+}
