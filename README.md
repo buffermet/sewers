@@ -1,5 +1,5 @@
 <p align="center">
-  :warning:  This project is a work in progress, <b>do not use it</b>.
+  :warning:  This is a work in progress, <b>do not use it</b>.
   <br>
   <img width="210px" type="image/png" src="https://rawgit.com/yungtravla/cdn/master/github.com/yungtravla/tunnels/logo.png" />
 </p>
