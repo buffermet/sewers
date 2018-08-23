@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8;" />
+	<meta http-equiv='CACHE-CONTROL' content='NO-CACHE'>
+	<meta http-equiv='PRAGMA' content='NO-CACHE'>
+	<title></title>
+	<style type="text/css">
+		html,
+		html body{
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			background: #222;
+		}
+		html body div.container{
+			position: relative;
+			height: 100%;
+			width: 100%;
+		}
+		html body div.container audio,
+		html body div.container video{
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			background-size: 80px auto !important;
+			background-position: center 50px !important;
+			background-repeat: no-repeat !important;
+		}
+		html body div.container audio{
+			background: url(./assets/images/stream-mic.svg);
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<!-- Load media -->
+	</div>
+</body>
+<script src="./assets/libs/jquery.min.js"></script>
+<script type="text/javascript">
+	// Parse URL
+	var queryLine = window.location.href.replace(/.*\?/g, "")
+	var queries = queryLine.split("&")
+	var streamType = queries[0],
+			streamID = queries[1]
+			streamFile = queries[2]
+
+	// Define elements
+	var container = $("html body div.container")
+
+	// Set title
+	document.title = streamType.toUpperCase() + " " + streamID
+
+	// Load media
+	if (streamType == "mic") {
+		container.append("<audio preload autoplay controls><source src='"+
+											location.protocol+"//"+
+											location.hostname+
+											(location.port?":"+location.port:"")+
+											"/assets/audio/"+
+											streamFile+
+											"' type='audio/wav'/>Your browser does not support HTML5 media playback!</audio>")
+	} else if (streamType == "mon") {
+		container.append("<video preload autoplay controls><source src='"+
+											location.protocol+"//"+
+											location.hostname+
+											(location.port?":"+location.port:"")+
+											"/assets/video-mon/"+
+											streamFile+
+											"'/>Your browser does not support HTML5 media playback!</video>")
+	} else if (streamType == "cam") {
+		container.append("<video preload autoplay controls><source src='"+
+											location.protocol+"//"+
+											location.hostname+
+											(location.port?":"+location.port:"")+
+											"/assets/video-cam/"+
+											streamFile+
+											"'/>Your browser does not support HTML5 media playback!</video>")
+	} else {
+		container.append("<h1>No stream type specified</h1>")
+	}
+</script>
+</html>

@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+	<title>Relays</title>
+	<link rel="icon" type="image/png" href="./assets/images/favicon.png">
+	<link rel="stylesheet" type="text/css" href="./assets/css/fonts.css">
+	<link rel="stylesheet" type="text/css" href="./assets/css/menu.css">
+	<style type="text/css">
+
+/* index.css */
+
+		html,
+		html body {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			background: #111;
+			overflow: hidden;
+			user-select: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			-o-user-select: none;
+		}
+		html body div.background {
+			opacity: .25;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 60%;
+			height: 60%;
+			background-image: url(./assets/images/relaysbg.svg);
+			background-size: contain;
+			background-repeat: no-repeat;
+		}
+		html body div.fade {
+			transition: opacity 360ms ease-in;
+			-webkit-transition: opacity 360ms ease-in;
+			-moz-transition: opacity 360ms ease-in;
+			-ms-transition: opacity 360ms ease-in;
+			-o-transition: opacity 360ms ease-in;
+			z-index: 999;
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background: rgba(0,0,0,.9);
+		}
+		html body div.fade.hide {
+			opacity: 0;
+			pointer-events: none;
+		}
+		html body div.fade div.messagebox {
+			transition: top 180ms ease-in;
+			-webkit-transition: top 180ms ease-in;
+			-moz-transition: top 180ms ease-in;
+			-ms-transition: top 180ms ease-in;
+			-o-transition: top 180ms ease-in;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin-left: -210px;
+			height: auto;
+			width: 420px;
+			padding: 20px;
+			background: rgb(24,24,24);
+			color: #FFF;
+			font-family: "OpenSans-Regular";
+			box-shadow: 0 0 6px 0 rgba(0,0,0,.75);
+		}
+		html body div.fade div.messagebox span.title {
+			font-family: "OpenSans-ExtraBold";
+			font-size: 20px;
+		}
+		html body div.fade div.messagebox div.message {
+			margin-top: 12px;
+			font-size: 14px;
+		}
+		html body div.fade div.messagebox div.button {
+			float: left;
+			height: 30px;
+			line-height: 30px;
+			background: rgb(42,42,42);
+			padding: 0 12px 0 12px;
+			margin-right: 12px;
+			margin-top: 20px;
+			cursor: pointer;
+		}
+		html body div.fade div.messagebox div.button:hover {
+			background: rgb(62,62,62);
+		}
+		html body div.fade div.messagebox div.button:active {
+			background: rgb(32,32,32);
+		}
+		html body div.fade div.messagebox div.corner {
+			position: absolute;
+			top: 0;
+			right: 0;
+			height: 100%;
+			width: 5%;
+			background-image: url(./assets/images/message-corner.svg);
+			background-size: 100% 150%;
+			background-position: 50% 60%;
+		}
+		html body div.fade div.modalbox {
+			transition: top 180ms ease-in;
+			-webkit-transition: top 180ms ease-in;
+			-moz-transition: top 180ms ease-in;
+			-ms-transition: top 180ms ease-in;
+			-o-transition: top 180ms ease-in;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin-left: -375px;
+			width: 750px;
+			height: auto;
+			background: #0d0d0d;
+			box-shadow: 0 0 6px 0 rgba(0,0,0,.75);
+		}
+		html body div.fade div.modalbox div.optionbox {
+			position: absolute;
+			left: 0;
+			width: 200px;
+			height: 100%;
+			background: #111;
+		}
+		html body div.fade div.modalbox div.optionbox ul {
+			padding: 0;
+			margin: 0;
+			margin-bottom: 44px;
+			list-style-type: none;
+		}
+		html body div.fade div.modalbox div.optionbox ul li {
+			padding: 10px;
+			border-bottom: 1px solid #0b0b0b;
+			font-family: "OpenSans-Regular";
+			font-size: 16px;
+			color: #FFF;
+			cursor: pointer;
+		}
+		html body div.fade div.modalbox div.optionbox ul li:hover {
+			background: #161616;
+		}
+		html body div.fade div.modalbox div.optionbox ul li:active {
+			background: #0d0d0d;
+		}
+		html body div.fade div.modalbox div.optionbox ul li.selected {
+			background: #0d0d0d;
+		}
+		html body div.fade div.modalbox div.optionbox ul li:last-of-type {
+			border-bottom: none;
+		}
+		html body div.fade div.modalbox div.optionbox div.bottom {
+			position: absolute;
+			bottom: 0;
+			width: 200px;
+			font-family: "OpenSans-Regular";
+			font-size: 16px;
+			color: #FFF;
+			border-top: 1px solid #0b0b0b;
+			cursor: pointer;
+		}
+		html body div.fade div.modalbox div.optionbox div.bottom div {
+			float: left;
+			height: 100%;
+			width: 50%;
+			padding: 10px 0;
+			text-align: center;
+			background: #111;
+			border-right: 1px solid #0d0d0d;
+		}
+		html body div.fade div.modalbox div.optionbox div.bottom div:first-of-type {
+			width: calc(50% - 1px);
+		}
+		html body div.fade div.modalbox div.optionbox div.bottom div:last-of-type {
+			border-right: none;
+		}
+		html body div.fade div.modalbox div.optionbox div.bottom div:hover {
+			background: #141414;
+		}
+		html body div.fade div.modalbox div.optionbox div.bottom div:active {
+			background: #0f0f0f;
+		}
+		html body div.fade div.modalbox div.optionbox div.bottom div.selected {
+			background: #0d0d0d;
+		}
+		html body div.fade div.modalbox div.optionbox div.bottom div:hover {
+			color: #999;
+		}
+		html body div.fade div.modalbox div.menupage {
+			float: right;
+			padding: 24px;
+			width: calc(550px - 24px - 24px);
+			height: auto;
+			background: #0d0d0d;
+			color: #FFF;
+			font-family: "OpenSans-Regular";
+		}
+		html body div.scrollcontainer {
+			position: relative;
+			/*margin-top: 26px;*/
+			height: 100%;
+			width: 100%;
+			overflow: hidden;
+			overflow-y: scroll;
+			transition: opacity 360ms ease-in;
+			-webkit-transition: opacity 360ms ease-in;
+			-moz-transition: opacity 360ms ease-in;
+			-ms-transition: opacity 360ms ease-in;
+			-o-transition: opacity 360ms ease-in;
+		}
+		html body div.scrollcontainer.hide {
+			opacity: 0;
+		}
+		/*html body div.scrollcontainer div.backbutton {
+			position: absolute;
+			left: 7px;
+			top: calc(15px + 26px);
+			background-color: rgba(0,0,0,.75);
+			padding: 8px;
+			cursor: pointer;
+			transition: all 200ms linear, left 400ms ease-in;
+			-webkit-transition: all 200ms linear, left 400ms ease-in;
+			-moz-transition: all 200ms linear, left 400ms ease-in;
+			-ms-transition: all 200ms linear, left 400ms ease-in;
+			-o-transition: all 200ms linear, left 400ms ease-in;
+		}
+		html body div.scrollcontainer div.backbutton.hide {
+			left: -170px;
+		}
+		html body div.scrollcontainer div.backbutton:hover {
+			background-color: rgba(255,255,255,.05);
+			transition: all 0s linear;
+			-webkit-transition: all 0s linear;
+			-moz-transition: all 0s linear;
+			-ms-transition: all 0s linear;
+			-o-transition: all 0s linear;
+		}
+		html body div.scrollcontainer div.backbutton:active {
+			background-color: rgba(0,0,0,1);
+		}
+		html body div.scrollcontainer div.backbutton div.logo {
+			opacity: .5;
+			float: left;
+			width: 20px;
+			height: 20px;
+			background-image: url(./assets/images/relay.svg);
+			background-size: 100%;
+			background-repeat: no-repeat;
+			margin-right: 8px;
+			transition: opacity 200ms linear;
+			-webkit-transition: opacity 200ms linear;
+			-moz-transition: opacity 200ms linear;
+			-ms-transition: opacity 200ms linear;
+			-o-transition: opacity 200ms linear;
+		}
+		html body div.scrollcontainer div.backbutton:hover div.logo {
+			opacity: 1;
+			transition: opacity 0s linear;
+			-webkit-transition: opacity 0s linear;
+			-moz-transition: opacity 0s linear;
+			-ms-transition: opacity 0s linear;
+			-o-transition: opacity 0s linear;
+		}
+		html body div.scrollcontainer div.backbutton span {
+			color: rgba(255,255,255,.25);
+			font-family: "OpenSans-Regular";
+			font-size: 14px;
+		}
+		html body div.scrollcontainer div.backbutton:hover span {
+			color: rgba(255,255,255,.5);
+		}*/
+		html body div.scrollcontainer div.container {
+			position: absolute;
+			left: 50%;
+			width: 1240px;
+			height: 100%;
+			margin-left: -620px;
+			transition: opacity 360ms ease-in;
+			-webkit-transition: opacity 360ms ease-in;
+			-moz-transition: opacity 360ms ease-in;
+			-ms-transition: opacity 360ms ease-in;
+			-o-transition: opacity 360ms ease-in;
+		}
+		html body div.scrollcontainer div.container.hide {
+			opacity: 0;
+		}
+		html body div.scrollcontainer div.container div.relaylist,
+		html body div.scrollcontainer div.container div.sessionlist {
+			position: absolute;
+			left: 50%;
+			margin-left: -620px;
+			height: calc(100% - 42px);
+			width: 100%;
+		}
+		html body div.scrollcontainer div.container div.relaylist div.header,
+		html body div.scrollcontainer div.container div.sessionlist div.header {
+			position: relative;
+			top: 26px;
+			height: auto;
+			width: 100%;
+			text-align: center;
+			font-family: "OpenSans-Regular";
+			color: #FFF;
+		}
+		html body div.scrollcontainer div.container div.relaylist div.header h1,
+		html body div.scrollcontainer div.container div.sessionlist div.header h1 {
+			display: inline-block;
+			width: 100%;
+			margin: 0px;
+			padding: 30px 0px 0px 0px;
+		}
+		html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage,
+		html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage {
+			display: inline-block;
+			transition: opacity 360ms ease-in;
+			-webkit-transition: opacity 360ms ease-in;
+			-moz-transition: opacity 360ms ease-in;
+			-ms-transition: opacity 360ms ease-in;
+			-o-transition: opacity 360ms ease-in;
+			width: 100%;
+			text-align: center;
+			color: rgba(255,255,255,.35);
+			margin: 0px;
+			padding: 0px 0px 40px 0px;
+		}
+		html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage.hide,
+		html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage.hide {
+			opacity: 0;
+		}
+		html body div.scrollcontainer div.container div.relaylist div.relay,
+		html body div.scrollcontainer div.container div.sessionlist div.session {
+			margin: 24px 12px 0 12px;
+			float: left;
+			position: relative;
+			width: 224px;
+			height: 224px;
+			background-color: rgba(0,0,0,.5);
+			background-image: url(./assets/images/relay.svg);
+			background-repeat: no-repeat;
+			background-size: 35%;
+			background-position: 50% 50%;
+			cursor: pointer;
+			font-size: 14px;
+			color: #FFF;
+			transition: background-color 200ms linear;
+			-webkit-transition: background-color 200ms linear;
+			-moz-transition: background-color 200ms linear;
+			-ms-transition: background-color 200ms linear;
+			-o-transition: background-color 200ms linear;
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session {
+			background-image: none;
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session.unknown {
+			background-color: rgba(50,0,0,.75)
+		}
+		html body div.scrollcontainer div.container div.relaylist div.relay:hover,
+		html body div.scrollcontainer div.container div.sessionlist div.session:hover {
+			background-color: rgba(255,255,255,.05);
+			transition: background-color 0s linear;
+			-webkit-transition: background-color 0s linear;
+			-moz-transition: background-color 0s linear;
+			-ms-transition: background-color 0s linear;
+			-o-transition: background-color 0s linear;
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session.unknown:hover {
+			background-color: rgba(75,25,25,.75)
+		}
+		html body div.scrollcontainer div.container div.relaylist div.relay:active,
+		html body div.scrollcontainer div.container div.sessionlist div.session:active {
+			background-color: rgba(0,0,0,1);
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session.unknown:active {
+			background-color: rgba(25,0,0,1)
+		}
+		@-webkit-keyframes loader {
+		  0%   { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -o-transform: rotate(0deg); }
+		  100% { transform: rotate(360deg); -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); }
+		}
+		@-moz-keyframes loader {
+		  0%   { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -o-transform: rotate(0deg); }
+		  100% { transform: rotate(360deg); -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); }
+		}
+		@-o-keyframes loader {
+		  0%   { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -o-transform: rotate(0deg); }
+		  100% { transform: rotate(360deg); -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); }
+		}
+		@keyframes loader {
+		  0%   { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -o-transform: rotate(0deg); }
+		  100% { transform: rotate(360deg); -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); }
+		}
+		.loader {
+			-webkit-animation: loader 420ms infinite linear;
+			-moz-animation: loader 420ms infinite linear;
+			-o-animation: loader 420ms infinite linear;
+			animation: loader 420ms infinite linear;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin-left: -25px;
+			margin-top: -25px;
+			width: 50px;
+			height: 50px;
+			background: url(./assets/images/loader.svg);
+			background-size: 100%;
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session div.icon {
+			margin-top: 30px;
+			width: 100%;
+			height: 100px;
+			background-size: contain !important;
+			background-position: center !important;
+			background-repeat: no-repeat !important;
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session div.icon.unknown {
+			background: url(./assets/images/unknown.svg);
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop {
+			background: url(./assets/images/laptop.svg);
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session div.icon.phone {
+			background: url(./assets/images/phone.svg);
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session div.icon.router {
+			background: url(./assets/images/router.svg);
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session div.icon.acer {
+			background: url(./assets/images/acer.svg);
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session div.icon.android {
+			background: url(./assets/images/os_android.svg);
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session div.icon.ios {
+			background: url(./assets/images/os_ios.svg);
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session div.icon.tor {
+			background: url(./assets/images/tor.png);
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session div.icon div.logo {
+			position: absolute;
+			width: 100%;
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop div.logo.acer {
+			top: 72px;
+			height: 10px;
+			background-image: url(./assets/images/brand_acer.svg);
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session div.icon.phone div.logo.android {
+			top: 71px;
+			height: 18px;
+			background-image: url(./assets/images/os_android.svg);
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session div.icon.phone div.logo.tor {
+			top: 68px;
+			height: 24px;
+			background-image: url(./assets/images/tor.png);
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session div.icon.router div.logo.tplink {
+			top: 113px;
+			left: 26px;
+			height: 4px;
+			background-image: url(./assets/images/tplink_black.svg);
+			opacity: 0.25;
+		}
+		html body div.scrollcontainer div.container div.relaylist div.relay span,
+		html body div.scrollcontainer div.container div.sessionlist div.session span {
+			width: 100%;
+			text-align: center;
+			max-width: 80%;
+			margin-left: 10%;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+		html body div.scrollcontainer div.container div.relaylist div.relay span.relaynumber {
+			position: absolute;
+			font-family: "OpenSans-ExtraBold";
+			font-size: 28px;
+			top: 25px;
+			width: 100%;
+		}
+		html body div.scrollcontainer div.container div.sessionlist div.session span.device {
+			bottom: 60px;
+			font-size: 10px;
+		}
+		html body div.scrollcontainer div.container div.relaylist div.relay span.name,
+		html body div.scrollcontainer div.container div.sessionlist div.session span.id {
+			position: absolute;
+			bottom: 38px;
+			font-family: "OpenSans-ExtraBold";
+		}
+		html body div.scrollcontainer div.container div.relaylist div.relay span.url,
+		html body div.scrollcontainer div.container div.sessionlist div.session span.hostname,
+		html body div.scrollcontainer div.container div.sessionlist div.session span.device {
+			position: absolute;
+			color:rgba(255,255,255,.5);
+			font-family: "OpenSans-Regular";
+		}
+		html body div.scrollcontainer div.container div.relaylist div.relay span.url,
+		html body div.scrollcontainer div.container div.sessionlist div.session span.hostname {
+			bottom: 18px;
+		}
+		html body div.scrollcontainer div.container span.nonefound {
+			font-family: "OpenSans-Regular";
+			color: rgba(255,255,255,0.1);
+			font-size: 18px;
+			text-align: center;
+			width: 100%;
+			position: absolute;
+			top: 50%;
+			margin-top: 71px;
+		}
+		html body div.scrollcontainer div.container div.relaylist div.space,
+		html body div.scrollcontainer div.container div.sessionlist div.space {
+			display: inline-block;
+			height: 100%;
+			width: 100%;
+		}
+		html body div.console {
+			position: absolute;
+			bottom: 0;
+			background: black;
+			height: 142px;
+			width: 100%;
+			box-shadow: 0 0 6px 0 rgba(0,0,0,.75);
+		}
+		html body div.console div.clear {
+			z-index: 9;
+			position: absolute;
+			left: 0;
+			top: -19px;
+			font-family: "OpenSans-Regular";
+			font-size: 12px;
+			padding: 1px 5px;
+			color: #FFF;
+			background-color: rgba(0,0,0,.75);
+			cursor: pointer;
+			transition: background-color 200ms linear;
+			-webkit-transition: background-color 200ms linear;
+			-moz-transition: background-color 200ms linear;
+			-ms-transition: background-color 200ms linear;
+			-o-transition: background-color 200ms linear;
+		}
+		html body div.console div.clear:hover {
+			background-color: rgba(255,255,255,.05);
+			transition: background-color 0s linear;
+			-webkit-transition: background-color 0s linear;
+			-moz-transition: background-color 0s linear;
+			-ms-transition: background-color 0s linear;
+			-o-transition: background-color 0s linear;
+		}
+		html body div.console div.clear:active {
+			background-color: rgba(0,0,0,1);
+		}
+		html body div.console div.topbar {
+			position: absolute;
+			bottom: 0;
+			height: 1px;
+			width: 100%;
+			background: rgb(60,60,60);
+			cursor: ns-resize;
+		}
+		html body div.console div.topbar div.padding {
+			position: absolute;
+			height: 10px;
+			width: 100%;
+		}
+		html body div.console div.topbar div.padding:nth-of-type(1) {
+			top: -10px;
+		}
+		html body div.console div.topbar div.padding:nth-of-type(2) {
+			top: 0;
+		}
+		html body div.console div.topbar div.handle {
+			position: absolute;
+			top: -2px;
+			left: 50%;
+			margin-left: -12px;
+			width: 24px;
+			height: 5px;
+		}
+		html body div.console div.topbar div.handle div {
+			position: absolute;
+			height: 1px;
+			width: 100%;
+			background: rgb(60,60,60);
+		}
+		html body div.console div.topbar div.handle div.top {
+			top: 0;
+			border-bottom: 1px solid black;
+		}
+		html body div.console div.topbar div.handle div.bottom {
+			bottom: 0;
+			width: 70%;
+			left: 15%;
+			border-top: 1px solid black;
+		}
+		html body div.console div.consolecontainer {
+			width: calc(100% - 6px);
+			height: calc(100% - 6px);
+			padding: 3px;
+			color: #FFF;
+			font-family: monospace;
+			font-size: 12px;
+			text-shadow: 0 -1px 0px black;
+			overflow: hidden;	
+			overflow-y: scroll;
+			word-break: break-all;
+		}
+		.selectable {
+			user-select: text;
+			-webkit-user-select: text;
+			-moz-user-select: text;
+			-ms-user-select: text;
+			-o-user-select: text;
+		}
+		.displaynone {
+			display: none;
+		}
+		.nopointerevents {
+			pointer-events: none;
+		}
+		.up {
+			top: -50% !important;
+		}
+		.down {
+			top: 150% !important;
+		}
+
+		@media(max-width: 1276px) {
+			html body div.scrollcontainer div.container {
+				max-width: 992px;
+				margin-left: -496px;
+			}
+			html body div.scrollcontainer div.container div.relaylist,
+			html body div.scrollcontainer div.container div.sessionlist {
+				margin-left: -496px;
+			}
+		}
+
+		@media(max-width: 1026px) {
+			html body div.scrollcontainer div.container {
+				max-width: 744px;
+				margin-left: -372px;
+			}
+			html body div.scrollcontainer div.container div.relaylist,
+			html body div.scrollcontainer div.container div.sessionlist {
+				margin-left: -372px;
+			}
+		}
+
+		@media(max-width: 780px) {
+			html body div.scrollcontainer div.container {
+				max-width: 496px;
+				margin-left: -248px;
+			}
+			html body div.scrollcontainer div.container div.container {
+				margin-left: -248px;
+			}
+			html body div.scrollcontainer div.container div.relaylist,
+			html body div.scrollcontainer div.container div.sessionlist {
+				margin-left: -248px;
+			}
+		}
+
+		@media(max-width: 534px) {
+			html body div.scrollcontainer div.container {
+				max-width: 248px;
+				margin-left: -124px;
+			}
+			html body div.scrollcontainer div.container div.container {
+				margin-left: -124px;
+			}
+			html body div.scrollcontainer div.container div.relaylist,
+			html body div.scrollcontainer div.container div.sessionlist {
+				margin-left: -124px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="background"></div>
+	<div class="fade hide">
+		<div class="messagebox down">
+			<span class="title"></span>
+			<div class="message"></div>
+			<div class="corner"></div>
+		</div>
+		<div class="modalbox settings down">
+			<div class="optionbox">
+				<ul>
+					<li class="selected">Option 1</li>
+					<li>Option 2</li>
+				</ul>
+				<div class="bottom">
+					<div class="save">Save</div>
+					<div class="cancel">Cancel</div>
+				</div>
+			</div>
+			<div class="menupage">
+				<div class="one">
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+					qui officia deserunt mollit anim id est laborum.
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="menu">
+		<div class="item left hidden">
+			<div class="icon back" title="Back to relays"></div>
+		</div>
+		<div class="item left noclick">
+			<div class="icon plus"></div>
+			<div class="submenu">
+				<div class="subitem" name="newrelay" title="Configure a new relay">&nbsp;New relay</div>
+				<div class="subitem" name="newinterpreter" title="Configure a new interpreter">&nbsp;New interpreter</div>
+			</div>
+		</div>
+		<div class="item left noclick">
+			<div class="icon link"></div>
+			<div class="submenu">
+				<div class="subitem" title="One"><div class="icon proxy-icon"></div>&nbsp;One</div>
+				<div class="subitem" title="Two"><div class="icon proxy-icon"></div>&nbsp;Two</div>
+			</div>
+		</div>
+		<div class="userlist">
+			<div class="item left noclick nohover" title="Active users">
+				<span class="ip"><div class="status active"></div>1</span>
+				<div class="submenu">
+					<div class="submodule">
+						<div class="row">
+							<div class="tab" name="ip">127.0.0.1</div>
+							<div class="tab" name="lastactive">Active 54 seconds ago.</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="item left noclick nohover" title="Inactive users">
+				<span class="ip"><div class="status inactive"></div>0</span>
+				<div class="submenu">
+					<div class="submodule"></div>
+				</div>
+			</div>
+		</div>
+		<div class="item right" name="quit" title="Quit sewers">
+			<div class="icon io"></div>
+		</div>
+		<div class="item right no-left-border" name="settings" title="Preferences">
+			<div class="icon settings"></div>
+		</div>
+	</div>
+	<div class="scrollcontainer">
+		<div class="container hide"></div>
+	</div>
+	<div class="console">
+		<div class="clear">CLEAR</div>
+		<div class="topbar">
+			<div class="padding"></div>
+			<div class="padding"></div>
+			<div class="handle">
+				<div class="top"></div>
+				<div class="bottom"></div>
+			</div>
+		</div>
+		<div class="consolecontainer selectable"></div>
+	</div>
+</body>
+<script src="./assets/libs/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+// variables-index.js
+
+	// Set variables
+	var config = {}
+
+	var webConsole = document.querySelector("html body div.console"),
+	    consoleContainer = document.querySelector("html body div.console div.consolecontainer"),
+	    consoleClear = document.querySelector("html body div.console div.clear"),
+	    topbar = document.querySelector("html body div.console div.topbar"),
+	    consoleLog,
+	    scrollOnOutput = true
+
+	var terminals = []
+
+	var backbutton = document.querySelector("div.icon.back").parentElement
+
+	var scrollContainer = document.querySelector("html body div.scrollcontainer"),
+	    container = document.querySelector("html body div.scrollcontainer div.container"),
+	    relayList = document.querySelector("html body div.scrollcontainer div.container div.relaylist"),
+	    relays = document.querySelectorAll("html body div.scrollcontainer div.container div.relaylist div.relay"),
+	    sessions = document.querySelectorAll("html body div.scrollcontainer div.container div.sessionlist div.session"),
+	    newsMessage = document.querySelector("html body div.scrollcontainer div.container div div.header span.newsmessage"),
+	    newsMessageRelays = document.querySelectorAll("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage"),
+	    newsMessageSessions = document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage"),
+	    newsRelays,
+	    newsSessions,
+	    currentRelaysNews = 0,
+	    currentSessionsNews = 0
+
+	var messageBox = document.querySelector("html body div.fade div.messagebox"),
+	    messageTitle = document.querySelector("html body div.fade div.messagebox span.title"),
+	    messageBody = document.querySelector("html body div.fade div.messagebox div.message"),
+	    fade = document.querySelector("html body div.fade")
+
+	var modalBoxes = document.querySelectorAll("html body div.fade div.modalbox"),
+	    openModalBox = document.querySelector("html body div.fade div.modalbox.open"),
+	    menuCancel = document.querySelector("html body div.fade div.modalbox div.optionbox div.bottom div.cancel")
+
+	var lastIP
+
+	var resizeConsole = false,
+	    dragStart
+
+// functions-transport.js
+
+	sendRequest = async (type, address, body) => {
+		return new Promise(resolve=>{
+			req = new XMLHttpRequest()
+			req.open(type, address)
+			req.onreadystatechange = async () => {
+				if (req.readyState == 4) {
+					resolve(req)
+				}
+			}
+			req.send(body)
+		})
+	}
+
+// functions-index.js
+
+	// Escape HTML
+	escapeHTML = async data => {
+		return new String(data).replace(/\&/g, "&amp;").replace(/\</g,"&lt;").replace(/\>/g,"&gt;").replace(/\"/g, "&quot;").replace(/\'/g,"&#39;").replace(/\//g, "&#x2F;").replace(/ /g, "&nbsp;").replace(/\t/g, "&emsp;").replace(/\n/g, "<br>")
+	}
+
+	// Log to console
+	log = async data => {
+		console.log(data)
+	}
+
+	// Open terminal in new pop-up tab
+	openTerminal = async (relay, session_id) => {
+		window.open('./terminal/' + relay + '/' + session_id, session_id +' - TAB' + Math.floor( (Math.random() * 9999) + 1), 'menubar=no,location=no,resizable=yes,scrollbars=no,status=yes')
+	}
+
+	// Fetch console log
+	fetchLog = async () => {
+		let res = await sendRequest("GET", "/console_log", "")
+
+		let response = res.responseText.replace(/\n/g, "<br>")
+
+		if (consoleContainer.innerHTML != response) {
+			consoleContainer.innerHTML = response
+
+			scrollOnOutput ? consoleContainer.scrollTop += 999999 : ""
+		}
+	}
+
+	getSewersConfig = async () => {
+		let res = await sendRequest("GET", "/config/sewers", "")
+
+		config = JSON.parse(res.responseText)
+	}
+
+	getSewersUserAgent = async () => {
+		let res = await sendRequest("GET", "/useragent", "")
+
+		return res.responseText
+	}
+
+	getRelays = async () => {
+		let skeleton = `
+				<div class="relaylist">
+					<div class="header">
+						<h1>Relays</h1>
+						<span class="newsmessage">&nbsp;</span>
+					</div>
+					<div class="space"></div>
+				</div>
+			`
+
+		container.classList.add("hide")
+		container.classList.add("nopointerevents")
+
+		setTimeout(async()=>{
+			container.innerHTML = skeleton
+
+			let res = await sendRequest("GET", "/get_relays", "")
+			let response = res.responseText
+
+			if (response != "nil") {
+				let relays = JSON.parse(response)
+
+				for (var i = 0; i < Object.keys(relays).length; i++) {
+					let relay = document.createElement("div")
+					relay.name = await escapeHTML(relays[i]["RelayID"])
+					relay.className = "relay"
+					relay.innerHTML = `
+							<span class="relaynumber">RELAY ` + (i + 1) + `</span>
+							<span class="name" title="Relay name">` + await escapeHTML(relays[i]["RelayID"]) + `</span>
+							<span class="url" title="Relay address">` + await escapeHTML(relays[i]["RelayAddress"]) + `</span>
+						`
+
+					document.querySelector("html body div.scrollcontainer div.container div.relaylist div.space")
+					.before(relay)
+				}
+
+				setTimeout(async()=>{
+					await updateTunnelCount()
+
+					currentRelaysNews = 0
+
+					await cycleNews()
+
+					container.classList.remove("hide")
+					container.classList.remove("nopointerevents")
+				}, 720)
+			} else {
+				let span = document.createElement("span")
+				span.class = "nonefound"
+				span.innerText = "No relays found"
+
+				document.querySelector("html body div.scrollcontainer div.container div.relaylist div.space")
+				.before(span)
+
+				currentRelaysNews = 0
+
+				await cycleNews()
+
+				container.classList.remove("hide")
+				container.classList.remove("nopointerevents")
+			}
+		}, 360)
+	}
+
+	getSessions = async relay => {
+		let skeleton = `
+			<div class="sessionlist">
+				<div class="header">
+					<h1>` + await escapeHTML(relay) + `</h1>
+					<span class="newsmessage">&nbsp;</span>
+				</div>
+				<div class="space"></div>
+			</div>
+		`
+
+		container.classList.add("hide")
+		container.classList.add("nopointerevents")
+
+		setTimeout(async()=>{
+			container.innerHTML = skeleton
+
+			backbutton.classList.remove("hidden")
+
+			let res = await sendRequest("GET", "/relay/" + relay, "")
+
+			if (res.status == 200) {
+				let response = res.responseText
+
+				if ( response != "nil" && response.match(/([a-zA-Z]+)/) ) {
+					let sessionlist = response.split(","),
+
+					skeleton = ""
+
+					for (var i = 0; i < sessionlist.length; i++) {
+						let url = "./session/" + relay.replace(".json", "") + "/" + sessionlist[i]
+
+						res = await sendRequest("GET", url, "")
+
+						if (res.status == 200) {
+							let response = res.responseText
+
+							let session = sessionlist[i]
+
+							if (response != "nil") {
+								sessionConfig = JSON.parse(response)
+								device = ( sessionConfig["os"].indexOf("Android" || "android") >= 0 ) 
+									? "phone" 
+									: ( sessionConfig["os"].indexOf("Darwin" || "darwin") >= 0 ) 
+									? "laptop"
+									: ( sessionConfig["os"].indexOf("cygwin" || "cygwin" || "mswin" || "mingw" || "bccwin" || "wince" || "emx") >= 0 ) 
+									? "laptop" 
+									: ( sessionConfig["device"].indexOf("Acer Aspire") >= 0 ) 
+									? "laptop" 
+									: "unknown"
+								logo = ( sessionConfig["device"].indexOf("Acer") >= 0 ) 
+									? "acer" 
+									: ( sessionConfig["os"].indexOf("Android" || "android") >= 0 ) 
+									? "android" 
+									: ( sessionConfig["os"].indexOf("Darwin" || "darwin") >= 0 ) 
+									? "apple" 
+									: ( sessionConfig["os"].indexOf("cygwin" || "cygwin" || "mswin" || "mingw" || "bccwin" || "wince" || "emx") >= 0 ) 
+									? "windows" 
+									: "unknown"
+								skeleton += `
+									<div class="session">
+										<div class="icon ` + await escapeHTML(device) + `">
+											<div class="logo ` + await escapeHTML(logo) + `"></div>
+										</div>
+										<span class="device">` + await escapeHTML(sessionConfig["device"]) + `</span>
+										<span class="id">` + await escapeHTML(session) + `</span>
+										<span class="hostname">` + await escapeHTML(sessionConfig["hostname"]) + `</span>
+									</div>
+								`
+							} else {
+								skeleton += `
+									<div class="session unknown">
+										<div class="icon unknown"></div>
+										<span class="device">` + await escapeHTML(sessionConfig["device"]) + `</span>
+										<span class="id">` + await escapeHTML(session) + `</span>
+										<span class="hostname">undefined</span>
+									</div>"
+								`
+							}
+						}
+					}
+					// debug
+					skeleton += new String(
+						"<div class=\"session\">" + 
+							"<div class=\"icon router\">" + 
+								"<div class=\"logo tplink\"></div>" +
+							"</div>" + 
+							"<span class=\"device\">Tor Exit TP-Link TL-WR840N</span>" + 
+							"<span class=\"id\">aX302ioJjf0mk21</span>" + 
+							"<span class=\"hostname\">gateway</span>" + 
+						"</div>"
+					)
+					$("html body div.scrollcontainer div.container div.sessionlist div.space").before(skeleton)
+					currentSessionsNews = 0
+					cycleNews()
+					container.classList.remove("hide")
+					container.classList.remove("nopointerevents")
+				} else {
+					skeleton = new String(
+						"<span class=\"nonefound\">No interpreters found</span>" +
+						"<div class=\"space\"></div>"
+					)
+					$("html body div.scrollcontainer div.container div.sessionlist div.space").before(skeleton)
+					currentSessionsNews = 0
+					cycleNews()
+					container.classList.remove("hide")
+					container.classList.remove("nopointerevents")
+				}
+			}
+
+			$.ajax({
+				method: "get",
+				url: "/relay/" + relay,
+				success: r => {
+				},
+				error: (r, status, error) => {
+					print(r.responseText)
+					skeleton = new String(
+						"<span class=\"nonefound\">Unable to connect to relay</span>" +
+						"<div class=\"space\"></div>"
+					)
+					$("html body div.scrollcontainer div.container div.sessionlist div.space").before(skeleton)
+					currentSessionsNews = 0
+					cycleNews()
+					container.classList.remove("hide")
+					container.classList.remove("nopointerevents")
+				}
+			})
+		}, 380)
+
+		updateSessionCount()
+	}
+
+	// Update relay count
+	updateTunnelCount = async () => {
+		relays = $("html body div.scrollcontainer div.container div.relaylist div.relay")
+		relays.unbind("click")
+		relays.on("click", async event => {
+			getSessions(event.currentTarget.children[1].innerText)
+		})
+	}
+
+	// Update session count
+	updateSessionCount = async () => {
+		relay = $("html body div.scrollcontainer div.container div.sessionlist div.header h1").text()
+		sessions = $("html body div.scrollcontainer div.container div.sessionlist div.session")
+		sessions.unbind("click")
+		sessions.on("click", async event => {
+			openTerminal(relay, event.currentTarget.querySelector("span.id").innerText)
+		})
+	}
+
+	// Override CSS
+	updateCSS = async () => {
+		// Console resizing
+		let newHeight = parseInt( config["console_height"] )
+		webConsole.style.height = newHeight
+		topbar.style.bottom = (newHeight - 1) + "px"
+		scrollContainer.style.height = "calc(100% - " + newHeight + "px)"
+
+		// Center message box
+		let messageboxHeight = messageBox.getBoundingClientRect().height
+		messageBox.style.marginTop = "-" + ( (messageboxHeight / 2) + 20 ) + "px"
+
+		// Center modal box
+		let openModalBox = document.querySelector("html body div.fade div.modalbox.open")
+		let openOptions = document.querySelector("html body div.fade div.modalbox.open div.optionbox ul")
+		if (openModalBox) {
+			openModalBox.css( "min-height", "calc(" + openOptions.getBoundingClientRect().height + "px + 44px)" )
+			modalboxHeight = openModalBox.getBoundingClientRect().height
+			openModalBox.css( "margin-top", "-" + ( (modalboxHeight / 2) + 20 ) + "px" )
+		}
+	}
+
+	// Print to console
+	print = async string => {
+		consoleContainer.append(string + "<br>")
+	}
+
+	// Fetch new HTML
+	// fetchHTML = (address, element) => {
+	// 	$.ajax({
+	// 		method: "get",
+	// 		url: address,
+	// 		success: r => {
+	// 			if (element.html() != r) {
+	// 				element.animate({"opacity":"0"}, 360)
+	// 				setTimeout(async()=>{
+	// 					element.html(r)
+	// 					element.animate({"opacity":"1"}, 360)
+	// 				}, 360)
+	// 			}
+	// 		}
+	// 	})
+	// }
+
+	// Show message box
+	showMessage = async (title, message) => {
+		messageTitle.innerText = title
+		messageBody.innerHTML = message
+		fade.classList.remove("hide")
+		setTimeout(async()=>{
+			messageBox.classList.remove("down")
+			updateCSS()
+		}, 180)
+	}
+
+	// Close message box
+	hideMessage = async () => {
+		messageBox.classList.add("up")
+		setTimeout(async()=>{
+			fade.classList.add("hide")
+			setTimeout(async()=>{
+				messageBox.classList.remove("up")
+				messageBox.classList.add("down")
+			}, 360)
+		}, 180)
+	}
+
+	// Show modal box
+	showPreferences = async () => {
+		$("html body div.fade div.modalbox.settings").classList.add("open")
+		openModalBox = $("html body div.fade div.modalbox.open")
+		fade.classList.remove("hide")
+		setTimeout(async()=>{
+			openModalBox.classList.remove("down")
+			updateCSS()
+		}, 180)
+	}
+
+	// Hide modal box
+	hideMenu = async () => {
+		openModalBox.classList.add("up")
+		setTimeout(async()=>{
+			fade.classList.add("hide")
+			setTimeout(async()=>{
+				openModalBox.classList.remove("up")
+				openModalBox.classList.add("down")
+				modalBoxes.classList.remove("open")
+			}, 360)
+		}, 180)
+	}
+
+	// Cycle news messages
+	cycleNews = async () => {
+		// Update vars
+		let newsMessage = document.querySelector("html body div.scrollcontainer div.container div div.header span.newsmessage")
+		let newsMessageRelays = document.querySelector("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage")
+		let newsMessageSessions = document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage")
+		// Update news messages
+		updateTunnelCount()
+		updateSessionCount()
+		newsRelays = {
+			0: relays.length + " relay" + (relays.length > 1 || relays.length < 1 ? "s" : ""),
+			1: "User-Agent: <span style=\"font-weight:bold\">" + await escapeHTML( getSewersUserAgent() ) + "</span>",
+		},
+		newsSessions = {
+			0: sessions.length + " session" + (sessions.length > 1 || sessions.length < 1 ? "s" : ""),
+			1: "User-Agent: <span style=\"font-weight:bold\">" + await escapeHTML( getSewersUserAgent() ) + "</span>",
+		}
+
+		// Cycle
+		newsMessage.classList.add('hide')
+		if ( currentRelaysNews == Object.keys(newsRelays).length ) {
+			currentRelaysNews = 0
+		}
+		if ( currentSessionsNews == Object.keys(newsSessions).length ) {
+			currentSessionsNews = 0
+		}
+		setTimeout(async()=>{
+			if (newsMessageRelays) {
+				newsMessageRelays.innerHTML = newsRelays[currentRelaysNews]
+				newsMessageRelays.classList.remove("hide")
+				currentRelaysNews += 1
+			}
+			if (newsMessageSessions) {
+				newsMessageSessions.innerHTML = newsSessions[currentSessionsNews]
+				newsMessageSessions.classList.remove("hide")
+				currentSessionsNews += 1
+			}
+		}, 360)
+	}
+
+	// Close sewers
+	quit = async () => {
+		location = "/quit"
+	}
+
+// controls-index.js
+
+	// Resizable console
+	topbar.addEventListener("mousedown", async event => {
+		resizeConsole = true
+		dragStart = event.clientY
+	})
+	document.addEventListener("mousemove", async event => {
+		if (!resizeConsole) {
+			return
+		}
+		offset = document.body.getBoundingClientRect().height - event.clientY
+		if ( event.clientY > 75 && event.clientY < ( document.body.getBoundingClientRect().height - 50 ) ) {
+			webConsole.style.height = offset + "px"
+			topbar.style.bottom = (offset - 1) + "px"
+			scrollContainer.style.height = "calc(100% - " + offset + "px)"
+		}
+	})
+	document.addEventListener("mouseup", async event => {
+		if (resizeConsole) {
+			$.ajax({
+				method: "post",
+				url: "/config/sewers",
+				dataType: "json",
+				data: "console_height=" + webConsole.getBoundingClientRect().height
+			})
+		}
+		resizeConsole = false
+	})
+	topbar.addEventListener("touchstart", async event => {
+		resizeConsole = true
+		dragStart = event.clientY
+	})
+	document.addEventListener("touchmove", async event => {
+		if (!resizeConsole) {
+			return
+		}
+		offset = document.body.getBoundingClientRect().height - event.clientY
+		if ( event.clientY > 75 && event.clientY < ( document.body.getBoundingClientRect().height - 50 ) ) {
+			webConsole.style.height = offset + "px"
+			topbar.style.bottom = (offset - 1) + "px"
+			scrollContainer.style.height = "calc(100% - " + offset + "px)"
+		}
+	})
+	document.addEventListener("touchend", async event => {
+		if (resizeConsole) {
+			req = new XMLHttpRequest()
+			req.open("POST", "/config/sewers")
+			$.ajax({
+				method: "post",
+				url: "/config/sewers",
+				dataType: "json",
+				data: "console_height=" + webConsole.getBoundingClientRect().height
+			})
+		}
+		resizeConsole = false
+	})
+	self.addEventListener("resize", async()=>{
+		if ( webConsole.getBoundingClientRect().height >= ( document.body.getBoundingClientRect().height - 75 ) && webConsole.getBoundingClientRect().height > 51 ) {
+			webConsole.style.height = ( document.body.getBoundingClientRect().height - 75 ) + "px"
+			topbar.style.bottom = (document.body.getBoundingClientRect().height - 75 - 1) + "px"
+			scrollContainer.style.height = "calc(100% - " + ( document.body.getBoundingClientRect().height - 75 ) + "px)"
+			$.ajax({
+				method: "post",
+				url: "/config/sewers",
+				dataType: "json",
+				data: "console_height=" + webConsole.getBoundingClientRect().height
+			})
+		}
+	})
+
+	consoleClear.addEventListener("click", async()=>{
+		$.ajax({
+			method: "get",
+			url: "/clear_console_log",
+			async: false,
+			success: () => {
+				consoleContainer.html("")
+			}
+		})
+		await fetchLog()
+	})
+
+	document.addEventListener("mouseenter", async()=>{
+		await fetchLog()
+	})
+
+	document.querySelector("html body div.menu div[name=quit]").addEventListener("click", ()=>{
+		showMessage("Quit?", "Do you want to close sewers?<br><div class=\"button\" onclick=\"quit()\">Yes</div><div class=\"button\" onclick=\"hideMessage()\">No</div>")
+	})
+
+	document.querySelector("html body div.menu div.item[name=settings]").addEventListener("click", ()=>{
+		showPreferences()
+	})
+
+	document.querySelector("html body div.fade div.modalbox div.optionbox ul li").addEventListener("mousedown", ()=>{
+		$("html body div.fade div.modalbox div.optionbox ul li").classList.remove("selected")
+		$(this).classList.add("selected")
+	})
+
+	backbutton.addEventListener("click", ()=>{
+		backbutton.classList.add("hidden")
+		getRelays()
+	})
+
+	menuCancel.addEventListener("click", ()=>{
+		hideMenu()
+	})
+
+// initiate-index.js
+
+	// Wait for everything to load
+	self.addEventListener("load", async()=>{
+		// Start streaming console log
+		await fetchLog()
+		setInterval(async()=>{
+			await fetchLog()
+		}, 2500)
+		// Get sewers config
+		getSewersConfig()
+		// Override CSS values
+		updateCSS()
+		// Get all relay configurations
+		getRelays()
+		// Cycle news messages
+		setInterval(async()=>{
+			cycleNews()
+		}, 6666)
+		// Finish
+		setTimeout(async()=>{
+			container.classList.remove("hide")
+		}, 720)
+	})
+
+</script>
+</html>
