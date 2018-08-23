@@ -112,10 +112,6 @@
 	// 	$("html body div.menu div.item").find("div.rec.blinking").parent().parent().remove()
 	// })
 
-	shrinkInputField = async () => {
-		form.style.height = "calc(100vh - " + scrollBox.getBoundingClientRect().height + "px)"
-	}
-
 	// Window resize handler
 	$(window).resize(async()=>{
 		setTimeout(resetClearBreaks(), 100)
