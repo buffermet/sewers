@@ -151,7 +151,7 @@
 
 		let request
 
-		let onResponse = () => {}
+		let onResponse = new Function()
 
 		let active_streams = new Array()
 
@@ -204,7 +204,7 @@
 			}
 
 		// plugin debug
-		// yungtravla-terminal-linux-gnome-screenshot.js
+		// gnome-screenshot.js
 
 			document.querySelector("html body div.menu div.subitem[name=yungtravla-terminal-linux-gnome-screenshot]").addEventListener("click", ()=>{
 				let os_string = session_config["os"]
