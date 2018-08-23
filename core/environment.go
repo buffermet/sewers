@@ -12,8 +12,8 @@ import(
 )
 
 const(
-	PATH_UI               = "./ui"
-	PATH_RELAYS           = "./relays"
+	PATH_UI     = "./ui"
+	PATH_RELAYS = "./relays"
 	PATH_MODULES_RELAYS       = "./modules/relays"
 	PATH_MODULES_STAGERS      = "./modules/stagers"
 	PATH_MODULES_INTERPRETERS = "./modules/interpreters"
