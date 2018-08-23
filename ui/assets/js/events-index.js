@@ -50,7 +50,7 @@
 
 			let console_height = webConsole.getBoundingClientRect().height
 
-			let res = sendRequest("POST", "/config/sewers?console_height=" + console_height, "")
+			sendRequest("POST", "/config/sewers?console_height=" + console_height, "")
 		}
 	})
 

