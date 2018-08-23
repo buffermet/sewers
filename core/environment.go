@@ -14,9 +14,10 @@ import(
 const(
 	PATH_UI               = "./ui"
 	PATH_RELAYS           = "./relays"
-	PATH_RAW_INTERPRETERS = "./modules/raw_interpreters"
-	PATH_RAW_RELAYS       = "./modules/raw_relays"
-	PATH_RAW_STAGERS      = "./modules/raw_stagers"
+	PATH_MODULES_RELAYS       = "./modules/relays"
+	PATH_MODULES_STAGERS      = "./modules/stagers"
+	PATH_MODULES_INTERPRETERS = "./modules/interpreters"
+	PATH_MODULES_PLUGINS      = "./modules/plugins"
 )
 
 var(
