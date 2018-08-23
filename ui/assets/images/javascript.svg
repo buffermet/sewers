@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="9.1442976mm"
+   height="6.7912273mm"
+   viewBox="0 0 9.1442979 6.7912274"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="javascript.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="8.8554217"
+     inkscape:cx="15.784354"
+     inkscape:cy="2.5"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1048"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-125.09155,-109.19367)">
+    <g
+       aria-label="JS"
+       transform="scale(0.92738305,1.0783031)"
+       style="font-style:normal;font-weight:normal;font-size:7.85672474px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.19641812"
+       id="text12">
+      <path
+         d="m 139.00606,101.5339 v 3.60624 q 0,0.50283 -0.15714,0.91924 -0.14928,0.4164 -0.43212,0.71496 -0.27498,0.2907 -0.66782,0.45569 -0.39284,0.15713 -0.8721,0.15713 -0.67567,0 -1.17065,-0.31427 -0.48712,-0.31427 -0.73853,-0.87209 l 0.9978,-0.44784 q 0.0471,0.11 0.12571,0.22785 0.0786,0.10999 0.18856,0.20427 0.11,0.0864 0.25142,0.14928 0.14928,0.055 0.34569,0.055 0.33784,0 0.53426,-0.13357 0.20428,-0.13356 0.31427,-0.32998 0.10999,-0.19642 0.14142,-0.40855 0.0393,-0.21213 0.0393,-0.37712 v -3.60624 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Geometos;-inkscape-font-specification:Geometos;fill:#ffffff;stroke-width:0.19641812"
+         id="path814" />
+      <path
+         d="m 140.01466,106.52292 0.59711,-0.87995 q 0.43212,0.29856 0.88781,0.51854 0.46355,0.21213 0.96638,0.21213 0.26713,0 0.4714,-0.0628 0.20428,-0.0707 0.3457,-0.17285 0.14142,-0.10999 0.21213,-0.24356 0.0707,-0.14142 0.0707,-0.27498 0,-0.17285 -0.10999,-0.2907 -0.10214,-0.12571 -0.28284,-0.20427 -0.17285,-0.0786 -0.41641,-0.13357 -0.2357,-0.055 -0.49497,-0.10214 -0.17285,-0.0314 -0.4007,-0.0707 -0.22784,-0.0471 -0.4714,-0.11785 -0.24356,-0.0786 -0.47926,-0.19642 -0.2357,-0.1257 -0.42426,-0.30641 -0.18856,-0.18856 -0.30642,-0.43997 -0.10999,-0.25928 -0.10999,-0.60497 0,-0.50283 0.20428,-0.83282 0.20427,-0.33783 0.51854,-0.5264 0.32212,-0.19641 0.7071,-0.27498 0.39284,-0.0786 0.75425,-0.0786 0.36141,0 0.64425,0.0471 0.28284,0.0471 0.5264,0.14142 0.24356,0.0864 0.47141,0.22785 0.2357,0.13356 0.50283,0.32212 l -0.61283,0.86424 q -0.40855,-0.28284 -0.78567,-0.43212 -0.37712,-0.14927 -0.79353,-0.14927 -0.14142,0 -0.32213,0.0393 -0.1807,0.0314 -0.34569,0.10999 -0.15714,0.0786 -0.26713,0.20428 -0.10214,0.11785 -0.10214,0.2907 0,0.17285 0.12571,0.2907 0.12571,0.11785 0.32213,0.19641 0.19641,0.0786 0.43211,0.13357 0.23571,0.055 0.45569,0.10999 0.165,0.0393 0.38498,0.0786 0.22785,0.0393 0.46355,0.10999 0.24356,0.0707 0.47926,0.18857 0.2357,0.11785 0.41641,0.30641 0.18856,0.1807 0.29855,0.45569 0.11785,0.26713 0.11785,0.65211 0,0.44783 -0.15713,0.77781 -0.15713,0.32998 -0.44783,0.54997 -0.2907,0.21213 -0.6914,0.32213 -0.40069,0.10999 -0.88781,0.10999 -0.44783,0 -0.79352,-0.0707 -0.33784,-0.0628 -0.62069,-0.17285 -0.28284,-0.11785 -0.53425,-0.27498 -0.25142,-0.15714 -0.51855,-0.3457 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Geometos;-inkscape-font-specification:Geometos;fill:#ffffff;stroke-width:0.19641812"
+         id="path816" />
+    </g>
+  </g>
+</svg>

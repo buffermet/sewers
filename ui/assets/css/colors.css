@@ -1,0 +1,49 @@
+span.red{
+	color: red;
+}
+span.green{
+	color: green;
+}
+span.lightgreen{
+	color: rgb(122, 255, 0);
+}
+span.blue{
+	color: blue;
+}
+span.cyan{
+	color: rgb(0,142,255);
+}
+span.yellow{
+	color: yellow;
+}
+span.tan,
+span.orange{
+	color: orange;
+}
+span.purple{
+	color: purple;
+}
+span.pink{
+	color: pink;
+}
+span.maroon{
+	color: maroon;
+}
+span.grey,
+span.gray{
+	color: #444;
+}
+span.black{
+	color: #000;
+}
+
+span.whitebg{
+	background-color: white;
+}
+
+span.bold{
+	font-weight: bold;
+}
+span.noshadow{
+	text-shadow: none;
+}

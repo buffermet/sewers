@@ -1,0 +1,322 @@
+html body div.menu {
+	position: absolute;
+	z-index: 99;
+	top: 0px;
+	height: 26px;
+	width: 100%;
+	background: rgba(0,0,0,0.8);
+	user-select: none;
+	text-align: center;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+}
+html body div.menu div.item {
+	display: inline-block;
+	position: relative;
+	height: 26px;
+	padding: 0px 8px;
+	line-height: 26px;
+	color: #FFF;
+	font-family: "OpenSans-Regular";
+	font-size: 13px;
+	cursor: pointer;
+	transition: margin-left 200ms linear;
+	-webkit-transition: margin-left 200ms linear;
+	-moz-transition: margin-left 200ms linear;
+	-ms-transition: margin-left 200ms linear;
+	-o-transition: margin-left 200ms linear;
+}
+html body div.menu div.item.hidden {
+	margin-left: -33px;
+}
+html body div.menu div.item.left {
+	float: left;
+	border-right: 1px solid rgba(255,255,255,0.05);
+}
+html body div.menu div.item.right {
+	float: right;
+	border-left: 1px solid rgba(255,255,255,0.05);
+}
+html body div.menu div.item.center:last-of-type {
+	border-right: none;
+}
+html body div.menu div.item:hover {
+	background: rgba(11,11,11,1);
+}
+html body div.menu div.item:active {
+	background: rgba(20,20,20,1);
+}
+html body div.menu div.item.noclick:active {
+	background: rgba(11,11,11,1);
+}
+html body div.menu div.item.nohover:hover {
+	background: none;
+}
+html body div.menu div.item.no-left-border {
+	border-left: none;
+}
+html body div.menu div.item.no-right-border {
+	border-right: none;
+}
+html body div.menu div.item.no-top-border {
+	border-top: none;
+}
+html body div.menu div.item.no-bottom-border {
+	border-bottom: none;
+}
+html body div.menu div.item.left span.ip {
+	font-family: "OpenSans-SemiBold";
+}
+html body div.menu div.item.left span.ip div.status {
+	height: 12px;
+	width: 12px;
+	border-radius: 999px;
+	display: inline-block;
+	float: left;
+	margin-top: 7px;
+	margin-right: 6px;
+}
+html body div.menu div.item.left span.ip div.status.active {
+	background: rgb(33, 255, 0);
+}
+html body div.menu div.item.left span.ip div.status.inactive {
+	background: rgba(120,120,120,1)
+}
+html body div.menu div.item div.icon {
+	position: relative;
+	top: 5px;
+	width: 16px;
+	height: 16px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+html body div.menu div.item div.icon.plug {
+	background-image: url(../images/plug.svg);
+}
+html body div.menu div.item div.icon.newwindow {
+	background-image: url(../images/newwindow.svg);
+}
+html body div.menu div.item div.icon.overview {
+	background-image: url(../images/newwindow.svg);
+}
+html body div.menu div.item div.icon.session {
+	background-image: url(../images/session.svg);
+}
+html body div.menu div.item div.icon.lock {
+	background-image: url(../images/key.svg);
+}
+html body div.menu div.item div.icon.pause {
+	background-image: url(../images/pause.svg);
+}
+html body div.menu div.item div.icon.stop {
+	background-image: url(../images/stop.svg);
+}
+html body div.menu div.item div.icon.proxy-icon {
+	background-image: url(../images/proxy-icon.svg);
+}
+html body div.menu div.item div.icon.proxy {
+	background-image: url(../images/proxy.svg);
+}
+html body div.menu div.item div.icon.settings {
+	background-image: url(../images/settings.svg);
+}
+html body div.menu div.item div.icon.javascript {
+	background-image: url(../images/javascript.svg);
+}
+html body div.menu div.item div.icon.streammic {
+	background-image: url(../images/streammic.svg);
+}
+html body div.menu div.item div.icon.eye {
+	background-image: url(../images/eye.svg);
+}
+html body div.menu div.item div.icon.link {
+	background-image: url(../images/link.svg);
+}
+html body div.menu div.item div.icon.link-unsafe {
+	background-image: url(../images/link-unsafe.svg);
+}
+html body div.menu div.item div.icon.streammon {
+	background-image: url(../images/streammon.svg);
+}
+html body div.menu div.item div.icon.snapmon {
+	background-image: url(../images/snapmon.svg);
+}
+html body div.menu div.item div.icon.selectall {
+	background-image: url(../images/selectall.svg);
+}
+html body div.menu div.item div.icon.clear {
+	background-image: url(../images/clear.svg);
+}
+html body div.menu div.item div.icon.padlock {
+	background-image: url(../images/padlock.svg);
+}
+html body div.menu div.item div.icon.io {
+	background-image: url(../images/io.svg);
+}
+html body div.menu div.item div.icon.toggle {
+	background-image: url(../images/toggle.svg);
+}
+html body div.menu div.item div.icon.appearance {
+	background-image: url(../images/appearance.svg);
+}
+html body div.menu div.item div.icon.plus {
+	background-image: url(../images/plus.svg);
+}
+html body div.menu div.item div.icon.relay {
+	background-image: url(../images/relay.svg);
+}
+html body div.menu div.item div.icon.controls {
+	background-image: url(../images/controls.svg);
+}
+html body div.menu div.item div.icon.fingerprint {
+	background-image: url(../images/fingerprint.svg);
+}
+html body div.menu div.item div.icon.back {
+	background-image: url(../images/back.svg);
+}
+html body div.menu div.item div.icon.box {
+	background-image: url(../images/box.svg);
+}
+html body div.menu div.item div.icon.wand {
+	background-image: url(../images/wand.svg);
+}
+html body div.menu div.item div.icon.script {
+	background-image: url(../images/script.svg);
+}
+html body div.menu div.item div.icon.cards {
+	background-image: url(../images/cards.svg);
+}
+html body div.menu div.item div.icon.chip {
+	background-image: url(../images/chip.svg);
+}
+html body div.menu div.item div.icon div.icon.rec,
+html body div.submenu div.subitem div.icon div.icon.rec {
+	position: absolute;
+	top: 0px;
+	left: -1px;
+	width: 6px;
+	height: 6px;
+	border-radius: 100px;
+	background: red;
+	box-shadow: 0px 0 0 1px white;
+}
+html body div.submenu div.subitem div.icon div.icon.rec {
+	top: 0px;
+	left: -6px;
+	width: 4px;
+	height: 4px;
+}
+html body div.menu div.item div.icon div.icon.rec.off,
+html body div.submenu div.subitem div.icon div.icon.rec.off {
+	background: #222;
+}
+html body div.menu div.item[name=statusled].online {
+	padding: 0px 2px 0 2px;
+	background: rgba(100,255,100,.5);
+	animation-duration: 666ms;
+	-webkit-animation-duration: 666ms;
+	animation-name: onlineblinking;
+	-webkit-animation-name: onlineblinking;
+	animation-iteration-count: infinite;
+	-webkit-animation-iteration-count: infinite;
+	animation-direction: alternate;
+	-webkit-animation-direction: alternate;
+}
+html body div.menu div.item[name=javascript] input {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	border: none;
+	background: none;
+	color: #888;
+	padding: 0px;
+	opacity: 0;
+	border-color: #222;
+	transition: all 200ms ease;
+	-webkit-transition: all 200ms ease;
+	-moz-transition: all 200ms ease;
+	-ms-transition: all 200ms ease;
+	-o-transition: all 200ms ease;
+}
+html body div.menu div.item[name=javascript] input:focus {
+	opacity: 1;
+	width: 100px;
+	background: rgb(11,11,11);
+	padding-left: 7px;
+	padding-right: 7px;
+	border-right: 1px solid black;
+}
+html body div.menu div.item div.icon div.icon.rec.blinking,
+html body div.submenu div.subitem div.icon div.icon.rec.blinking {
+	animation-duration: 666ms;
+	-webkit-animation-duration: 666ms;
+	animation-name: blinking;
+	-webkit-animation-name: blinking;
+	animation-iteration-count: infinite;
+	-webkit-animation-iteration-count: infinite;
+	animation-direction: alternate;
+	-webkit-animation-direction: alternate;
+}
+html body div.menu div.item div.submenu {
+	display: none;
+	z-index: 9;
+	position: absolute;
+	top: 26px;
+	left: 1px;
+	min-width: 180px;
+	width: auto;
+	max-height: calc(100% - 26px);
+	border-left: none;
+	border-right: none;
+}
+html body div.menu div.item.right div.submenu {
+	left: initial;
+	right: 1px;
+}
+html body div.menu div.item div.submenu div.subitem {
+	border-bottom: 1px solid rgba(255,255,255,0.05);
+	text-indent: 6px;
+	height: 30px;
+	width: 100%;
+	line-height: 29px;
+	text-align: left;
+	background: rgba(0,0,0,0.8);
+}
+html body div.menu div.item div.submenu div.submodule {
+	text-indent: 6px;
+	min-height: 60px;
+	width: 420px;
+	line-height: 29px;
+	text-align: left;
+	cursor: default;
+	background: rgba(0,0,0,0.8);
+}
+html body div.menu div.item div.submenu div.subitem:hover {
+	background: rgba(11,11,11,1);
+}
+html body div.menu div.item div.submenu div.subitem:active {
+	background: rgba(20,20,20,1);
+}
+html body div.menu div.item div.submenu div.subitem:last-of-type {
+	border-bottom: none;
+}
+html body div.menu div.item.left:hover div.submenu {
+	display: block;
+	left: -1px;
+}
+html body div.menu div.item.right:hover div.submenu {
+	display: block;
+	right: -1px;
+}
+html body div.menu div.item div.submenu div.icon {
+	width: 12px;
+	height: 12px;
+	top: 1.5px;
+	margin: 0px 7px 0 5px;
+	display: inline-block;
+}

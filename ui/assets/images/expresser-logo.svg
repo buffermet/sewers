@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="320"
+   height="320"
+   viewBox="0 0 84.66666 84.666667"
+   version="1.1"
+   id="svg889"
+   sodipodi:docname="sewers-logo.svg"
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1048"
+     id="namedview940"
+     showgrid="false"
+     inkscape:zoom="1.475"
+     inkscape:cx="27.535401"
+     inkscape:cy="190.31316"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg889" />
+  <defs
+     id="defs883">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1489">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop1485" />
+      <stop
+         style="stop-color:#1a1a1a;stop-opacity:1"
+         offset="1"
+         id="stop1487" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient1190">
+      <stop
+         style="stop-color:#4d4d4d;stop-opacity:1"
+         offset="0"
+         id="stop1186" />
+      <stop
+         id="stop1192"
+         offset="0.30740765"
+         style="stop-color:#808080;stop-opacity:1" />
+      <stop
+         style="stop-color:#666666;stop-opacity:0;"
+         offset="1"
+         id="stop1188" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient1118">
+      <stop
+         id="stop1114"
+         offset="0"
+         style="stop-color:#ff00ff;stop-opacity:1" />
+      <stop
+         id="stop1116"
+         offset="1"
+         style="stop-color:#800080;stop-opacity:0.01005025" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient896">
+      <stop
+         id="stop892"
+         offset="0"
+         style="stop-color:#666666;stop-opacity:1;" />
+      <stop
+         id="stop894"
+         offset="1"
+         style="stop-color:#666666;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="82.488556"
+       x2="72.548767"
+       y1="49.992944"
+       x1="32.522513"
+       id="linearGradient898"
+       xlink:href="#linearGradient896" />
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="42.333332"
+       x2="60.217139"
+       y1="42.333332"
+       x1="24.449525"
+       id="linearGradient1120"
+       xlink:href="#linearGradient1118" />
+    <linearGradient
+       y2="82.488556"
+       x2="64.386086"
+       y1="30.699339"
+       x1="25.101896"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient1165"
+       xlink:href="#linearGradient1190" />
+    <filter
+       height="1.8808"
+       y="-0.4404"
+       width="1.8808"
+       x="-0.4404"
+       id="filter1220"
+       style="color-interpolation-filters:sRGB">
+      <feGaussianBlur
+         id="feGaussianBlur1222"
+         stdDeviation="9.0683373" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1489"
+       id="linearGradient1491"
+       x1="35.5284"
+       y1="55.042332"
+       x2="42.396751"
+       y2="84.824654"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <metadata
+     id="metadata886">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <circle
+     r="42.333332"
+     cy="42.333332"
+     cx="42.333332"
+     id="path866"
+     style="opacity:1;fill:url(#linearGradient1491);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5.75010252;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal" />
+  <circle
+     transform="matrix(0.69662263,0,0,0.69662263,12.842975,12.842975)"
+     r="24.709366"
+     cy="42.333332"
+     cx="42.333332"
+     id="circle1194"
+     style="opacity:1;fill:#800080;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3.35625362;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;filter:url(#filter1220)" />
+  <circle
+     style="opacity:1;fill:url(#linearGradient1120);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.19712663;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+     id="circle900"
+     cx="42.333332"
+     cy="42.333332"
+     r="16.175657" />
+  <g
+     id="g1163"
+     style="opacity:0.85">
+    <path
+       style="opacity:1;fill:url(#linearGradient1165);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5.75010252;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       d="m 84.666664,42.333332 c 0,23.380054 -19.018138,44.073634 -42.333332,42.333332 C 19.441479,82.957962 56.062196,87.384374 55.882345,64.633798 55.697524,41.254476 16.592052,15.216789 39.972106,15.216789 c 23.380054,0 44.694558,3.736489 44.694558,27.116543 z"
+       id="circle875" />
+  </g>
+</svg>
