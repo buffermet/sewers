@@ -360,11 +360,11 @@
 		updateSessionCount()
 		newsRelays = {
 			0: relays.length + " relay" + (relays.length > 1 || relays.length < 1 ? "s" : ""),
-			1: "User-Agent: <span style=\"font-weight:bold\">" + await escapeHTML( getSewersUserAgent() ) + "</span>",
+			1: "User-Agent: <span style=\"font-weight:bold\">" + await escapeHTML( await getSewersUserAgent() ) + "</span>",
 		},
 		newsSessions = {
 			0: sessions.length + " session" + (sessions.length > 1 || sessions.length < 1 ? "s" : ""),
-			1: "User-Agent: <span style=\"font-weight:bold\">" + await escapeHTML( getSewersUserAgent() ) + "</span>",
+			1: "User-Agent: <span style=\"font-weight:bold\">" + await escapeHTML( await getSewersUserAgent() ) + "</span>",
 		}
 
 		// Cycle

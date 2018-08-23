@@ -71,46 +71,46 @@
 		}
 	})
 
-	// Open new window button
-	document.querySelector("html body div.menu div.item[name=newwindow]").addEventListener("click", async()=>{
-		self.open("../../terminal.html?fixthis", "root@fixthis - TAB" + Math.floor( (Math.random() * 9999) + 1), "menubar=no,location=no,resizable=yes,scrollbars=no,status=yes")
-	})
+	// // Open new window button
+	// document.querySelector("html body div.menu div.item[name=newwindow]").addEventListener("click", async()=>{
+	// 	self.open("../../terminal.html?fixthis", "root@fixthis - TAB" + Math.floor( (Math.random() * 9999) + 1), "menubar=no,location=no,resizable=yes,scrollbars=no,status=yes")
+	// })
 
 	// Clear button
 	document.querySelector("html body div.menu div.item[name=clear]").addEventListener("click", async()=>{
 		clear()
 	})
 
-	// Select all button
-	document.querySelector("html body div.menu div.item[name=selectall]").addEventListener("click", async()=>{
-		textarea.value =  terminal.text()
-		textarea.select()
-	})
+	// // Select all button
+	// document.querySelector("html body div.menu div.item[name=selectall]").addEventListener("click", async()=>{
+	// 	textarea.value =  terminal.text()
+	// 	textarea.select()
+	// })
 
-	// Stream microphone button
-	document.querySelector("html body div.menu div.item[name=streammic]").addEventListener("click", async()=>{
-		print(request_tag + "<span title='" + timestamp() + "'>Streaming microphone at " + mic_bitrate +  "bps...</span>")
-		streamMic(mic_bitrate)
-	})
+	// // Stream microphone button
+	// document.querySelector("html body div.menu div.item[name=streammic]").addEventListener("click", async()=>{
+	// 	print(request_tag + "<span title='" + timestamp() + "'>Streaming microphone at " + mic_bitrate +  "bps...</span>")
+	// 	streamMic(mic_bitrate)
+	// })
 
-	// Stream monitor button
-	document.querySelector("html body div.menu div.item[name=streammon]").addEventListener("click", async()=>{
-		print(request_tag + "<span title='" + timestamp() + "'>Streaming monitor at a resolution of " + mon_resolution + " pixels at " + mon_bitrate + "bps...</span>")
-		streamMon(mon_bitrate, mon_resolution)
-	})
+	// // Stream monitor button
+	// document.querySelector("html body div.menu div.item[name=streammon]").addEventListener("click", async()=>{
+	// 	print(request_tag + "<span title='" + timestamp() + "'>Streaming monitor at a resolution of " + mon_resolution + " pixels at " + mon_bitrate + "bps...</span>")
+	// 	streamMon(mon_bitrate, mon_resolution)
+	// })
 
-	// Stream webcam button
-	document.querySelector("html body div.menu div.item[name=streamcam]").addEventListener("click", async()=>{
-		print(request_tag + "<span title='" + timestamp() + "'>Streaming webcam at a resolution of " + cam_resolution + " pixels at " + cam_bitrate + "bps...</span>")
-		streamCam(cam_bitrate, cam_resolution)
-	})
+	// // Stream webcam button
+	// document.querySelector("html body div.menu div.item[name=streamcam]").addEventListener("click", async()=>{
+	// 	print(request_tag + "<span title='" + timestamp() + "'>Streaming webcam at a resolution of " + cam_resolution + " pixels at " + cam_bitrate + "bps...</span>")
+	// 	streamCam(cam_bitrate, cam_resolution)
+	// })
 
-	// End all streams button
-	document.querySelector("html body div.menu div.item[name=endallstreams]").addEventListener("click", async()=>{
-		print(request_tag + "<span title='" + timestamp() + "'>Ending all streams...</span>")
-		stdIn("ENDALLSTREAMS")
-		$("html body div.menu div.item").find("div.rec.blinking").parent().parent().remove()
-	})
+	// // End all streams button
+	// document.querySelector("html body div.menu div.item[name=endallstreams]").addEventListener("click", async()=>{
+	// 	print(request_tag + "<span title='" + timestamp() + "'>Ending all streams...</span>")
+	// 	stdIn("ENDALLSTREAMS")
+	// 	$("html body div.menu div.item").find("div.rec.blinking").parent().parent().remove()
+	// })
 
 	shrinkInputField = async () => {
 		form.style.height = "calc(100vh - " + scrollBox.getBoundingClientRect().height + "px)"

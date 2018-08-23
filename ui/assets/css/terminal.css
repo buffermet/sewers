@@ -1,0 +1,143 @@
+* {
+	-webkit-appearance: none !important;
+	-moz-appearance: none !important;
+	-ms-appearance: none !important;
+	-o-appearance: none !important;
+}
+*::selection {
+	background: white;
+	color: #000;
+	text-shadow: none;
+}
+*::-moz-selection {
+	background: white;
+	color: #000;
+	text-shadow: none;
+}
+
+::-webkit-scrollbar { display: none; }
+
+html,
+html body {
+	background: black;
+	margin: 0;
+	overflow: hidden;
+	font-weight: 100;
+}
+html body div.scrollBox {
+	position: absolute;
+	height: auto;
+	max-height: calc(100% - 26px - 48px);
+	width: 100%;
+	padding-top: 26px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+html body div.scrollBox div.background {
+	z-index: -1;
+	position: fixed;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	opacity: .1;
+	/*background-image: url(../../assets/images/backgrounds/16.jpg);*/
+	background-image: url(../../assets/images/mandelbrot.svg);
+	/*background-image: url(../../assets/images/backgrounds/1.png);*/
+	background-size: auto 220px;
+	background-repeat: no-repeat;
+	background-position: top right;
+	pointer-events: none;
+}
+html body div.scrollBox div.terminal {
+	padding: 3px;
+	color: #FFF;
+	font-family: monospace;
+	font-size: 12px;
+	text-shadow: 0 -1px 0px black;
+	word-break: break-all;
+}
+html body div.scrollBox div.terminal a {
+	color: white;
+	text-decoration: underline;
+	cursor: pointer;
+	user-select: text !important;
+	-webkit-user-select: text !important;
+	-moz-user-select: text !important;
+	-ms-user-select: text !important;
+	-o-user-select: text !important;
+}
+html body div.scrollBox div.terminal a:hover {
+	text-decoration: none;
+}
+html body div.scrollBox div.terminal img {
+	max-width: 100%;
+}
+html body div.scrollBox div.terminal img.icon {
+	position: relative;
+	width: 12px;
+	height: 12px;
+	top: 1px;
+	margin: 0 3px 0 1px;
+	display: inline-block;
+}
+html body div.scrollBox div.terminal img.icon.link {
+	margin: 0;
+}
+html body div.scrollBox div.terminal span {
+	user-select: initial;
+	-webkit-user-select: initial;
+	-moz-user-select: initial;
+	-ms-user-select: initial;
+	-o-user-select: initial;
+}
+html body div.scrollBox div.terminal hr {
+	display: block;
+	width: calc(100% - 12px);
+	height: 1px;
+	background: rgba(255,255,255,0.05);
+	margin: 6px;
+	border: none;
+	padding: 0px;
+}
+html body form {
+	position: absolute;
+	bottom: 0;
+	height: calc(100vh - 26px - 12px - 11px);
+	min-height: 40px;
+	width: 100%;
+	font-size: 12px;
+}
+html body form div.loadline {
+	position: absolute;
+	left: -720px;
+	width: 720px;
+	height: 1px;
+	background: url(../../assets/images/loadline.svg);
+	background-size: 100%;
+}
+html body form textarea {
+	margin: 0;
+	padding: 0;
+	outline: none;
+	width: 100%;
+	height: calc(100% - 8px);
+	border: none;
+	border-top: 1px solid rgba(255,255,255,0.05);
+	text-shadow: 0 -1px 0px black;
+	font-size: 12px;
+	padding: 4px;
+	background: transparent;
+	resize: none;
+	color: #FFF;
+}
+html body form input[type=button]:hover {
+	background: rgba(80,80,80,0.4);
+}
+img.preload {
+	position: absolute;
+	width: 0px;
+	height: 0px;
+}
+.displaynone {
+	display: none;
+}

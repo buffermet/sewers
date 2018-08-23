@@ -4,57 +4,41 @@
 	// Make console resizable.
 	topbar.addEventListener("mousedown", async event => {
 		resizeConsole = true
-		dragStart = event.clientY
 	})
 	topbar.addEventListener("touchstart", async event => {
 		resizeConsole = true
-		dragStart = event.clientY
 	})
 	document.addEventListener("mousemove", async event => {
-		if (!resizeConsole) {
-			return
-		}
-		offset = document.body.getBoundingClientRect().height - event.clientY
-		if ( event.clientY > 75 && event.clientY < ( document.body.getBoundingClientRect().height - 50 ) ) {
-			webConsole.style.height = offset + "px"
-			topbar.style.bottom = (offset - 1) + "px"
-			scrollContainer.style.height = "calc(100% - " + offset + "px)"
+		if (resizeConsole) {
+			let offset = document.body.getBoundingClientRect().height - event.clientY
+			if ( event.clientY > 75 && event.clientY < ( document.body.getBoundingClientRect().height - 50 ) ) {
+				webConsole.style.height = offset + "px"
+				topbar.style.bottom = (offset - 1) + "px"
+				scrollContainer.style.height = "calc(100% - " + offset + "px)"
+			}
 		}
 	})
 	document.addEventListener("touchmove", async event => {
-		if (!resizeConsole) {
-			return
-		}
-		offset = document.body.getBoundingClientRect().height - event.clientY
-		if ( event.clientY > 75 && event.clientY < ( document.body.getBoundingClientRect().height - 50 ) ) {
-			webConsole.style.height = offset + "px"
-			topbar.style.bottom = (offset - 1) + "px"
-			scrollContainer.style.height = "calc(100% - " + offset + "px)"
+		if (resizeConsole) {
+			let offset = document.body.getBoundingClientRect().height - event.clientY
+			if ( event.clientY > 75 && event.clientY < ( document.body.getBoundingClientRect().height - 50 ) ) {
+				webConsole.style.height = offset + "px"
+				topbar.style.bottom = (offset - 1) + "px"
+				scrollContainer.style.height = "calc(100% - " + offset + "px)"
+			}
 		}
 	})
 	document.addEventListener("mouseup", async event => {
 		if (resizeConsole) {
-			$.ajax({
-				method: "post",
-				url: "/config/sewers",
-				dataType: "json",
-				data: "console_height=" + webConsole.getBoundingClientRect().height
-			})
+			sendRequest( "POST", "/config/sewers", webConsole.getBoundingClientRect().height )
+			resizeConsole = false
 		}
-		resizeConsole = false
 	})
 	document.addEventListener("touchend", async event => {
 		if (resizeConsole) {
-			req = new XMLHttpRequest()
-			req.open("POST", "/config/sewers")
-			$.ajax({
-				method: "post",
-				url: "/config/sewers",
-				dataType: "json",
-				data: "console_height=" + webConsole.getBoundingClientRect().height
-			})
+			sendRequest( "POST", "/config/sewers", webConsole.getBoundingClientRect().height )
+			resizeConsole = false
 		}
-		resizeConsole = false
 	})
 
 	// Prevent console from being hidden when resizing window.

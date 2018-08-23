@@ -1,0 +1,40 @@
+@keyframes blinking {
+	from {
+	  background: red;
+	}
+	to {
+	  background: #222;
+	}
+}
+@-webkit-keyframes blinking {
+	from {
+	  background: red;
+	}
+	to {
+	  background: #222;
+	}
+}
+@keyframes onlineblinking {
+	from {
+	  background: rgba(100,255,100,.5);
+	  box-shadow: none;
+	  border-color: transparent;
+	}
+	to {
+	  background: rgba(0,255,0,1);
+	  box-shadow: 0 0 5px 1px green;
+	  border-color: rgba(0,255,0,.1);
+	}
+}
+@-webkit-keyframes onlineblinking {
+	from {
+	  background: rgba(100,255,100,.5);
+	  box-shadow: none;
+	  border-color: transparent;
+	}
+	to {
+	  background: rgba(0,255,0,1);
+	  box-shadow: 0 0 5px 1px green;
+	  border-color: rgba(0,255,0,.1);
+	}
+}
