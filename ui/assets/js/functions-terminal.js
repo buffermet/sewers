@@ -15,8 +15,8 @@
 		return buffer
 	}
 
-	// Dilate seconds
-	dilateTime = async (min, max) => {
+	// Randomize seconds
+	randTime = async (min, max) => {
 		return ( min + ( Math.random() * (max - min) ) )
 	}
 
@@ -55,15 +55,13 @@
 
 	// Get current User-Agent of sewers (used in requests sent to relays)
 	getsewersUserAgent = async () => {
-		let useragent = ""
-
-		res = await sendRequest("GET", "/useragent", "")
-
-		if (res.status == 200) {
-			useragent = res.responseText
-		}
-
-		return useragent
+		return new Promise(resolve=>{
+			sendRequest("GET", "/useragent", "").then(res=>{
+				if (res.status == 200) {
+					resolve(res.responseText)
+				}
+			})
+		})
 	}
 
 	printSessionInfo = async () => {
@@ -96,19 +94,15 @@
 
 	// Return StdIn to sewers
 	stdIn = async data => {
-		data = {
-			"body" : data,
-			"session_id" : session_id,
-			"encryption_key_one" : session_config.encryption_key_one,
-			"relay_address": relay_config.relay_address,
-			"request_tag": relay_config.sewers_post_tag
-		}
-		$.ajax({
-			method: 'post',
-			url: '../../post',
-			dataType: 'json',
-			data: data
-		})
+		let params = new String(
+			"?body=" + data + 
+			"&session_id=" + session_id + 
+			"&encryption_key_one=" + session_config.encryption_key_one + 
+			"&relay_address=" + relay_config.relay_address + 
+			"&request_tag=" + relay_config.sewers_post_tag
+		)
+
+		let res = sendForm("POST", "/post" + params, "")
 	}
 
 	// Change fetch rate
@@ -169,15 +163,18 @@
 						await print(response_tag + ' <span class="bold lightgreen">OK</span> <span>' + time + '</span><br>')
 
 						if (type == "image/png") {
-							await print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + response + "\" /><br>")
+							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
 						} else if (type == "\" + type + \"") {
-							await print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + response + "\" /><br>")
+							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
 						} else if (type == "\" + type + \"") {
-							await print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + response + "\" /><br>")
+							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
 						} else if (type == "" + type + "") {
-							await print(plaintext + '<br>')
+							let stdout = await escapeHTML(plaintext)
+							stdout = stdout + (stdout.endsWith("<br>") ? "" : "\n")
+
+							print(stdout)
 						} else {
-							await print('<span title="Response ID: ' + packetID + '">' + await escapeHTML(plaintext) + '</span>')
+							print('<span title="Response ID: ' + packetID + '">' + await escapeHTML(plaintext) + '</span>')
 						}
 					}
 				}
@@ -204,12 +201,12 @@
 
 		auto_fetching = true
 
-		fetch_delay = dilateTime(min, max) * 1000
+		fetch_delay = randTime(min, max) * 1000
 
 		fetchPackets()
 
 		autoFetcher = async () => {
-			fetch_delay = dilateTime(min, max) * 1000
+			fetch_delay = randTime(min, max) * 1000
 
 			fetchPackets()
 

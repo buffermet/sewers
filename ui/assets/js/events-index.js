@@ -47,31 +47,27 @@
 			webConsole.style.height = ( document.body.getBoundingClientRect().height - 75 ) + "px"
 			topbar.style.bottom = (document.body.getBoundingClientRect().height - 75 - 1) + "px"
 			scrollContainer.style.height = "calc(100% - " + ( document.body.getBoundingClientRect().height - 75 ) + "px)"
-			$.ajax({
-				method: "post",
-				url: "/config/sewers",
-				dataType: "json",
-				data: "console_height=" + webConsole.getBoundingClientRect().height
-			})
+
+			let console_height = webConsole.getBoundingClientRect().height
+
+			let res = sendRequest("POST", "/config/sewers?console_height=" + console_height, "")
 		}
 	})
 
 	// Console "CLEAR" button
 	consoleClear.addEventListener("click", async()=>{
-		$.ajax({
-			method: "get",
-			url: "/clear_console_log",
-			async: false,
-			success: () => {
-				consoleContainer.html("")
-			}
-		})
-		await fetchLog()
+		let res = await sendRequest("GET", "/clear_console_log", "")
+
+		if (res.status == 200) {
+			consoleContainer.innerHTML = ""
+		}
+
+		fetchLog()
 	})
 
 	// (change this) Fetch log when user is active on window
 	document.addEventListener("mouseenter", async()=>{
-		await fetchLog()
+		fetchLog()
 	})
 
 	// Quit button

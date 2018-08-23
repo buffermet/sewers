@@ -1,9 +1,9 @@
 
 /* Sync/async HTTP transport */
 
-	sendRequest = async (type, address, body) => {
+	const sendRequest = async (type, address, body) => {
 		return new Promise(resolve=>{
-			req = new XMLHttpRequest()
+			let req = new XMLHttpRequest()
 			req.open(type, address)
 			req.onreadystatechange = async () => {
 				if (req.readyState == 4) {
@@ -14,9 +14,9 @@
 		})
 	}
 
-	sendForm = async (type, address, params) => {
+	const sendForm = async (type, address, params) => {
 		return new Promise(resolve=>{
-			req = new XMLHttpRequest()
+			let req = new XMLHttpRequest()
 			req.open(type, address)
 			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
 			req.onreadystatechange = async () => {
@@ -28,9 +28,9 @@
 		})
 	}
 
-	sendJSON = async (type, address, json) => {
+	const sendJSON = async (type, address, json) => {
 		return new Promise(resolve=>{
-			req = new XMLHttpRequest()
+			let req = new XMLHttpRequest()
 			req.open(type, address)
 			req.setRequestHeader("Content-Type", "application/json")
 			req.onreadystatechange = async () => {
@@ -38,6 +38,6 @@
 					resolve(req)
 				}
 			}
-			req.send(json)
+			req.send( JSON.stringify(json) )
 		})
 	}
