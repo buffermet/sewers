@@ -3,9 +3,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" charset="utf-8">
 	<title>Loading</title>
-	<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
-	<link rel="stylesheet" type="text/css" href="../../assets/css/fonts.css">
-	<link rel="stylesheet" type="text/css" href="../../assets/css/menu.css">
+	<link rel="/assets/images/favicon.png">
+	<link rel="/assets/css/fonts.css">
+	<link rel="/assets/css/menu.css">
 	<style type="text/css">
 
 /* terminal-animations.css */
@@ -198,27 +198,27 @@
 		}
 
 	</style>
-	<link rel="stylesheet" type="text/css" href="../../assets/css/colors.css">
+	<link rel="/assets/css/colors.css">
 </head>
 <base target="_blank">
 <body>
-	<img class="preload" src="../../assets/images/link.svg"></img>
-	<img class="preload" src="../../assets/images/home.svg"></img>
-	<img class="preload" src="../../assets/images/server.svg"></img>
-	<img class="preload" src="../../assets/images/key.svg"></img>
-	<img class="preload" src="../../assets/images/pause.svg"></img>
-	<img class="preload" src="../../assets/images/stop.svg"></img>
-	<img class="preload" src="../../assets/images/endallstreams.svg"></img>
-	<img class="preload" src="../../assets/images/snapmon.svg"></img>
-	<img class="preload" src="../../assets/images/streammon.svg"></img>
-	<img class="preload" src="../../assets/images/streammic.svg"></img>
-	<img class="preload" src="../../assets/images/eye.svg"></img>
-	<img class="preload" src="../../assets/images/proxy.svg"></img>
-	<img class="preload" src="../../assets/images/proxy-icon.svg"></img>
-	<img class="preload" src="../../assets/images/session.svg"></img>
-	<img class="preload" src="../../assets/images/newwindow.svg"></img>
-	<img class="preload" src="../../assets/images/selectall.svg"></img>
-	<img class="preload" src="../../assets/images/clear.svg"></img>
+	<img class="/assets/images/link.svg"></img>
+	<img class="/assets/images/home.svg"></img>
+	<img class="/assets/images/server.svg"></img>
+	<img class="/assets/images/key.svg"></img>
+	<img class="/assets/images/pause.svg"></img>
+	<img class="/assets/images/stop.svg"></img>
+	<img class="/assets/images/endallstreams.svg"></img>
+	<img class="/assets/images/snapmon.svg"></img>
+	<img class="/assets/images/streammon.svg"></img>
+	<img class="/assets/images/streammic.svg"></img>
+	<img class="/assets/images/eye.svg"></img>
+	<img class="/assets/images/proxy.svg"></img>
+	<img class="/assets/images/proxy-icon.svg"></img>
+	<img class="/assets/images/session.svg"></img>
+	<img class="/assets/images/newwindow.svg"></img>
+	<img class="/assets/images/selectall.svg"></img>
+	<img class="/assets/images/clear.svg"></img>
 	<div class="menu">
 		<div class="item left online" name="statusled" title="Status: Online"></div>
 		<!-- <div class="item left" name="newwindow" title="Open new terminal">
@@ -316,30 +316,28 @@
 		<!-- <input type="button" name="button" value="ENTER"> -->
 	</form>
 	<div class="buffer"></div>
-	<script src="../../assets/libs/jquery.min.js"></script>
+	<script src="/assets/libs/jquery.min.js"></script>
 	<script>
 
-// terminal-variables.js
-
 		let form = document.querySelector("html body form"),
-				textarea = document.querySelector("html body form textarea"),
-				scrollBox = document.querySelector("html body div.scrollBox"),
-				terminal = document.querySelector("html body div.scrollBox div.terminal"),
-				jsfield = document.querySelector("html body div.menu div.item[name=javascript] input")
+		    textarea = document.querySelector("html body form textarea"),
+		    scrollBox = document.querySelector("html body div.scrollBox"),
+		    terminal = document.querySelector("html body div.scrollBox div.terminal"),
+		    jsfield = document.querySelector("html body div.menu div.item[name=javascript] input")
 
 		let session_config = {},
-				relay_config = {}
+		    relay_config = {}
 
 		let auto_fetching = false,
-				fetch_delay = 1000
+		    fetch_delay = 1000
 
 		let load_line = document.querySelector("html body form div.loadline")
 
 		let relay = location.href.replace(/.*\/terminal\//g, "").replace(/\/.*/g, ""),
-				session_id = location.href.replace(/.*\//g, "")
+		    session_id = location.href.replace(/.*\//g, "")
 
 		let request_tag = "<span class='orange bold'>sewers</span> > ",
-				response_tag = "<span class='cyan bold'>interpreter</span> > "
+		    response_tag = "<span class='cyan bold'>interpreter</span> > "
 
 		let request
 
@@ -350,791 +348,65 @@
 		let allowed_characters = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz".split("")
 
 		let cmd_history = new Array(),
-				cmd_history_i = 0,
-				cmd_current
+		    cmd_history_i = 0,
+		    cmd_current
 
 		let linebreaks,
-				clearBreaks = parseInt( scrollBox.getBoundingClientRect().height / 12 )
+		    clearBreaks = parseInt( scrollBox.getBoundingClientRect().height / 12 )
 
 		let warnBeforeClose = true,
-				warnOnReset = false,
-				scrollOnInput = true,
-				scrollOnOutput = true,
-				scrollOnScrolledOutput = false,
-				scrollOnJsInput = false,
-				mic_bitrate = "16000",
-				mon_bitrate = "512000",
-				mon_resolution = "1280x800"
-				cam_bitrate = "512000",
-				cam_resolution = "1280x800"
-
-// terminal-commands.json
-
-		commands = {
-			"clear": {
-				"category": "Terminal",
-				"arguments": [],
-				"description": ""
-			},
-			"exit": {
-				"category": "Terminal",
-				"arguments": [],
-				"description": ""
-			},
-			"fetchrate": {
-				"category": "Interpreter",
-				"arguments": ["MIN SECONDS", "MAX SECONDS"],
-				"description": "Set automatic fetch rate of interpreter."
-			}
-		}
-
-// terminal-functions.js
-
-		// Synchronous & asynchronous HTTP requests
-	  HTTPRequest = (method, url, body) => {
-	    return new Promise((resolve, reject)=>{
-	      req = new XMLHttpRequest()
-	      req.open(method, url, false)
-	      req.onload = () => {
-	        if (req.status == 200) {
-	          resolve(req)
-	        } else {
-	          reject(req)
-	        }
-	      }
-	      req.onerror = () => {
-	        reject(req)
-	      }
-	      req.send(body)
-	    })
-	  }
-
-	  // Generate random string
-	  randomString = (min, max) => {
-	  	length = ( min + ( Math.random() * (max - min) ) )
-	  	buffer = ""
-	  	chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	  	while (buffer.length < length) {
-	  		index = parseInt( Math.random() * chars.length )
-	  		buffer = buffer + chars.charAt(index)
-	  	}
-	  	return buffer
-	  }
-
-	  // Dilate seconds
-	  dilateTime = (min, max) => {
-	  	return ( min + ( Math.random() * (max - min) ) )
-	  }
-
-		// Print to terminal
-		print = html => {
-			now = new Date()
-			timestamped = document.createElement("stamp")
-			timestamped.setAttribute("time", now)
-			timestamped.innerHTML = html
-			terminal.append(timestamped)
-			// // For some reason appending is done synchronously??
-			setTimeout(()=>{
-				shrinkInputField()
-				resetClearBreaks()
-				if (scrollOnOutput) {
-					scrollToBottom()
-				}
-			}, 40)
-		}
-
-		// Return readable timestamp
-		timestamp = () => {
-			return new Date().toLocaleString().toUpperCase().replace(",", " ").replace(/\//g, "-")
-		}
-
-		// Print commands
-		printCommands = () => {
-			$.ajax({
-				method: "get",
-				url: "../../help.html",
-				success: res => {
-					print(res)
-				}
-			})
-		}
-
-		// Get current User-Agent of sewers (used in requests sent to relays)
-		getsewersUserAgent = () => {
-			useragent = ""
-
-			$.ajax({
-				method: "GET",
-				url: "/useragent",
-				async: false,
-				success: res => {
-					useragent = res
-				}
-			})
-
-			return useragent
-
-			// HTTPRequest("GET", "http://0.0.0.0/useragent", "")
-			// .then(res=>{
-			// 	return res.responseText
-			// })
-			// .catch(err=>{
-			// 	return err.statusText
-			// })
-
-			// fetch("http://0.0.0.0/useragent", {method: "GET"})
-			// .then(function(res){
-			// 	return res.text()
-			// })
-			// .catch(function(err){
-			// 	console.log("ERROR: " + err)
-			// })
-		}
-
-		printSessionInfo = () => {
-			icon = ""
-
-			if ( session_config["os"].indexOf("Android" || "android") >= 0 ) {
-				icon = "<img width=\"12px\" src=\"../../assets/images/os_android.svg\" />"
-			} else if ( session_config["os"].indexOf("iOS" || "ios") >= 0 ) {
-				icon = "<img width=\"12px\" src=\"../../assets/images/os_apple.svg\" />"
-			} else if ( session_config["os"].indexOf("cygwin" || "cygwin" || "mswin" || "mingw" || "bccwin" || "wince" || "emx") >= 0 ) {
-				icon = "<img width=\"12px\" src=\"../../assets/images/os_windows.svg\" />"
-			} else if ( session_config["os"].indexOf("Darwin" || "darwin") >= 0 ) {
-				icon = "<img width=\"12px\" src=\"../../assets/images/os_apple.svg\" />"
-			} else if ( session_config["os"].indexOf("Linux" || "linux") >= 0 ) {
-				icon = "<img width=\"12px\" src=\"../../assets/images/os_linux.svg\" />"
-			}
-
-			print(" " + icon + " <span class=\"bold\">" + session_config["os"] + "<br></span>" + 
-				"<span class=\"grey\">Device&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span> <span class=\"bold\">" + session_config["device"] + "<br></span>" + 
-				"<span class=\"grey\">Hostname&nbsp;&nbsp;&nbsp;:</span> <span class=\"bold\">" + session_config["hostname"] + "<br></span>" + 
-				"<span class=\"grey\">Session&nbsp;ID&nbsp;:</span> <span class=\"bold\">" + session_config["session_id"] + "<br></span>" + 
-				"<span class=\"grey\">User-Agent&nbsp;:</span> <span class=\"bold\">" + session_config["user_agent"] + "<br><br></span>" + 
-				"<span>Interpreter is fetching packets every <span class=\"bold\">" + session_config["fetch_rate"].replace("-", "</span> to <span class=\"bold\">") + "</span> seconds</span>.<br></span>" + 
-				"<hr>" + 
-				"<span class=\"bold\">sewers v1.0<br></span>" + 
-				"<span class=\"grey\">User-Agent&nbsp;:</span> <span class=\"bold\">" + getsewersUserAgent() + "<br><br></span>" + 
-				"<span>Type <span class=\"orange bold\">?</span>, <span class=\"orange bold\">h</span> or <span class=\"orange bold\">help</span> for more info.<br></span>"
-			)
-		}
-
-		// checkStreams = () => {
-		// 	print(request_tag + "<span title=\"" + timestamp() + "\">Checking active streams...</span>")
-		// 	$.ajax({
-		// 		method: "post",
-		// 		url: "/",
-		// 		data: "data=CHECKSTREAMS&session_id=" + session_id,
-		// 		success: res => {
-		// 			print("<span>Active streams: </span>" + res)
-		// 		}
-		// 	})
-		// }
-
-		// Return StdIn to sewers
-		stdIn = data => {
-			data = {
-				"body"               : data,
-				"session_id"         : session_id,
-				"encryption_key_one" : session_config["encryption_key_one"],
-				"relay_address"      : relay_config["relay_address"],
-				"request_tag"        : relay_config["sewers_post_tag"]
-			}
-			$.ajax({
-				method: 'post',
-				url: '../../post',
-				dataType: 'json',
-				data: data
-			})
-		}
-
-		// Change fetch rate
-		changeFetchRate = (min, max) => {
-			$.ajax({
-				method: 'post',
-				url: '../../post',
-				data: 'body=' + session_config['fetch_rate_tag'] + ' ' + min + ' ' + max + '&session_id=' + session_id + '&encryption_key_one=' + session_config['encryption_key_one'] + '&relay_address=' + relay_config['relay_address'] + '&request_tag=' + relay_config['sewers_post_tag'],
-				mimeType: 'text/plain; charset=UTF-8',
-				success: () => {
-					print("<span>Interpreter will be fetching packets every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds next time it fetches packets<br></span>")
-					session_config["fetch_rate"] = min + "-" + max
-				}
-			})
-		}
-		// changeFetchRate = (min, max) => {
-		// 	old_rate = session_config['fetch_rate']
-		// 	old_max_rate = old_rate.replace(/.*\-/g, "")
-		// 	$.ajax({
-		// 		method: 'post',
-		// 		url: '../../post',
-		// 		data: 'body=' + session_config['fetch_rate_tag'] + ' ' + min + ' ' + max + '&session_id=' + session_id + '&encryption_key_one=' + session_config['encryption_key_one'] + '&relay_address=' + relay_config['relay_address'] + '&request_tag=' + relay_config['sewers_post_tag'],
-		// 		mimeType: 'text/plain; charset=UTF-8',
-		// 		success: () => {
-		// 			onResponse = (()=>{
-		// 				session_config['fetch_rate'] = min + '-' + max
-		// 				$.ajax({
-		// 					method: 'get',
-		// 					url: '../../config/' + relay + '/' + session_id,
-		// 					data: 'fetch_rate=' + min + '-' + max,
-		// 					mimeType: 'text/plain; charset=UTF-8',
-		// 					async: false,
-		// 					success: () => {
-		// 						fetch_delays = min + '-' + max
-		// 						min_fetch_delay = fetch_delays[0]
-		// 						fetch_dilation = fetch_delays[1] - fetch_delays[0]
-		// 						delay = parseFloat( Math.random() * fetch_dilation ) + parseFloat(min_fetch_delay)
-
-		// 						new_load_line_width = 720 / delay
-		// 						new_load_line_width < 5 ? new_load_line_width = 5 : ""
-
-		// 						session_config['fetch_rate'] = min + '-' + max
-		// 					},
-		// 					error: () => {
-		// 						print("<span class='red'>WARNING</span> This terminal was not able to update the relay's fetch rate.<br>The sewers and interpreter might be connecting to the relay out of fetch.<br>Please try again after " + old_max_rate + " seconds.<br>")
-		// 					}
-		// 				})
-		// 			})
-		// 		}
-		// 	})
-		// }
-
-		// Fetch new packets from interpreter
-		fetchPackets = () => {
-			resetLoadLine()
-
-			setTimeout(()=>{
-				moveLoadLine()
-			}, 200) // wait for loadline
-
-			$.ajax({
-				method: 'get',
-				url: '../../get',
-				data: 'packet_id=&session_id=' + session_id + '&encryption_key_one=' + session_config['encryption_key_one'] + '&relay_address=' + relay_config['relay_address'] + '&request_tag=' + relay_config['sewers_get_tag'],
-				mimeType: 'text/plain; charset=UTF-8',
-				success: res => {
-					if (res.length > 0) {
-						packets = res.split(',')
-						for (i = 0; i < packets.length; i++) {
-							let packetID = packets[i]
-							$.ajax({
-								method: 'get',
-								url: '../../get',
-								data: 'packet_id=' + packetID + '&session_id=' + session_id + '&encryption_key_one=' + session_config['encryption_key_one'] + '&relay_address=' + relay_config['relay_address'] + '&request_tag=' + relay_config['sewers_get_tag'],
-								mimeType: 'text/plain; charset=UTF-8',
-								success: (res, status, xhr) => {
-									if (res.length > 0) {
-										new Audio('../../assets/audio/bell.mp3').play()
-										let type,
-												plaintext = atob(res),
-												time = timestamp()
-										if ( plaintext.startsWith("\xff\xd8\xff") || plaintext.startsWith("\xFF\xD8\xFF") ) {
-											type = 'image/jpg'
-										} else if ( plaintext.startsWith("\x89PNG\r\n\x1a\n") || plaintext.startsWith("\x89PNG\r\n\x1A\n") ) {
-											type = 'image/png'
-										} else if ( plaintext.startsWith("GIF87a") || plaintext.startsWith("GIF89a") ) {
-											type = 'image/gif'
-										} else if ( plaintext.startsWith("<?xml") && plaintext.indexOf("<svg") >= 0 || plaintext.startsWith("<svg") ) {
-											type = 'image/svg+xml'
-										}
-										print(response_tag + ' <span class="bold lightgreen">OK</span> <span>' + time + '</span><br>')
-										if (type == 'image/png') {
-											print('<img title="Response ID: ' + packetID + '" src="data:' + type + ';base64,' + res + '" /><br>')
-										} else if (type == "" + type + "") {
-											print('<img title="Response ID: ' + packetID + '" src="data:' + type + ';base64,' + res + '" /><br>')
-										} else if (type == "" + type + "") {
-											print('<img title="Response ID: ' + packetID + '" src="data:' + type + ';base64,' + res + '" /><br>')
-										} else if (type == "" + type + "") {
-											print(plaintext + '<br>')
-										} else {
-											print('<span title="Response ID: ' + packetID + '">' + escapeHTML(plaintext) + '</span>')
-										}
-										setTimeout(()=>{
-										  shrinkInputField()
-										  resetClearBreaks()
-										  scrollToBottom()
-										}, 42)
-									}
-								}
-							})
-						}
-					}
-				}
-			})
-		}
-
-		// Auto fetch
-		autoFetcher = () => {}
-
-		// Start auto fetcher
-		startAutoFetching = (min, max) => {
-			if (auto_fetching) {
-				print("<span>Waiting for auto fetcher...<br></span>")
-				auto_fetching = false
-				autoFetcher = () => {
-					startAutoFetching(min, max)
-				}
-				return
-			}
-			auto_fetching = true
-			fetch_delay = dilateTime(min, max) * 1000
-			fetchPackets()
-			autoFetcher = () => {
-				fetch_delay = dilateTime(min, max) * 1000
-				fetchPackets()
-				setTimeout(()=>{
-					autoFetcher()
-				}, fetch_delay + 200) // wait for loadline
-			}
-			autoFetcher()
-			print("<span>Fetching new packets from relay every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds.<br></span>")
-		}
-
-		// Stop auto fetcher
-		stopAutoFetching = (min, max) => {
-			auto_fetching = false
-			fetch_delay = 1000
-			print("<span>Stopping auto fetcher...<br></span>")
-			autoFetcher = () => {
-				print("<span>Auto fetcher stopped.<br></span>")
-			}
-		}
-
-		// Get session config
-		getSessionConfig = (relay, session) => {
-			$.ajax({
-				method: 'get',
-				url: '../../session/' + relay + '/' + session,
-				mimeType: 'text/plain; charset=UTF-8',
-				async: false,
-				success: res => {
-					if (res != 'nil') {
-						session_config = JSON.parse(res)
-					}
-				}
-			})
-		}
-
-		// Get relay config
-		getRelayConfig = relay => {
-			$.ajax({
-				method: 'get',
-				url: '../../config/' + relay,
-				mimeType: 'text/plain; charset=UTF-8',
-				async: false,
-				success: res => {
-					if (res != 'nil') {
-						relay_config = JSON.parse(res)
-					}
-				}
-			})
-		}
-
-		// Move loadline
-		moveLoadLine = () => {
-			new_width = parseInt( 720 / (fetch_delay / 1000) )
-			new_width < 5 ? new_width = 5 : ""
-
-			load_line.style.transition       = "left " + fetch_delay + "ms linear"
-			load_line.style.webkitTransition = "left " + fetch_delay + "ms linear"
-			load_line.style.mozTransition    = "left " + fetch_delay + "ms linear"
-			load_line.style.msTransition     = "left " + fetch_delay + "ms linear"
-			load_line.style.oTransition      = "left " + fetch_delay + "ms linear"
-			load_line.style.left             = "calc(100% + " + new_width + "px)"
-		}
-
-		// Reset loadline
-		resetLoadLine = () => {
-			new_width = parseInt( 720 / (fetch_delay / 1000) )
-			new_width < 5 ? new_width = 5 : ""
-
-			load_line.style.width            = new_width + "px"
-			load_line.style.transition       = "left 0s linear"
-			load_line.style.webkitTransition = "left 0s linear"
-			load_line.style.mozTransition    = "left 0s linear"
-			load_line.style.msTransition     = "left 0s linear"
-			load_line.style.oTransition      = "left 0s linear"
-			load_line.style.left             = "-" + new_width + "px"
-		}
-
-		// Scroll to bottom
-		scrollToBottom = () => {
-			scrollBox.scrollTop = terminal.getBoundingClientRect().height
-		}
-
-		// Set clear breaks for clear function
-		resetClearBreaks = () => {
-			clearBreaks = parseInt( ( $(window).height() - 84 ) / 12 )
-		}
-
-		// Clear function
-		clear = () => {
-			linebreaks = "<br>".repeat(clearBreaks)
-			print(linebreaks)
-		}
-
-		// Append new stream to menu
-		addStream = (streamID, streamType) => {
-			if (streamType == "STREAMMIC") {
-				$("html body div.menu").append("<div class='item left' title='Stream ID: " + streamID + "' onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mic&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".wav\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'><div class='icon streammic'><div class='icon rec blinking'></div></div></div>")
-			} else if (streamType == "STREAMMON") {
-				$("html body div.menu").append("<div class='item left' title='Stream ID: " + streamID + "' onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mon&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'><div class='icon streammon'><div class='icon rec blinking'></div></div></div>")
-			} else if (streamType == "STREAMCAM") {
-				$("html body div.menu").append("<div class='item left' title='Stream ID: " + streamID + "' onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?cam&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'><div class='icon eye'><div class='icon rec blinking'></div></div></div>")
-			}
-		}
-
-		// Start new monitor stream
-		streamMon = (bitrate, resolution) => {
-			request = $.ajax({
-				method: "post",
-				url: "/",
-				data: "data=STREAMMON " + bitrate + " " + resolution + "&session_id=" + session_id,
-				success: res => {
-					res = response.split(" ")
-					streamID = res[0]
-					streamFile = res[1]
-
-					print(response_tag + " [<span class='green'>OK</span>] " + "<span>" + timestamp() + "</span>")
-					if (res[0] == "Usage:") {
-						print("<span>" + response + "</span>")
-					} else {
-						print("<span>Monitor stream started.</span>")
-						print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
-						print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mon&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mon&" + streamID + "&" + streamFile + ".mp4</a></span>")
-						addStream(streamID, "STREAMMON")
-					}
-					!request
-				}
-			})
-		}
-
-		// Start new microphone stream
-		streamMic = bitrate => {
-			request = $.ajax({
-				method: "post",
-				url: "/",
-				data: "data=STREAMMIC " + bitrate + "&session_id=" + session_id,
-				success: res => {
-					res = response.split(" ")
-					streamID = res[0]
-					streamFile = res[1]
-
-					print(response_tag + " [<span class='green'>OK</span>] " + "<span>" + timestamp() + "</span>")
-					if (res[0] == "Usage:") {
-						print("<span>" + response + "</span>")
-					} else {
-						print("<span>Microphone stream started.</span>")
-						print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
-						print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mic&" + streamID + "&" + streamFile + ".wav\", \"" + streamFile + ".wav\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mic&" + streamID + "&" + streamFile + ".wav</a></span>")
-						addStream(streamID, "STREAMMIC")
-					}
-					!request
-				}
-			})
-		}
-
-		// Start new webcam stream
-		streamCam = (bitrate, resolution) => {
-			print(request_tag + "<span title='" + timestamp() + "'>Streaming webcam...</span>")
-			request = $.ajax({
-				method: "post",
-				url: "/",
-				data: "data=STREAMCAM&session_id=" + session_id,
-				success: res => {
-					res = response.split(" ")
-					streamID = res[0]
-					streamFile = res[1]
-
-					print(response_tag + " [<span class='green'>OK</span>] " + "<span>" + timestamp() + "</span>")
-					if (res[0] == "Usage:") {
-						print("<span>" + response + "</span>")
-					} else {
-						print("<span>Webcam stream started.</span>")
-						print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
-						print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?cam&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?cam&" + streamID + "&" + streamFile + ".mp4</a></span>")
-						addStream(streamID, "STREAMCAM")
-					}
-					!request
-				}
-			})
-		}
-
-		// Escape HTML
-		escapeHTML = data => {
-			return data.replace(/\&/g, "&amp;").replace(/\</g,"&lt;").replace(/\>/g,"&gt;").replace(/\"/g, "&quot;").replace(/\'/g,"&#39;").replace(/\//g, "&#x2F;").replace(/ /g, "&nbsp;").replace(/\t/g, "&emsp;").replace(/\n/g, "<br>")
-		}
-
-		// Strip strings (the Ruby way)
-		strip = data => {
-			while	( data.split("")[0] == " " || data.split("")[0] == "\n" ) {
-      	data = data.slice(1)
-			}
-			while	( data.split("")[-1] == " " || data.split("")[-1] == "\n" ) {
-				data = data.slice(0,-1)
-			}
-	  	return data
-		}
-
-		// Input handler
-		onCommand = () => {
-			cmd = textarea.value
-			textarea.value = ""
-
-			if (cmd.length > 0) {
-				if (cmd_history[0] != cmd) {
-					cmd_history.unshift(cmd)
-				}
-			}
-			cmd_history_i = 0
-
-			print(request_tag + "<span title='" + timestamp() + "'>" + escapeHTML(cmd) + "</span><br>")
-			if (cmd.split("")[0] == "#") {
-				return
-			} else if (cmd.split(" ")[0] == "startautofetching") {
-				if (cmd.split(" ")[3]) {
-					print('Too many arguments.<br>Usage: <span class="tan">startautofetching</span> <span class="grey">' + escapeHTML('<MIN SECONDS> <MAX SECONDS>') + '</span><br>')
-				} else if (!cmd.split(" ")[2]) {
-					print('Not enough arguments.<br>Usage: <span class="tan">startautofetching</span> <span class="grey">' + escapeHTML('<MIN SECONDS> <MAX SECONDS>') + '</span><br>')
-				} else if ( parseInt(cmd.split(" ")[1]) >= parseInt(cmd.split(" ")[2]) ) {
-					print('Minimum value must be less than maximum.<br>Usage: <span class="tan">startautofetching</span> <span class="grey">' + escapeHTML('<MIN SECONDS> <MAX SECONDS>') + '</span><br>')
-				} else if ( parseInt(cmd.split(" ")[1]) < 1 ) {
-					print('Minimum value must be at least 1.<br>Usage: <span class="tan">startautofetching</span> <span class="grey">' + escapeHTML('<MIN SECONDS> <MAX SECONDS>') + '</span><br>')
-				} else {
-					min = parseInt( cmd.split(" ")[1] )
-					max = parseInt( cmd.split(" ")[2] )
-					startAutoFetching(min, max)
-				}
-			} else if (cmd == "clear") {
-				clear()
-			} else if (cmd == "exit") {
-				self.close() || alert("You can only use this in pop-up mode.")
-			} else if (cmd.toLowerCase() == "?" || cmd.toLowerCase() == "help" || cmd.toLowerCase() == "h" || cmd.toLowerCase() == "commands" || cmd.toLowerCase() == "usage") {
-				printCommands()
-			} else if (cmd.toLowerCase() == "checkstreams") {
-				checkStreams()
-			} else if (cmd == "reset") {
-				if (warnOnReset) {
-					self.location = location.href
-				}	else {
-					$("body").html("")
-					window.onbeforeunload = ""
-					self.location = location.href
-				}
-			} else if (cmd == "stopautofetching") {
-				stopAutoFetching()
-			} else if (cmd.split(" ")[0].toLowerCase() == "streammon") {
-				streamMon(cmd.split(" ")[1], cmd.split(" ")[2])
-			} else if (cmd.split(" ")[0].toLowerCase() == "streammic") {
-				streamMic(cmd.split(" ")[1])
-			} else if (cmd.split(" ")[0].toLowerCase() == "info") {
-				printSessionInfo()
-			} else if (cmd == "fetch") {
-				fetchPackets()
-			} else if (cmd.split(" ")[0].toLowerCase() == "fetchrate") {
-				if (cmd.split(" ")[3]) {
-					print('Too many arguments.<br>Usage: <span class="tan">fetchrate</span> <span class="grey">' + escapeHTML('<MIN SECONDS> <MAX SECONDS>') + '</span><br>')
-				} else if (!cmd.split(" ")[2]) {
-					print('Not enough arguments.<br>Usage: <span class="tan">fetchrate</span> <span class="grey">' + escapeHTML('<MIN SECONDS> <MAX SECONDS>') + '</span><br>')
-				} else if ( parseInt(cmd.split(" ")[1]) >= parseInt(cmd.split(" ")[2]) ) {
-					print('Minimum value must be less than maximum.<br>Usage: <span class="tan">fetchrate</span> <span class="grey">' + escapeHTML('<MIN SECONDS> <MAX SECONDS>') + '</span><br>')
-				} else if ( parseInt(cmd.split(" ")[1]) < 1 ) {
-					print('Minimum value must be at least 1.<br>Usage: <span class="tan">fetchrate</span> <span class="grey">' + escapeHTML('<MIN SECONDS> <MAX SECONDS>') + '</span><br>')
-				} else {
-					min = parseInt( cmd.split(" ")[1] )
-					max = parseInt( cmd.split(" ")[2] )
-					changeFetchRate(min, max)
-				}
-			} else if (cmd.split(" ")[0].toLowerCase() == "shell" || cmd.split(" ")[0].toLowerCase() == "sh") {
-				cmd = cmd.split(' ')
-				cmd.splice(cmd[0], 1)
-				cmd = cmd.join(' ')
-				stdIn( strip(cmd) )
-			} else if (cmd.length > 0) {
-				print( escapeHTML(cmd) + ': command not found. Type <span class="bold orange">help</span> to see a list of commands.<br>' )
-			}
-			textarea.focus()
-		}
-
-		// XSS input handler
-		onXSSCommand = () => {
-			let command = jsfield.value
-			let escapedCommand = escapeHTML(command)
-
-			jsfield.value = ""
-			textarea.focus()
-
-			print(request_tag + " <span class='bold red'>XSS</span> <span>" + timestamp() + "</span><br>")
-			print("<span class='red'>" + escapedCommand + "</span><br>")
-			print( eval(command) + '<br>' )
-		}
-
-// terminal-controls.js
-
-		// Focus input field unless selecting span text
-		$(window).click(e=>{
-			if (e.target.tagName != "SPAN" && e.target.tagName != "INPUT") {
-				textarea.focus()
-			}
-		})
-
-		// Custom keyboard handler
-		$(window).keypress(event=>{
-			if (!event.ctrlKey) { // unless CTRL key is pressed
-
-				// If nothing is focused, add new character to stdin field
-				if ( 
-					allowed_characters.includes(event.key) 
-					&& !(
-						textarea === document.activeElement 
-						|| jsfield === document.activeElement
-					) 
-				) {
-					oldValue = textarea.value
-					newValue = oldValue + event.key
-					textarea.value = newValue
-					textarea.focus()
-				}
-
-				// Scroll to bottom on StdIn if applicable
-				if (scrollOnInput) {
-					if (scrollBox.scrol)
-					if (!jsfield === document.activeElement) {
-						scrollToBottom()
-					}
-				}
-				if (scrollOnJsInput) {
-					if (jsfield === document.activeElement) {
-						scrollToBottom()
-					}
-				}
-
-				// Terminal controls
-				if (event.keyCode == 13) { // Enter
-					if ( textarea === document.activeElement ) {
-						event.preventDefault()
-						onCommand()
-					}
-					if ( jsfield === document.activeElement ) {
-						event.preventDefault()
-						onXSSCommand()
-					}
-					cmd_current = ""
-				} else if (event.keyCode == "38") { // Up arrow
-					if (cmd_history_i < cmd_history.length) {
-						textarea.value = cmd_history[cmd_history_i]
-						cmd_history_i += 1
-					}
-					textarea.focus()
-				} else if (event.keyCode == "40") { // Down arrow
-					if (cmd_history_i > 0) {
-						cmd_history_i -= 1
-						textarea.value = cmd_history[cmd_history_i]
-					} else {
-						textarea.value = cmd_current
-					}
-					textarea.focus()
-				} else {
-					cmd_current = textarea.value
-				}
-
-			}
-		})
-
-		// Open new window button
-		$("html body div.menu div.item[name=newwindow]").click(()=>{
-			window.open("../../terminal.html?fixthis", "root@fixthis - TAB" + Math.floor( (Math.random() * 9999) + 1), "menubar=no,location=no,resizable=yes,scrollbars=no,status=yes")
-		})
-
-		// Clear button
-		$("html body div.menu div.item[name=clear]").click(()=>{
-			clear()
-		})
-
-		// Select all button
-		$("html body div.menu div.item[name=selectall]").click(()=>{
-			textarea.value =  terminal.text()
-			textarea.select()
-		})
-
-		// Stream microphone button
-		$("html body div.menu div.item[name=streammic]").click(()=>{
-			print(request_tag + "<span title='" + timestamp() + "'>Streaming microphone at " + mic_bitrate +  "bps...</span>")
-			streamMic(mic_bitrate)
-		})
-
-		// Stream monitor button
-		$("html body div.menu div.item[name=streammon]").click(()=>{
-			print(request_tag + "<span title='" + timestamp() + "'>Streaming monitor at a resolution of " + mon_resolution + " pixels at " + mon_bitrate + "bps...</span>")
-			streamMon(mon_bitrate, mon_resolution)
-		})
-
-		// Stream webcam button
-		$("html body div.menu div.item[name=streamcam]").click(()=>{
-			print(request_tag + "<span title='" + timestamp() + "'>Streaming webcam at a resolution of " + cam_resolution + " pixels at " + cam_bitrate + "bps...</span>")
-			streamCam(cam_bitrate, cam_resolution)
-		})
-
-		// End all streams button
-		$("html body div.menu div.item[name=endallstreams]").click(()=>{
-			print(request_tag + "<span title='" + timestamp() + "'>Ending all streams...</span>")
-			stdIn("ENDALLSTREAMS")
-			$("html body div.menu div.item").find("div.rec.blinking").parent().parent().remove()
-		})
-
-		shrinkInputField = () => {
-			form.style.height = "calc(100vh - " + scrollBox.getBoundingClientRect().height + "px)"
-		}
-
-		// Window resize handler
-		$(window).resize(()=>{
-			setTimeout(resetClearBreaks(), 100)
-			shrinkInputField()
-		})
-
-		// Handle ajax errors
-		$(document).ajaxError(data=>{
-			console.log(data)
-		})
-
-		// Handle accidental quit
-		if (warnBeforeClose) {
-			window.onbeforeunload = e => {
-				return "Close?"
-			}
-		}
-
-// terminal-initiate.js
-
-		self.addEventListener("load", ()=>{
-			// Set clear breaks
-			resetClearBreaks()
-
-			// Get configs
-			getSessionConfig(relay, session_id)
-			getRelayConfig(relay)
-
-			printSessionInfo()
-
-			textarea.focus()
-
-			// Set title
-			document.title = session_config['session_id'] + ' - ' + session_config['hostname']
-		})
-
-////////////////// MODULES ////////////////// MODULES ////////////////// MODULES //////////////////
-
-// yungtravla-terminal-linux-gnome-screenshot.js
-
-		document.querySelector("html body div.menu div.subitem[name=yungtravla-terminal-linux-gnome-screenshot]").addEventListener("click", ()=>{
-			let os_string = session_config["os"]
-
-			if ( os_string.match("GNU/Linux") ) {
-				print(request_tag + "<span title='" + timestamp() + "'>Capturing screenshot...<br></span>")
-				filename = randomString(8, 16)
-				stdIn("gnome-screenshot -p -f ./" + filename + ".png && cat ./" + filename + ".png && rm ./" + filename + ".png")
-			}
-		})
+		    warnOnReset = false,
+		    scrollOnInput = true,
+		    scrollOnOutput = true,
+		    scrollOnScrolledOutput = false,
+		    scrollOnJsInput = false,
+		    mic_bitrate = "16000",
+		    mon_bitrate = "512000",
+		    mon_resolution = "1280x800"
+		    cam_bitrate = "512000",
+		    cam_resolution = "1280x800"
 
 	</script>
+	<script src="/assets/js/transport.js"></script>
+	<script src="/assets/js/functions-terminal.js"></script>
+	<script src="/assets/js/events-terminal.js"></script>
+	<script>
+
+		// plugin debug
+		// terminal-commands.json
+
+			commands = {
+				"clear": {
+					"category": "Terminal",
+					"arguments": [],
+					"description": ""
+				},
+				"exit": {
+					"category": "Terminal",
+					"arguments": [],
+					"description": ""
+				},
+				"fetchrate": {
+					"category": "Interpreter",
+					"arguments": ["MIN SECONDS", "MAX SECONDS"],
+					"description": "Set automatic fetch rate of interpreter."
+				}
+			}
+
+		// plugin debug
+		// yungtravla-terminal-linux-gnome-screenshot.js
+
+			document.querySelector("html body div.menu div.subitem[name=yungtravla-terminal-linux-gnome-screenshot]").addEventListener("click", ()=>{
+				let os_string = session_config["os"]
+
+				if ( os_string.match("GNU/Linux") ) {
+					print(request_tag + "<span title='" + timestamp() + "'>Capturing screenshot...<br></span>")
+					filename = randomString(8, 16)
+					stdIn("gnome-screenshot -p -f ./" + filename + ".png && cat ./" + filename + ".png && rm ./" + filename + ".png")
+				}
+			})
+
+	</script>
+	<script src="/assets/js/initiate-terminal.js"></script>
 </body>
 </html>
