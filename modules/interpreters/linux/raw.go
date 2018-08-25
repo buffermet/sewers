@@ -14,14 +14,14 @@ import(
 )
 
 const(
-	obf_const_session_id = "QMXwaHcmfvOMYbLw"
-	obf_const_post_tag = "P"
-	obf_const_get_tag = "G"
+	obf_const_session_id = ""
+	obf_const_post_tag = ""
+	obf_const_get_tag = ""
 )
 
 var(
-	obf_var_encryption_key = []byte("MZpirFa4XEQsTNmaBBaFAmXuUCe2Qan0")
-	obf_var_relay_address = "http://0.0.0.0:81/relay.php"
+	obf_var_encryption_key = []byte("")
+	obf_var_relay_address = ""
 	obf_var_useragent = "Sewers Interpreter (Linux) Reverse HTTP Test Session"
 )
 
