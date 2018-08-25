@@ -121,7 +121,7 @@
 
 	// Warn before quit
 	if (warnBeforeClose) {
-		self.onbeforeunload = async e => {
+		self.onbeforeunload = async () => {
 			return "Close?"
 		}
 	}

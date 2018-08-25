@@ -4,6 +4,13 @@
 	// Auto fetch
 	let autoFetcher = async () => {}
 
+	// Sleep
+	const sleep = async seconds => {
+		return new Promise(async resolve=>{
+			setTimeout(resolve, seconds * 1000)
+		})
+	}
+
 	// Generate random string
 	const randomString = async (min, max) => {
 		let length = ( min + ( Math.random() * (max - min) ) )
@@ -151,31 +158,33 @@
 
 						let time = await timestamp()
 
-						if ( plaintext.startsWith("\xff\xd8\xff") || plaintext.startsWith("\xFF\xD8\xFF") ) {
-							type = "image/jpg"
-						} else if ( plaintext.startsWith("\x89PNG\r\n\x1a\n") || plaintext.startsWith("\x89PNG\r\n\x1A\n") ) {
-							type = "image/png"
-						} else if ( plaintext.startsWith("GIF87a") || plaintext.startsWith("GIF89a") ) {
-							type = "image/gif"
-						} else if ( plaintext.startsWith("<?xml") && plaintext.indexOf("<svg") >= 0 || plaintext.startsWith("<svg") ) {
-							type = "image/svg+xml"
-						}
-
 						await print(response_tag + " <span class=\"bold lightgreen\">OK</span> <span>" + time + "</span><br>")
 
-						if (type == "image/png") {
+						if ( plaintext.startsWith("\xff\xd8\xff") || plaintext.startsWith("\xFF\xD8\xFF") ) {
+							type = "image/jpg"
+
 							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
-						} else if (type == "\" + type + \"") {
+							sleep(0.1).then(async()=>{ print("<hr>") })
+						} else if ( plaintext.startsWith("\x89PNG\r\n\x1a\n") || plaintext.startsWith("\x89PNG\r\n\x1A\n") ) {
+							type = "image/png"
+
 							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
-						} else if (type == "\" + type + \"") {
+							sleep(0.1).then(async()=>{ print("<hr>") })
+						} else if ( plaintext.startsWith("GIF87a") || plaintext.startsWith("GIF89a") ) {
+							type = "image/gif"
+
 							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
-						} else if (type == "" + type + "") {
+							sleep(0.1).then(async()=>{ print("<hr>") })
+						} else if ( plaintext.startsWith("<?xml") && plaintext.indexOf("<svg") >= 0 || plaintext.startsWith("<svg") ) {
+							type = "image/svg+xml"
+
+							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
+							sleep(0.1).then(async()=>{ print("<hr>") })
+						} else {
 							let stdout = await escapeHTML(plaintext)
 							stdout = stdout + (stdout.endsWith("<br>") ? "" : "\n")
 
 							print(stdout)
-						} else {
-							print("<span title=\"Response ID: " + packetID + "\">" + await escapeHTML(plaintext) + "</span>")
 						}
 					}
 				}
@@ -286,7 +295,7 @@
 
 	// Set clear breaks for clear function
 	const resetClearBreaks = async () => {
-		clearBreaks = parseInt( ( document.body.getBoundingClientRect().height - 84 ) / 12 )
+		clearBreaks = parseInt( ( self.innerHeight - 84 ) / 12 )
 	}
 
 	// Shrink input field as scrollbox increases in size
@@ -296,7 +305,8 @@
 
 	// Clear function
 	const clear = async () => {
-		linebreaks = "<br>".repeat(clearBreaks)
+		let linebreaks = "<br>".repeat(clearBreaks)
+
 		print(linebreaks)
 	}
 
@@ -471,7 +481,7 @@
 			} else if (cmd.split(" ")[0].toLowerCase() == "shell" || cmd.split(" ")[0].toLowerCase() == "sh") {
 				cmd = cmd.split(" ")
 				cmd.splice(cmd[0], 1)
-				cmd = cmd.join(" ")
+				cmd = encodeURIComponent( cmd.join(" ") )
 				stdIn( await strip(cmd) )
 			} else {
 				print( await escapeHTML(cmd) + ": command not found. Type <span class=\"bold orange\">help</span> to see a list of commands.<br>" )

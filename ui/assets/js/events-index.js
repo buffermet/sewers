@@ -10,9 +10,9 @@
 	})
 	document.addEventListener("mousemove", async event => {
 		if (resizeConsole) {
-			let offset = document.body.getBoundingClientRect().height - event.clientY
+			let offset = self.innerHeight - event.clientY
 
-			if ( event.clientY > 75 && event.clientY < ( document.body.getBoundingClientRect().height - 50 ) ) {
+			if ( event.clientY > 75 && event.clientY < ( self.innerHeight - 50 ) ) {
 				webConsole.style.height = offset + "px"
 				topbar.style.bottom = (offset - 1) + "px"
 				scrollContainer.style.height = "calc(100% - " + offset + "px)"
@@ -21,9 +21,9 @@
 	})
 	document.addEventListener("touchmove", async event => {
 		if (resizeConsole) {
-			let offset = document.body.getBoundingClientRect().height - event.clientY
+			let offset = self.innerHeight - event.clientY
 
-			if ( event.clientY > 75 && event.clientY < ( document.body.getBoundingClientRect().height - 50 ) ) {
+			if ( event.clientY > 75 && event.clientY < ( self.innerHeight - 50 ) ) {
 				webConsole.style.height = offset + "px"
 				topbar.style.bottom = (offset - 1) + "px"
 				scrollContainer.style.height = "calc(100% - " + offset + "px)"
@@ -45,10 +45,10 @@
 
 	// Prevent console from being hidden when resizing window.
 	self.addEventListener("resize", async()=>{
-		if ( webConsole.getBoundingClientRect().height >= ( document.body.getBoundingClientRect().height - 75 ) && webConsole.getBoundingClientRect().height > 51 ) {
-			webConsole.style.height = ( document.body.getBoundingClientRect().height - 75 ) + "px"
-			topbar.style.bottom = ( document.body.getBoundingClientRect().height - 75 - 1 ) + "px"
-			scrollContainer.style.height = "calc(100% - " + ( document.body.getBoundingClientRect().height - 75 ) + "px)"
+		if ( webConsole.getBoundingClientRect().height >= ( self.innerHeight - 75 ) && webConsole.getBoundingClientRect().height > 51 ) {
+			webConsole.style.height = ( self.innerHeight - 75 ) + "px"
+			topbar.style.bottom = ( self.innerHeight - 75 - 1 ) + "px"
+			scrollContainer.style.height = "calc(100% - " + ( self.innerHeight - 75 ) + "px)"
 
 			let console_height = webConsole.getBoundingClientRect().height
 
