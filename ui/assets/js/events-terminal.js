@@ -3,7 +3,7 @@
 
 	// Focus input field unless selecting span text
 	self.addEventListener("click", async event=>{
-		if (event.target.tagName != "SPAN" && event.target.tagName != "INPUT") {
+		if (event.currentTarget.tagName != "SPAN" && event.currentTarget.tagName != "INPUT") {
 			textarea.focus()
 		}
 	})
@@ -113,14 +113,10 @@
 	// })
 
 	// Window resize handler
-	$(window).resize(async()=>{
-		setTimeout(resetClearBreaks(), 100)
+	self.addEventListener("resize", async()=>{
 		shrinkInputField()
-	})
 
-	// Handle ajax errors
-	$(document).ajaxError(async data=>{
-		console.log(data)
+		setTimeout(resetClearBreaks(), 100)
 	})
 
 	// Warn before quit

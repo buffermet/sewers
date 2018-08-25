@@ -110,14 +110,12 @@
 
 	// Change fetch rate
 	const changeFetchRate = async (min, max) => {
-		$.ajax({
-			method: "post",
-			url: "../../post",
-			data: "body=" + session_config["fetch_rate_tag"] + " " + min + " " + max + "&session_id=" + session_id + "&encryption_key_one=" + session_config["encryption_key_one"] + "&relay_address=" + relay_config["relay_address"] + "&request_tag=" + relay_config["sewers_post_tag"],
-			mimeType: "text/plain; charset=UTF-8",
-			success: () => {
-				print("<span>Interpreter will be fetching packets every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds next time it fetches packets<br></span>")
-				session_config["fetch_rate"] = min + "-" + max
+		sendForm("POST", "/post", "body=" + session_config.fetch_rate_tag + " " + min + " " + max + "&session_id=" + session_id + "&encryption_key_one=" + session_config.encryption_key_one + "&relay_address=" + relay_config.relay_address + "&request_tag=" + relay_config.sewers_post_tag)
+		.then(async res=>{
+			if (res.status == 200) {
+				print("<span>Interpreter will be fetching packets every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds as soon as it fetches packets.<br></span>")
+
+				session_config.fetch_rate = min + "-" + max
 			}
 		})
 	}

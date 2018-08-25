@@ -1,10 +1,10 @@
 
 /* Sync/async HTTP transport */
 
-	const sendRequest = async (type, address, body) => {
+	const sendRequest = async (method, address, body) => {
 		return new Promise(resolve=>{
 			let req = new XMLHttpRequest()
-			req.open(type, address)
+			req.open(method, address)
 			req.onreadystatechange = async () => {
 				if (req.readyState == 4) {
 					resolve(req)
@@ -14,10 +14,10 @@
 		})
 	}
 
-	const sendForm = async (type, address, params) => {
+	const sendForm = async (method, address, params) => {
 		return new Promise(resolve=>{
 			let req = new XMLHttpRequest()
-			req.open(type, address)
+			req.open(method, address)
 			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
 			req.onreadystatechange = async () => {
 				if (req.readyState == 4) {
@@ -28,10 +28,10 @@
 		})
 	}
 
-	const sendJSON = async (type, address, json) => {
+	const sendJSON = async (method, address, json) => {
 		return new Promise(resolve=>{
 			let req = new XMLHttpRequest()
-			req.open(type, address)
+			req.open(method, address)
 			req.setRequestHeader("Content-Type", "application/json")
 			req.onreadystatechange = async () => {
 				if (req.readyState == 4) {

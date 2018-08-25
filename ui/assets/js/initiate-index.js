@@ -1,28 +1,23 @@
 
 /* Initiate index.html */
 
-	// Wait for everything to load
 	self.addEventListener("load", async()=>{
 
 		// Start streaming console log
-		await fetchLog()
-		setInterval(async()=>{
-			await fetchLog()
-		}, 2500)
+		fetchLog()
+		setInterval(fetchLog, 2500)
 
 		// Get sewers config
-		getSewersConfig()
+		await getSewersConfig()
 
 		// Override CSS values
-		updateCSS()
+		await updateCSS()
 
 		// Get all relay configurations
-		showRelays()
+		await showRelays()
 
 		// Cycle news messages
-		setInterval(async()=>{
-			cycleNews()
-		}, 6666)
+		setInterval(cycleNews, 4000)
 
 		// Reveal relays
 		setTimeout(async()=>{

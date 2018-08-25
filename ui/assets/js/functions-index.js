@@ -1,6 +1,13 @@
 
 /* Set functions for index.html */
 
+	// Sleep
+	const sleep = async seconds => {
+		return new Promise(async resolve=>{
+			setTimeout(resolve, seconds * 1000)
+		})
+	}
+
 	// Escape HTML
 	const escapeHTML = async data => {
 		return new String(data).replace(/\&/g, "&amp;").replace(/\</g,"&lt;").replace(/\>/g,"&gt;").replace(/\"/g, "&quot;").replace(/\'/g,"&#39;").replace(/\//g, "&#x2F;").replace(/ /g, "&nbsp;").replace(/\t/g, "&emsp;").replace(/\n/g, "<br>")
@@ -13,26 +20,38 @@
 
 	// Open terminal in new pop-up tab
 	const openTerminal = async (relay, session_id) => {
-		window.open('./terminal/' + relay + '/' + session_id, session_id +' - TAB' + Math.floor( (Math.random() * 9999) + 1), 'menubar=no,location=no,resizable=yes,scrollbars=no,status=yes')
+		self.open('./terminal/' + relay + '/' + session_id, session_id +' - TAB' + Math.floor( (Math.random() * 9999) + 1), 'menubar=no,location=no,resizable=yes,scrollbars=no,status=yes')
 	}
 
 	// Fetch console log
 	const fetchLog = async () => {
-		let res = await sendRequest("GET", "/console_log", "")
+		sendRequest("GET", "/console_log", "").then(async res=>{
+			if (res.status == 200) {
+				let response = res.responseText.replace(/\n/g, "<br>")
 
-		let response = res.responseText.replace(/\n/g, "<br>")
+				if (consoleContainer.innerHTML != response) {
+					consoleContainer.innerHTML = response
 
-		if (consoleContainer.innerHTML != response) {
-			consoleContainer.innerHTML = response
-
-			scrollOnOutput ? consoleContainer.scrollTop += 999999 : ""
-		}
+					scrollOnOutput ? consoleContainer.scrollTop += 999999 : ""
+				}
+			} else {
+				print("Could not connect to sewers.")
+			}
+		})
 	}
 
 	const getSewersConfig = async () => {
-		let res = await sendRequest("GET", "/config/sewers", "")
-
-		config = JSON.parse(res.responseText)
+		return new Promise(async resolve=>{
+			sendRequest("GET", "/config/sewers", "").then(async res=>{
+				if (res.status == 200) {
+					config = JSON.parse(res.responseText)
+					resolve()
+				} else {
+					print("Could not fetch sewers config.")
+					resolve()
+				}
+			})
+		})
 	}
 
 	const getSewersUserAgent = async () => {
@@ -43,74 +62,9 @@
 
 	const showRelays = async () => {
 		let skeleton = `
-				<div class="relaylist">
-					<div class="header">
-						<h1>Relays</h1>
-						<span class="newsmessage">&nbsp;</span>
-					</div>
-					<div class="space"></div>
-				</div>
-			`
-
-		container.classList.add("hide")
-		container.classList.add("nopointerevents")
-
-		setTimeout(async()=>{
-			container.innerHTML = skeleton
-
-			let res = await sendRequest("GET", "/get_relays", "")
-			let response = res.responseText
-
-			if (response != "nil") {
-				let relays = JSON.parse(response)
-
-				for (var i = 0; i < Object.keys(relays).length; i++) {
-					let relay = document.createElement("div")
-					relay.name = await escapeHTML(relays[i]["RelayID"])
-					relay.className = "relay"
-					relay.innerHTML = `
-							<span class="relaynumber">RELAY ` + (i + 1) + `</span>
-							<span class="name" title="Relay name">` + await escapeHTML(relays[i]["RelayID"]) + `</span>
-							<span class="url" title="Relay address">` + await escapeHTML(relays[i]["RelayAddress"]) + `</span>
-						`
-
-					document.querySelector("html body div.scrollcontainer div.container div.relaylist div.space")
-					.before(relay)
-				}
-
-				setTimeout(async()=>{
-					await updateTunnelCount()
-
-					currentRelaysNews = 0
-
-					await cycleNews()
-
-					container.classList.remove("hide")
-					container.classList.remove("nopointerevents")
-				}, 720)
-			} else {
-				let span = document.createElement("span")
-				span.class = "nonefound"
-				span.innerText = "No relays found"
-
-				document.querySelector("html body div.scrollcontainer div.container div.relaylist div.space")
-				.before(span)
-
-				currentRelaysNews = 0
-
-				await cycleNews()
-
-				container.classList.remove("hide")
-				container.classList.remove("nopointerevents")
-			}
-		}, 360)
-	}
-
-	const getSessions = async relay => {
-		let skeleton = `
-			<div class="sessionlist">
+			<div class="relaylist">
 				<div class="header">
-					<h1>` + await escapeHTML(relay) + `</h1>
+					<h1>Relays</h1>
 					<span class="newsmessage">&nbsp;</span>
 				</div>
 				<div class="space"></div>
@@ -120,149 +74,206 @@
 		container.classList.add("hide")
 		container.classList.add("nopointerevents")
 
-		setTimeout(async()=>{
+		sleep(0.4).then(()=>{
 			container.innerHTML = skeleton
+
+			sendRequest("GET", "/get_relays", "").then(async res=>{
+				let response = res.responseText
+
+				if (response != "nil") {
+					let relays = JSON.parse(response)
+
+					for (let i = 0; i < Object.keys(relays).length; i++) {
+						let relay = document.createElement("div")
+
+						relay.name = await escapeHTML(relays[i].RelayID)
+						relay.className = "relay"
+						relay.innerHTML = `
+							<span class="relaynumber">RELAY ` + (i + 1) + `</span>
+							<span class="name" title="Relay name">` + await escapeHTML(relays[i].RelayID) + `</span>
+							<span class="url" title="Relay address">` + await escapeHTML(relays[i].RelayAddress) + `</span>
+						`
+						relay.onclick = async () => {
+							showSessions(relays[i].RelayID)
+						}
+
+						document.querySelector("html body div.scrollcontainer div.container div.relaylist div.space").before(relay)
+					}
+
+					sleep(0.72).then(()=>{
+						currentRelaysNews = 0
+
+						cycleNews().then(async()=>{
+							container.classList.remove("hide")
+							container.classList.remove("nopointerevents")
+						})
+					})
+				} else {
+					let span = document.createElement("span")
+					span.class = "nonefound"
+					span.innerText = "No relays found"
+
+					document.querySelector("html body div.scrollcontainer div.container div.relaylist div.space").before(span)
+
+					currentRelaysNews = 0
+
+					cycleNews().then(async()=>{
+						container.classList.remove("hide")
+						container.classList.remove("nopointerevents")
+					})
+				}
+			})
+		})
+
+		relays = document.querySelectorAll("html body div.scrollcontainer div.container div.relaylist div.relay")
+	}
+
+	const showSessions = async relay => {
+		container.classList.add("hide")
+		container.classList.add("nopointerevents")
+
+		sleep(0.4).then(async()=>{
+			container.innerHTML = `
+				<div class="sessionlist">
+					<div class="header">
+						<h1>` + await escapeHTML(relay) + `</h1>
+						<span class="newsmessage">&nbsp;</span>
+					</div>
+					<div class="space"></div>
+				</div>
+			`
 
 			backbutton.classList.remove("hidden")
 
-			let res = await sendRequest("GET", "/relay/" + relay, "")
+			sendRequest("GET", "/relay/" + relay, "").then(async res=>{
+				if (res.status == 200) {
+					if ( res.responseText != "nil" && res.responseText.match(/([a-zA-Z]+)/) ) {
+						let sessionlist = res.responseText.split(",")
 
-			if (res.status == 200) {
-				let response = res.responseText
+						for (let i = 0; i < sessionlist.length; i++) {
+							let url = "./session/" + relay.replace(".json", "") + "/" + sessionlist[i]
 
-				if ( response != "nil" && response.match(/([a-zA-Z]+)/) ) {
-					let sessionlist = response.split(","),
+							sendRequest("GET", url, "").then(async res=>{
+								if (res.status == 200) {
+									let session = sessionlist[i]
 
-					skeleton = ""
+									if (res.responseText != "nil") {
+										sessionConfig = JSON.parse(res.responseText)
+										device = ( sessionConfig.os.indexOf("Android" || "android") >= 0 ) 
+											? "phone" 
+											: ( sessionConfig.os.indexOf("Darwin" || "darwin") >= 0 ) 
+											? "laptop"
+											: ( sessionConfig.os.indexOf("cygwin" || "cygwin" || "mswin" || "mingw" || "bccwin" || "wince" || "emx") >= 0 ) 
+											? "laptop" 
+											: ( sessionConfig.device.indexOf("Acer Aspire") >= 0 ) 
+											? "laptop" 
+											: "unknown"
+										logo = ( sessionConfig.device.indexOf("Acer") >= 0 ) 
+											? "acer" 
+											: ( sessionConfig.os.indexOf("Android" || "android") >= 0 ) 
+											? "android" 
+											: ( sessionConfig.os.indexOf("Darwin" || "darwin") >= 0 ) 
+											? "apple" 
+											: ( sessionConfig.os.indexOf("cygwin" || "cygwin" || "mswin" || "mingw" || "bccwin" || "wince" || "emx") >= 0 ) 
+											? "windows" 
+											: "unknown"
 
-					for (var i = 0; i < sessionlist.length; i++) {
-						let url = "./session/" + relay.replace(".json", "") + "/" + sessionlist[i]
+										let div = document.createElement("div")
 
-						res = await sendRequest("GET", url, "")
+										div.className = "session"
+										div.innerHTML = `
+											<div class="icon ` + await escapeHTML(device) + `">
+												<div class="logo ` + await escapeHTML(logo) + `"></div>
+											</div>
+											<span class="device">` + await escapeHTML(sessionConfig.device) + `</span>
+											<span class="id">` + await escapeHTML(session) + `</span>
+											<span class="hostname">` + await escapeHTML(sessionConfig.hostname) + `</span>
+										`
+										div.onclick = async () => {
+											openTerminal(relay, session)
+										}
 
-						if (res.status == 200) {
-							let response = res.responseText
+										document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
+									} else {
+										let div = document.createElement("div")
 
-							let session = sessionlist[i]
+										div.className = "session unknown"
+										div.innerHTML = `
+											<div class="icon unknown"></div>
+											<span class="device">` + await escapeHTML(sessionConfig.device) + `</span>
+											<span class="id">` + await escapeHTML(session) + `</span>
+											<span class="hostname">undefined</span>
+										`
+										div.onclick = async () => {
+											openTerminal(relay, session)
+										}
 
-							if (response != "nil") {
-								sessionConfig = JSON.parse(response)
-								device = ( sessionConfig["os"].indexOf("Android" || "android") >= 0 ) 
-									? "phone" 
-									: ( sessionConfig["os"].indexOf("Darwin" || "darwin") >= 0 ) 
-									? "laptop"
-									: ( sessionConfig["os"].indexOf("cygwin" || "cygwin" || "mswin" || "mingw" || "bccwin" || "wince" || "emx") >= 0 ) 
-									? "laptop" 
-									: ( sessionConfig["device"].indexOf("Acer Aspire") >= 0 ) 
-									? "laptop" 
-									: "unknown"
-								logo = ( sessionConfig["device"].indexOf("Acer") >= 0 ) 
-									? "acer" 
-									: ( sessionConfig["os"].indexOf("Android" || "android") >= 0 ) 
-									? "android" 
-									: ( sessionConfig["os"].indexOf("Darwin" || "darwin") >= 0 ) 
-									? "apple" 
-									: ( sessionConfig["os"].indexOf("cygwin" || "cygwin" || "mswin" || "mingw" || "bccwin" || "wince" || "emx") >= 0 ) 
-									? "windows" 
-									: "unknown"
-								skeleton += `
-									<div class="session">
-										<div class="icon ` + await escapeHTML(device) + `">
-											<div class="logo ` + await escapeHTML(logo) + `"></div>
-										</div>
-										<span class="device">` + await escapeHTML(sessionConfig["device"]) + `</span>
-										<span class="id">` + await escapeHTML(session) + `</span>
-										<span class="hostname">` + await escapeHTML(sessionConfig["hostname"]) + `</span>
-									</div>
-								`
-							} else {
-								skeleton += `
-									<div class="session unknown">
-										<div class="icon unknown"></div>
-										<span class="device">` + await escapeHTML(sessionConfig["device"]) + `</span>
-										<span class="id">` + await escapeHTML(session) + `</span>
-										<span class="hostname">undefined</span>
-									</div>"
-								`
-							}
+										document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
+									}
+								}
+							})
 						}
-					}
-					// debug
-					skeleton += new String(
-						"<div class=\"session\">" + 
-							"<div class=\"icon router\">" + 
-								"<div class=\"logo tplink\"></div>" +
-							"</div>" + 
-							"<span class=\"device\">Tor Exit TP-Link TL-WR840N</span>" + 
-							"<span class=\"id\">aX302ioJjf0mk21</span>" + 
-							"<span class=\"hostname\">gateway</span>" + 
-						"</div>"
-					)
-					$("html body div.scrollcontainer div.container div.sessionlist div.space").before(skeleton)
-					currentSessionsNews = 0
-					cycleNews()
-					container.classList.remove("hide")
-					container.classList.remove("nopointerevents")
-				} else {
-					skeleton = new String(
-						"<span class=\"nonefound\">No interpreters found</span>" +
-						"<div class=\"space\"></div>"
-					)
-					$("html body div.scrollcontainer div.container div.sessionlist div.space").before(skeleton)
-					currentSessionsNews = 0
-					cycleNews()
-					container.classList.remove("hide")
-					container.classList.remove("nopointerevents")
-				}
-			}
+						// debug
+						div = document.createElement("div")
+						div.className = "session"
+						div.innerHTML = `
+							<div class="icon router">
+								<div class="logo tplink"></div>
+							</div>
+							<span class="device">Tor Exit TP-Link TL-WR840N</span>
+							<span class="id">aX302ioJjf0mk21</span>
+							<span class="hostname">gateway</span>
+						`
+						document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
 
-			$.ajax({
-				method: "get",
-				url: "/relay/" + relay,
-				success: r => {
-				},
-				error: (r, status, error) => {
-					print(r.responseText)
-					skeleton = new String(
-						"<span class=\"nonefound\">Unable to connect to relay</span>" +
-						"<div class=\"space\"></div>"
-					)
-					$("html body div.scrollcontainer div.container div.sessionlist div.space").before(skeleton)
+						currentSessionsNews = 0
+						cycleNews()
+
+						container.classList.remove("hide")
+						container.classList.remove("nopointerevents")
+					} else {
+						print(response)
+
+						let span = document.createElement("span")
+						let div = document.createElement("div")
+						span.className = "nonefound"
+						span.innerText = "No interpreters found"
+						div.className = "space"
+
+						document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(span)
+						document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
+
+						currentSessionsNews = 0
+						cycleNews()
+
+						container.classList.remove("hide")
+						container.classList.remove("nopointerevents")
+					}
+				} else {
+					let span = document.createElement("span")
+					span.className = "nonefound"
+					span.innerText = "Unable to connect to relay"
+
+					document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(span)
+
 					currentSessionsNews = 0
 					cycleNews()
+
 					container.classList.remove("hide")
 					container.classList.remove("nopointerevents")
 				}
 			})
-		}, 380)
-
-		updateSessionCount()
-	}
-
-	// Update relay count
-	const updateTunnelCount = async () => {
-		relays = $("html body div.scrollcontainer div.container div.relaylist div.relay")
-		relays.unbind("click")
-		relays.on("click", async event => {
-			getSessions(event.currentTarget.children[1].innerText)
 		})
-	}
 
-	// Update session count
-	const updateSessionCount = async () => {
-		relay = $("html body div.scrollcontainer div.container div.sessionlist div.header h1").text()
-		sessions = $("html body div.scrollcontainer div.container div.sessionlist div.session")
-		sessions.unbind("click")
-		sessions.on("click", async event => {
-			openTerminal(relay, event.currentTarget.querySelector("span.id").innerText)
-		})
+		sessions = document.querySelectorAll("html body div.scrollcontainer div.container div.sessionlist div.session")
 	}
 
 	// Override CSS
 	const updateCSS = async () => {
 		// Console resizing
-		let newHeight = parseInt( config["console_height"] )
-		webConsole.style.height = newHeight
+		let newHeight = parseInt(config.console_height)
+
+		webConsole.style.height = newHeight + "px"
 		topbar.style.bottom = (newHeight - 1) + "px"
 		scrollContainer.style.height = "calc(100% - " + newHeight + "px)"
 
@@ -270,81 +281,76 @@
 		let messageboxHeight = messageBox.getBoundingClientRect().height
 		messageBox.style.marginTop = "-" + ( (messageboxHeight / 2) + 20 ) + "px"
 
-		// Center modal box
-		let openModalBox = document.querySelector("html body div.fade div.modalbox.open")
-		let openOptions = document.querySelector("html body div.fade div.modalbox.open div.optionbox ul")
-		if (openModalBox) {
-			openModalBox.css( "min-height", "calc(" + openOptions.getBoundingClientRect().height + "px + 44px)" )
-			modalboxHeight = openModalBox.getBoundingClientRect().height
-			openModalBox.css( "margin-top", "-" + ( (modalboxHeight / 2) + 20 ) + "px" )
+		// Center modal
+		let openModal = document.querySelector("html body div.fade div.modal.open")
+		let openOptions = document.querySelector("html body div.fade div.modal.open div.optionbox ul")
+		if (openModal) {
+			openModal.css( "min-height", "calc(" + openOptions.getBoundingClientRect().height + "px + 44px)" )
+			modalHeight = openModal.getBoundingClientRect().height
+			openModal.css( "margin-top", "-" + ( (modalHeight / 2) + 20 ) + "px" )
 		}
 	}
 
 	// Print to console
 	const print = async string => {
-		consoleContainer.append(string + "<br>")
+		consoleContainer.append(string)
 	}
-
-	// Fetch new HTML
-	// fetchHTML = (address, element) => {
-	// 	$.ajax({
-	// 		method: "get",
-	// 		url: address,
-	// 		success: r => {
-	// 			if (element.html() != r) {
-	// 				element.animate({"opacity":"0"}, 360)
-	// 				setTimeout(async()=>{
-	// 					element.html(r)
-	// 					element.animate({"opacity":"1"}, 360)
-	// 				}, 360)
-	// 			}
-	// 		}
-	// 	})
-	// }
 
 	// Show message box
 	const showMessage = async (title, message) => {
 		messageTitle.innerText = title
 		messageBody.innerHTML = message
+
 		fade.classList.remove("hide")
-		setTimeout(async()=>{
+
+		sleep(0.2).then(async()=>{
 			messageBox.classList.remove("down")
+
 			updateCSS()
-		}, 180)
+		})
 	}
 
 	// Close message box
 	const hideMessage = async () => {
 		messageBox.classList.add("up")
+
 		setTimeout(async()=>{
 			fade.classList.add("hide")
+
 			setTimeout(async()=>{
-				messageBox.classList.remove("up")
 				messageBox.classList.add("down")
+				messageBox.classList.remove("up")
 			}, 360)
 		}, 180)
 	}
 
-	// Show modal box
+	// Show modal
 	const showPreferences = async () => {
-		$("html body div.fade div.modalbox.settings").classList.add("open")
-		openModalBox = $("html body div.fade div.modalbox.open")
-		fade.classList.remove("hide")
-		setTimeout(async()=>{
-			openModalBox.classList.remove("down")
-			updateCSS()
-		}, 180)
+		try {
+			document.querySelector("html body div.fade div.modal.settings").classList.add("open")
+
+			let openModal = document.querySelector("html body div.fade div.modal.open")
+
+			fade.classList.remove("hide")
+
+			setTimeout(async()=>{
+				openModal.classList.remove("down")
+				updateCSS()
+			}, 180)
+		} catch (ignore){}
 	}
 
-	// Hide modal box
+	// Hide modal
 	const hideMenu = async () => {
-		openModalBox.classList.add("up")
+		openModal.classList.add("up")
+
 		setTimeout(async()=>{
 			fade.classList.add("hide")
+
 			setTimeout(async()=>{
-				openModalBox.classList.remove("up")
-				openModalBox.classList.add("down")
-				modalBoxes.classList.remove("open")
+				openModal.classList.remove("up")
+				openModal.classList.add("down")
+				modales.classList.remove("open")
 			}, 360)
 		}, 180)
 	}
@@ -353,11 +359,10 @@
 	const cycleNews = async () => {
 		// Update vars
 		let newsMessage = document.querySelector("html body div.scrollcontainer div.container div div.header span.newsmessage")
-		let newsMessageRelays = document.querySelector("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage")
-		let newsMessageSessions = document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage")
-		// Update news messages
-		updateTunnelCount()
-		updateSessionCount()
+		let relayNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage")
+		let SessionsNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage")
+
+		// Cycle
 		newsRelays = {
 			0: relays.length + " relay" + (relays.length > 1 || relays.length < 1 ? "s" : ""),
 			1: "User-Agent: <span style=\"font-weight:bold\">" + await escapeHTML( await getSewersUserAgent() ) + "</span>",
@@ -367,23 +372,24 @@
 			1: "User-Agent: <span style=\"font-weight:bold\">" + await escapeHTML( await getSewersUserAgent() ) + "</span>",
 		}
 
-		// Cycle
 		newsMessage.classList.add('hide')
+
 		if ( currentRelaysNews == Object.keys(newsRelays).length ) {
 			currentRelaysNews = 0
 		}
 		if ( currentSessionsNews == Object.keys(newsSessions).length ) {
 			currentSessionsNews = 0
 		}
+
 		setTimeout(async()=>{
-			if (newsMessageRelays) {
-				newsMessageRelays.innerHTML = newsRelays[currentRelaysNews]
-				newsMessageRelays.classList.remove("hide")
+			if (relayNewsMessage) {
+				relayNewsMessage.innerHTML = newsRelays[currentRelaysNews]
+				relayNewsMessage.classList.remove("hide")
 				currentRelaysNews += 1
 			}
-			if (newsMessageSessions) {
-				newsMessageSessions.innerHTML = newsSessions[currentSessionsNews]
-				newsMessageSessions.classList.remove("hide")
+			if (SessionsNewsMessage) {
+				SessionsNewsMessage.innerHTML = newsSessions[currentSessionsNews]
+				SessionsNewsMessage.classList.remove("hide")
 				currentSessionsNews += 1
 			}
 		}, 360)
