@@ -13,6 +13,6 @@
 
 ![screenshot](https://user-images.githubusercontent.com/29265684/44615794-018e7f00-a886-11e8-884c-4bd0014b2878.png)
 
-![screenshot](https://user-images.githubusercontent.com/29265684/44615796-02271580-a886-11e8-9d3d-94ed4254f82a.png)
+<img src="https://user-images.githubusercontent.com/29265684/44615796-02271580-a886-11e8-9d3d-94ed4254f82a.png">
 
 </p>
