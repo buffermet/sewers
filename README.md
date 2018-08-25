@@ -7,6 +7,8 @@
 <br>
 <br>
 
-![screenshot](https://user-images.githubusercontent.com/29265684/41658189-fcc88d84-74d8-11e8-94f2-afe90ca5b66b.png)
+![screenshot](https://user-images.githubusercontent.com/29265684/44615794-018e7f00-a886-11e8-884c-4bd0014b2878.png)
 
-![screenshot](https://user-images.githubusercontent.com/29265684/41630197-2603bc2c-7471-11e8-9237-0f627a4078b0.png)
+![screenshot](https://user-images.githubusercontent.com/29265684/44615795-02271580-a886-11e8-9c53-7e6ec40d6238.png)
+
+![screenshot](https://user-images.githubusercontent.com/29265684/44615796-02271580-a886-11e8-9d3d-94ed4254f82a.png)
