@@ -95,24 +95,23 @@
 		<div class="consolecontainer selectable"></div>
 	</div>
 </body>
-<script src="./assets/libs/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 
 	// Set variables
-	var config = {}
+	let config = {}
 
-	var webConsole = document.querySelector("html body div.console"),
+	let webConsole = document.querySelector("html body div.console"),
 	    consoleContainer = document.querySelector("html body div.console div.consolecontainer"),
 	    consoleClear = document.querySelector("html body div.console div.clear"),
 	    topbar = document.querySelector("html body div.console div.topbar"),
 	    consoleLog,
 	    scrollOnOutput = true
 
-	var terminals = []
+	let terminals = []
 
-	var backbutton = document.querySelector("div.icon.back").parentElement
+	let backbutton = document.querySelector("div.icon.back").parentElement
 
-	var scrollContainer = document.querySelector("html body div.scrollcontainer"),
+	let scrollContainer = document.querySelector("html body div.scrollcontainer"),
 	    container = document.querySelector("html body div.scrollcontainer div.container"),
 	    relayList = document.querySelector("html body div.scrollcontainer div.container div.relaylist"),
 	    relays = document.querySelectorAll("html body div.scrollcontainer div.container div.relaylist div.relay"),
@@ -125,18 +124,18 @@
 	    currentRelaysNews = 0,
 	    currentSessionsNews = 0
 
-	var messageBox = document.querySelector("html body div.fade div.messagebox"),
+	let messageBox = document.querySelector("html body div.fade div.messagebox"),
 	    messageTitle = document.querySelector("html body div.fade div.messagebox span.title"),
 	    messageBody = document.querySelector("html body div.fade div.messagebox div.message"),
 	    fade = document.querySelector("html body div.fade")
 
-	var modalBoxes = document.querySelectorAll("html body div.fade div.modalbox"),
+	let modalBoxes = document.querySelectorAll("html body div.fade div.modalbox"),
 	    openModalBox = document.querySelector("html body div.fade div.modalbox.open"),
 	    menuCancel = document.querySelector("html body div.fade div.modalbox div.optionbox div.bottom div.cancel")
 
-	var lastIP
+	let lastIP
 
-	var resizeConsole = false,
+	let resizeConsole = false,
 	    dragStart
 
 </script>

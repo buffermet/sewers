@@ -126,7 +126,6 @@
 		<!-- <input type="button" name="button" value="ENTER"> -->
 	</form>
 	<div class="buffer"></div>
-	<script src="/assets/libs/jquery.min.js"></script>
 	<script>
 
 		let form = document.querySelector("html body form"),
@@ -146,12 +145,12 @@
 		let relay = location.href.replace(/.*\/terminal\//g, "").replace(/\/.*/g, ""),
 		    session_id = location.href.replace(/.*\//g, "")
 
-		let request_tag = "<span class='orange bold'>sewers</span> > ",
-		    response_tag = "<span class='cyan bold'>interpreter</span> > "
+		let request_tag = "<span class=\"orange bold\">sewers</span> \xBB ",
+		    response_tag = "<span class=\"cyan bold\">interpreter</span> \xBB "
 
 		let request
 
-		let onResponse = new Function()
+		let onResponse = async()=>{}
 
 		let active_streams = new Array()
 
@@ -206,12 +205,16 @@
 		// plugin debug
 		// gnome-screenshot.js
 
-			document.querySelector("html body div.menu div.subitem[name=yungtravla-terminal-linux-gnome-screenshot]").addEventListener("click", ()=>{
-				let os_string = session_config["os"]
+			document.querySelector("html body div.menu div.subitem[name=yungtravla-terminal-linux-gnome-screenshot]").addEventListener("click", async()=>{
+				let os_string = session_config.os
 
 				if ( os_string.match("GNU/Linux") ) {
-					print(request_tag + "<span title='" + timestamp() + "'>Capturing screenshot...<br></span>")
-					filename = randomString(8, 16)
+					let time = await timestamp()
+
+					print( request_tag + "<span title=\"" + time + "\">Capturing screenshot...<br></span>" )
+
+					filename = await randomString(8, 16)
+
 					stdIn("gnome-screenshot -p -f ./" + filename + ".png && cat ./" + filename + ".png && rm ./" + filename + ".png")
 				}
 			})
