@@ -116,7 +116,7 @@
 	self.addEventListener("resize", async()=>{
 		shrinkInputField()
 
-		setTimeout(resetClearBreaks(), 100)
+		setTimeout(resetClearBreaks, 100)
 	})
 
 	// Warn before quit
