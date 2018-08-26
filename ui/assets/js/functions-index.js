@@ -78,23 +78,23 @@
 			container.innerHTML = skeleton
 
 			sendRequest("GET", "/get_relays", "").then(async res=>{
-				let response = res.responseText
+				const response = res.responseText
 
-				if (response != "nil") {
-					let relays = JSON.parse(response)
+				if (response.length > 0) {
+					const relay_configs = JSON.parse(response)
 
-					for (let i = 0; i < Object.keys(relays).length; i++) {
-						let relay = document.createElement("div")
+					for (let i = 0; i < Object.keys(relay_configs).length; i++) {
+						const relay = document.createElement("div")
 
-						relay.name = await escapeHTML(relays[i].RelayID)
+						relay.name = await escapeHTML(relay_configs[i].RelayID)
 						relay.className = "relay"
 						relay.innerHTML = `
 							<span class="relaynumber">RELAY ` + (i + 1) + `</span>
-							<span class="name" title="Relay name">` + await escapeHTML(relays[i].RelayID) + `</span>
-							<span class="url" title="Relay address">` + await escapeHTML(relays[i].RelayAddress) + `</span>
+							<span class="name" title="Relay name">` + await escapeHTML(relay_configs[i].RelayID) + `</span>
+							<span class="url" title="Relay address">` + await escapeHTML(relay_configs[i].RelayAddress) + `</span>
 						`
 						relay.onclick = async () => {
-							showSessions(relays[i].RelayID)
+							showSessions(relay_configs[i].RelayID)
 						}
 
 						document.querySelector("html body div.scrollcontainer div.container div.relaylist div.space").before(relay)
@@ -327,9 +327,9 @@
 	// Show modal
 	const showPreferences = async () => {
 		try {
-			document.querySelector("html body div.fade div.modal.settings").classList.add("open")
+			const openModal = document.querySelector("html body div.fade div.modal.settings")
 
-			let openModal = document.querySelector("html body div.fade div.modal.open")
+			openModal.classList.add("open")
 
 			fade.classList.remove("hide")
 
@@ -358,15 +358,15 @@
 	// Cycle news messages
 	const cycleNews = async () => {
 		// Update vars
-		let newsMessage = document.querySelector("html body div.scrollcontainer div.container div div.header span.newsmessage")
-		let relayNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage")
-		let SessionsNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage")
+		const newsMessage = document.querySelector("html body div.scrollcontainer div.container div div.header span.newsmessage")
+		const relayNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage")
+		const SessionsNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage")
 
 		// Cycle
 		newsRelays = {
 			0: relays.length + " relay" + (relays.length > 1 || relays.length < 1 ? "s" : ""),
 			1: "User-Agent: <span style=\"font-weight:bold\">" + await escapeHTML( await getSewersUserAgent() ) + "</span>",
-		},
+		}
 		newsSessions = {
 			0: sessions.length + " session" + (sessions.length > 1 || sessions.length < 1 ? "s" : ""),
 			1: "User-Agent: <span style=\"font-weight:bold\">" + await escapeHTML( await getSewersUserAgent() ) + "</span>",

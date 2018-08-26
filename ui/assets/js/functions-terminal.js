@@ -227,13 +227,17 @@
 
 	// Stop auto fetcher
 	const stopAutoFetching = async (min, max) => {
-		auto_fetching = false
-		fetch_delay = 1000
+		if (auto_fetching) {
+			auto_fetching = false
+			fetch_delay = 1000
 
-		print("<span>Stopping auto fetcher...<br></span>")
+			print("<span>Stopping auto fetcher...<br></span>")
 
-		autoFetcher = async () => {
-			print("<span>Auto fetcher stopped.<br></span>")
+			autoFetcher = async () => {
+				print("<span>Auto fetcher stopped.<br></span>")
+			}
+		} else {
+			print("<span>Auto fetcher is not running.</span>")
 		}
 	}
 
@@ -486,6 +490,10 @@
 				cmd.splice(cmd[0], 1)
 				cmd = encodeURIComponent( cmd.join(" ") )
 				stdIn( await strip(cmd) )
+			} else if ( cmd.match(/^xss /) ) {
+				const js_cmd = cmd.replace(/^xss /, "")
+
+				parseXSSCommand(js_cmd)
 			} else {
 				print( await escapeHTML(cmd) + ": command not found. Type <span class=\"bold orange\">help</span> to see a list of commands.<br>" )
 			}
@@ -496,12 +504,18 @@
 
 	// XSS input handler
 	const onXSSCommand = async () => {
-		let cmd = jsfield.value
-		let esc_cmd = escapeHTML(cmd)
+		const command = jsfield.value
 
 		jsfield.value = ""
 
+		parseXSSCommand(command)
+
 		textarea.focus()
+	}
+
+	// XSS input handler
+	const parseXSSCommand = async cmd => {
+		const esc_cmd = await escapeHTML(cmd)
 
 		print(request_tag + " <span class=\"bold red\">XSS</span> <span>" + await timestamp() + "</span><br>")
 		print("<span class=\"red\">" + esc_cmd + "</span><br>")
