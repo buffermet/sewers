@@ -91,7 +91,7 @@ html body div.fade div.messagebox div.corner {
 	background-size: 100% 150%;
 	background-position: 50% 60%;
 }
-html body div.fade div.modalbox {
+html body div.fade div.modal {
 	transition: top 180ms ease-in;
 	-webkit-transition: top 180ms ease-in;
 	-moz-transition: top 180ms ease-in;
@@ -106,20 +106,20 @@ html body div.fade div.modalbox {
 	background: #0d0d0d;
 	box-shadow: 0 0 6px 0 rgba(0,0,0,.75);
 }
-html body div.fade div.modalbox div.optionbox {
+html body div.fade div.modal div.optionbox {
 	position: absolute;
 	left: 0;
 	width: 200px;
 	height: 100%;
 	background: #111;
 }
-html body div.fade div.modalbox div.optionbox ul {
+html body div.fade div.modal div.optionbox ul {
 	padding: 0;
 	margin: 0;
 	margin-bottom: 44px;
 	list-style-type: none;
 }
-html body div.fade div.modalbox div.optionbox ul li {
+html body div.fade div.modal div.optionbox ul li {
 	padding: 10px;
 	border-bottom: 1px solid #0b0b0b;
 	font-family: "OpenSans-Regular";
@@ -127,19 +127,19 @@ html body div.fade div.modalbox div.optionbox ul li {
 	color: #FFF;
 	cursor: pointer;
 }
-html body div.fade div.modalbox div.optionbox ul li:hover {
+html body div.fade div.modal div.optionbox ul li:hover {
 	background: #161616;
 }
-html body div.fade div.modalbox div.optionbox ul li:active {
+html body div.fade div.modal div.optionbox ul li:active {
 	background: #0d0d0d;
 }
-html body div.fade div.modalbox div.optionbox ul li.selected {
+html body div.fade div.modal div.optionbox ul li.selected {
 	background: #0d0d0d;
 }
-html body div.fade div.modalbox div.optionbox ul li:last-of-type {
+html body div.fade div.modal div.optionbox ul li:last-of-type {
 	border-bottom: none;
 }
-html body div.fade div.modalbox div.optionbox div.bottom {
+html body div.fade div.modal div.optionbox div.bottom {
 	position: absolute;
 	bottom: 0;
 	width: 200px;
@@ -149,7 +149,7 @@ html body div.fade div.modalbox div.optionbox div.bottom {
 	border-top: 1px solid #0b0b0b;
 	cursor: pointer;
 }
-html body div.fade div.modalbox div.optionbox div.bottom div {
+html body div.fade div.modal div.optionbox div.bottom div {
 	float: left;
 	height: 100%;
 	width: 50%;
@@ -158,25 +158,25 @@ html body div.fade div.modalbox div.optionbox div.bottom div {
 	background: #111;
 	border-right: 1px solid #0d0d0d;
 }
-html body div.fade div.modalbox div.optionbox div.bottom div:first-of-type {
+html body div.fade div.modal div.optionbox div.bottom div:first-of-type {
 	width: calc(50% - 1px);
 }
-html body div.fade div.modalbox div.optionbox div.bottom div:last-of-type {
+html body div.fade div.modal div.optionbox div.bottom div:last-of-type {
 	border-right: none;
 }
-html body div.fade div.modalbox div.optionbox div.bottom div:hover {
+html body div.fade div.modal div.optionbox div.bottom div:hover {
 	background: #141414;
 }
-html body div.fade div.modalbox div.optionbox div.bottom div:active {
+html body div.fade div.modal div.optionbox div.bottom div:active {
 	background: #0f0f0f;
 }
-html body div.fade div.modalbox div.optionbox div.bottom div.selected {
+html body div.fade div.modal div.optionbox div.bottom div.selected {
 	background: #0d0d0d;
 }
-html body div.fade div.modalbox div.optionbox div.bottom div:hover {
+html body div.fade div.modal div.optionbox div.bottom div:hover {
 	color: #999;
 }
-html body div.fade div.modalbox div.menupage {
+html body div.fade div.modal div.menupage {
 	float: right;
 	padding: 24px;
 	width: calc(550px - 24px - 24px);

@@ -48,11 +48,14 @@ html body div.menu div.item:hover {
 html body div.menu div.item:active {
 	background: rgba(20,20,20,1);
 }
-html body div.menu div.item.noclick:active {
+html body div.menu div.item.no-click:active {
 	background: rgba(11,11,11,1);
 }
-html body div.menu div.item.nohover:hover {
+html body div.menu div.item.no-hover:hover {
 	background: none;
+}
+html body div.menu div.item.no-cursor {
+	cursor: default !important;
 }
 html body div.menu div.item.no-left-border {
 	border-left: none;
@@ -216,8 +219,8 @@ html body div.submenu div.subitem div.icon div.icon.rec.off {
 html body div.menu div.item[name=statusled].online {
 	padding: 0px 2px 0 2px;
 	background: rgba(100,255,100,.5);
-	animation-duration: 666ms;
-	-webkit-animation-duration: 666ms;
+	animation-duration: 1s;
+	-webkit-animation-duration: 1s;
 	animation-name: onlineblinking;
 	-webkit-animation-name: onlineblinking;
 	animation-iteration-count: infinite;

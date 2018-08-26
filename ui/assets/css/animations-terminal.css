@@ -16,7 +16,7 @@
 }
 @keyframes onlineblinking {
 	from {
-	  background: rgba(100,255,100,.5);
+	  background: rgba(100,255,100,.4);
 	  box-shadow: none;
 	  border-color: transparent;
 	}
@@ -28,7 +28,7 @@
 }
 @-webkit-keyframes onlineblinking {
 	from {
-	  background: rgba(100,255,100,.5);
+	  background: rgba(100,255,100,.4);
 	  box-shadow: none;
 	  border-color: transparent;
 	}

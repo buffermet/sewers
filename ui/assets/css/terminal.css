@@ -115,6 +115,13 @@ html body form div.loadline {
 	background: url(../../assets/images/loadline.svg);
 	background-size: 100%;
 }
+html body form div.loadline.reset {
+	transition: left 0s linear !important;
+	-webkit-transition: left 0s linear !important;
+	-moz-transition: left 0s linear !important;
+	-ms-transition: left 0s linear !important;
+	-o-transition: left 0s linear !important;
+}
 html body form textarea {
 	margin: 0;
 	padding: 0;
@@ -140,4 +147,79 @@ img.preload {
 }
 .displaynone {
 	display: none;
+}
+
+/* loading.io css loader */
+.lds-ellipsis {
+	display: inline-block;
+	position: relative;
+	width: 16px;
+	height: 16px;
+	transform-origin: top left;
+	-webkit-transform-origin: top left;
+	-moz-transform-origin: top left;
+	-ms-transform-origin: top left;
+	-o-transform-origin: top left;
+	transform: scale(0.33);
+	-webkit-transform: scale(0.33);
+	-moz-transform: scale(0.33);
+	-ms-transform: scale(0.33);
+	-o-transform: scale(0.33);
+	transition: opacity 333ms linear;
+	-webkit-transition: opacity 333ms linear;
+	-moz-transition: opacity 333ms linear;
+	-ms-transition: opacity 333ms linear;
+	-o-transition: opacity 333ms linear;
+}
+.lds-ellipsis.hidden {
+	opacity: 0;
+}
+.lds-ellipsis div {
+	position: absolute;
+	top: 27px;
+	width: 11px;
+	height: 11px;
+	border-radius: 50%;
+	background: #fff;
+	animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+	left: 6px;
+	animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+	left: 6px;
+	animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+	left: 26px;
+	animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+	left: 45px;
+	animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+@keyframes lds-ellipsis3 {
+	0% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(0);
+	}
+}
+@keyframes lds-ellipsis2 {
+	0% {
+		transform: translate(0, 0);
+	}
+	100% {
+		transform: translate(19px, 0);
+	}
 }
