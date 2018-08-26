@@ -13,8 +13,9 @@
 
 	// Generate random string
 	const randomString = async (min, max) => {
-		let length = ( min + ( Math.random() * (max - min) ) )
-		let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		const length = ( min + ( Math.random() * (max - min) ) )
+		const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
 		let buffer = ""
 
 		while (buffer.length < length) {
@@ -32,10 +33,9 @@
 
 	// Print to terminal
 	const print = async html => {
-		let now = new Date()
+		const timestamped = document.createElement("stamp")
 
-		let timestamped = document.createElement("stamp")
-		timestamped.setAttribute("time", now)
+		timestamped.setAttribute( "time", new Date() )
 		timestamped.innerHTML = html
 
 		terminal.append(timestamped)
@@ -56,7 +56,7 @@
 
 	// Print commands
 	const printCommands = async () => {
-		let res = await sendRequest("GET", "/help.html", "")
+		const res = await sendRequest("GET", "/help.html", "")
 
 		if (res.status == 200) {
 			print(res.responseText)
@@ -77,24 +77,24 @@
 	const printSessionInfo = async () => {
 		let icon = ""
 
-		if ( session_config["os"].indexOf("Android" || "android") >= 0 ) {
+		if ( session_config.os.indexOf("Android" || "android") >= 0 ) {
 			icon = "<img width=\"12px\" src=\"../../assets/images/os_android.svg\" />"
-		} else if ( session_config["os"].indexOf("iOS" || "ios") >= 0 ) {
+		} else if ( session_config.os.indexOf("iOS" || "ios") >= 0 ) {
 			icon = "<img width=\"12px\" src=\"../../assets/images/os_apple.svg\" />"
-		} else if ( session_config["os"].indexOf("cygwin" || "cygwin" || "mswin" || "mingw" || "bccwin" || "wince" || "emx") >= 0 ) {
+		} else if ( session_config.os.indexOf("cygwin" || "cygwin" || "mswin" || "mingw" || "bccwin" || "wince" || "emx") >= 0 ) {
 			icon = "<img width=\"12px\" src=\"../../assets/images/os_windows.svg\" />"
-		} else if ( session_config["os"].indexOf("Darwin" || "darwin") >= 0 ) {
+		} else if ( session_config.os.indexOf("Darwin" || "darwin") >= 0 ) {
 			icon = "<img width=\"12px\" src=\"../../assets/images/os_apple.svg\" />"
-		} else if ( session_config["os"].indexOf("Linux" || "linux") >= 0 ) {
+		} else if ( session_config.os.indexOf("Linux" || "linux") >= 0 ) {
 			icon = "<img width=\"12px\" src=\"../../assets/images/os_linux.svg\" />"
 		}
 
-		print(" " + icon + " <span class=\"bold\">" + session_config["os"] + "<br></span>" + 
-			"<span class=\"grey\">Device&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span> <span class=\"bold\">" + session_config["device"] + "<br></span>" + 
-			"<span class=\"grey\">Hostname&nbsp;&nbsp;&nbsp;:</span> <span class=\"bold\">" + session_config["hostname"] + "<br></span>" + 
-			"<span class=\"grey\">Session&nbsp;ID&nbsp;:</span> <span class=\"bold\">" + session_config["session_id"] + "<br></span>" + 
-			"<span class=\"grey\">User-Agent&nbsp;:</span> <span class=\"bold\">" + session_config["user_agent"] + "<br><br></span>" + 
-			"<span>Interpreter is fetching packets every <span class=\"bold\">" + session_config["fetch_rate"].replace("-", "</span> to <span class=\"bold\">") + "</span> seconds</span>.<br></span>" + 
+		print(" " + icon + " <span class=\"bold\">" + session_config.os + "<br></span>" + 
+			"<span class=\"grey\">Device&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span> <span class=\"bold\">" + session_config.device + "<br></span>" + 
+			"<span class=\"grey\">Hostname&nbsp;&nbsp;&nbsp;:</span> <span class=\"bold\">" + session_config.hostname + "<br></span>" + 
+			"<span class=\"grey\">Session&nbsp;ID&nbsp;:</span> <span class=\"bold\">" + session_config.session_id + "<br></span>" + 
+			"<span class=\"grey\">User-Agent&nbsp;:</span> <span class=\"bold\">" + session_config.user_agent + "<br><br></span>" + 
+			"<span>Interpreter is fetching packets every <span class=\"bold\">" + session_config.fetch_rate.replace("-", "</span> to <span class=\"bold\">") + "</span> seconds</span>.<br></span>" + 
 			"<hr>" + 
 			"<span class=\"bold\"><img src=\"/assets/images/os_linux.svg\" width=\"12px\"> Sewers v1.0<br></span>" + 
 			"<span class=\"grey\">User-Agent&nbsp;:</span> <span class=\"bold\">" + await getsewersUserAgent() + "<br><br></span>" + 
@@ -104,7 +104,7 @@
 
 	// Return StdIn to sewers
 	const stdIn = async data => {
-		let params = new String(
+		const params = new String(
 			"?body=" + data + 
 			"&session_id=" + session_id + 
 			"&encryption_key_one=" + session_config.encryption_key_one + 
@@ -112,7 +112,11 @@
 			"&request_tag=" + relay_config.sewers_post_tag
 		)
 
-		let res = sendForm("POST", "/post" + params, "")
+		showNetworkIndicator()
+
+		sendForm("POST", "/post" + params, "").then(res=>{
+			hideNetworkIndicator()
+		})
 	}
 
 	// Change fetch rate
@@ -129,8 +133,12 @@
 
 	// Fetch new packets from interpreter
 	const fetchPackets = async () => {
+		showNetworkIndicator()
+
 		await resetLoadLine()
-		moveLoadLine()
+		sleep(0.1).then(async()=>{
+			moveLoadLine()
+		})
 
 		// Make this send a form.
 		let res = await sendForm("GET", "/get" + "?packet_id=&session_id=" + session_id + "&encryption_key_one=" + session_config.encryption_key_one + "&relay_address=" + relay_config.relay_address + "&request_tag=" + relay_config.sewers_get_tag, "")
@@ -152,31 +160,27 @@
 					if (response.length > 0) {
 						new Audio("../../assets/audio/bell.mp3").play()
 
-						let type = ""
+						const plaintext = atob(response)
 
-						let plaintext = atob(response)
-
-						let time = await timestamp()
-
-						await print(response_tag + " <span class=\"bold lightgreen\">OK</span> <span>" + time + "</span><br>")
+						await print(response_tag + " <span class=\"bold lightgreen\">OK</span> <span>" + await timestamp() + "</span><br>")
 
 						if ( plaintext.startsWith("\xff\xd8\xff") || plaintext.startsWith("\xFF\xD8\xFF") ) {
-							type = "image/jpg"
+							const type = "image/jpg"
 
 							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
 							sleep(0.1).then(async()=>{ print("<hr>") })
 						} else if ( plaintext.startsWith("\x89PNG\r\n\x1a\n") || plaintext.startsWith("\x89PNG\r\n\x1A\n") ) {
-							type = "image/png"
+							const type = "image/png"
 
 							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
 							sleep(0.1).then(async()=>{ print("<hr>") })
 						} else if ( plaintext.startsWith("GIF87a") || plaintext.startsWith("GIF89a") ) {
-							type = "image/gif"
+							const type = "image/gif"
 
 							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
 							sleep(0.1).then(async()=>{ print("<hr>") })
 						} else if ( plaintext.startsWith("<?xml") && plaintext.indexOf("<svg") >= 0 || plaintext.startsWith("<svg") ) {
-							type = "image/svg+xml"
+							const type = "image/svg+xml"
 
 							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
 							sleep(0.1).then(async()=>{ print("<hr>") })
@@ -190,6 +194,10 @@
 				}
 			}
 		}
+
+		sleep(1).then(async()=>{
+			hideNetworkIndicator()
+		})
 	}
 
 	// Start auto fetcher
@@ -265,28 +273,30 @@
 
 	// Move loadline
 	const moveLoadLine = async () => {
-		new_width = parseInt( 720 / (fetch_delay / 1000) )
-		new_width < 5 ? new_width = 5 : ""
-
 		load_line.style.transition = "left " + fetch_delay + "ms linear"
 		load_line.style.webkitTransition = "left " + fetch_delay + "ms linear"
-		load_line.style.mozTransition= "left " + fetch_delay + "ms linear"
+		load_line.style.mozTransition = "left " + fetch_delay + "ms linear"
 		load_line.style.msTransition = "left " + fetch_delay + "ms linear"
-		load_line.style.oTransition= "left " + fetch_delay + "ms linear"
+		load_line.style.oTransition = "left " + fetch_delay + "ms linear"
+
 		load_line.style.left = "calc(100% + " + new_width + "px)"
 	}
 
 	// Reset loadline
 	const resetLoadLine = async () => {
 		new_width = parseInt( 720 / (fetch_delay / 1000) )
-		new_width < 5 ? new_width = 5 : ""
+		if (new_width < 5) {
+			new_width = 5
+		}
 
-		load_line.style.width= new_width + "px"
+		load_line.style.width = new_width + "px"
+
 		load_line.style.transition = "left 0s linear"
 		load_line.style.webkitTransition = "left 0s linear"
-		load_line.style.mozTransition= "left 0s linear"
+		load_line.style.mozTransition = "left 0s linear"
 		load_line.style.msTransition = "left 0s linear"
-		load_line.style.oTransition= "left 0s linear"
+		load_line.style.oTransition = "left 0s linear"
+
 		load_line.style.left = "-" + new_width + "px"
 	}
 
@@ -405,6 +415,20 @@
 	// Strip strings (the Ruby way)
 	const strip = async data => {
 		return data.replace(/^\s*/, "").replace(/\s*$/, "")
+	}
+
+	// Network activity indicator
+	const showNetworkIndicator = async () => {
+		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
+
+		network_indicator.classList.remove("hidden")
+	}
+
+	// Network activity indicator
+	const hideNetworkIndicator = async () => {
+		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
+
+		network_indicator.classList.add("hidden")
 	}
 
 	// Input handler
