@@ -213,13 +213,11 @@
 		fetchPackets()
 
 		autoFetcher = async () => {
-			fetch_delay = randTime(min, max) * 1000
+			fetch_delay = await randTime(min, max) * 1000
 
 			fetchPackets()
 
-			setTimeout(async()=>{
-				autoFetcher()
-			}, fetch_delay) // wait for loadline
+			setTimeout(autoFetcher, fetch_delay) // wait for loadline
 		}
 
 		autoFetcher()
@@ -409,6 +407,11 @@
 	const onCommand = async () => {
 		let cmd = textarea.value
 
+		parseCommand(cmd)
+	}
+
+	// StdIn handler
+	const parseCommand = async cmd => {
 		textarea.value = ""
 
 		if (cmd.length > 0) {
