@@ -1,0 +1,7 @@
+{
+	"relay_address": "http://0.0.0.0:81/relay.php",
+	"sewers_post_tag": "inventory",
+	"sewers_get_tag": "perks",
+	"interpreter_post_tag": "P",
+	"interpreter_get_tag": "G"
+}

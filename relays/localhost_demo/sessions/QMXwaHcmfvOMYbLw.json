@@ -1,0 +1,18 @@
+{
+	"device": "Acer Aspire",
+	"encryption_key_one": "MZpirFa4XEQsTNmaBBaFAmXuUCe2Qan0",
+	"sewers_get_tag": "perks",
+	"sewers_post_tag": "inventory",
+	"fetch_rate": "1-2",
+	"fetch_rate_tag": "obf_tag_fetch_rate",
+	"hostname": "ghxst",
+	"interpreter_get_tag": "G",
+	"interpreter_post_tag": "P",
+	"os": "Linux ghxst 4.16.0-kali2-amd64 #1 SMP Debian 4.16.12-1kali1 (2018-05-28) x86_64 GNU/Linux",
+	"relay_address": "http://0.0.0.0:81/chat-dial.php",
+	"session_id": "QMXwaHcmfvOMYbLw",
+	"terminal_size": "600x1200",
+	"icon": "laptop",
+	"logo": "acer",
+	"user_agent": "Sewers Interpreter (Linux) Reverse HTTP Test Session"
+}

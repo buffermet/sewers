@@ -1,0 +1,7 @@
+{
+	"relay_address": "https://chatdialtest.000webhostapp.com/chat-dial.php",
+	"sewers_post_tag": "sp",
+	"sewers_get_tag": "sg",
+	"interpreter_post_tag": "ip",
+	"interpreter_get_tag": "ig"
+}

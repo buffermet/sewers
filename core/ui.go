@@ -96,22 +96,25 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 			fmt.Fprintf(res, "OK")
 		} else if strings.HasPrefix(req.URL.Path, "/config") {
-			req.ParseForm()
-
 			path := strings.Replace(req.URL.Path, "/", "", 1)
 			split_path := strings.Split(path, "/")
 
 			json_path := ""
 
 			if len(split_path) > 2 {
+				// Configure session
 				json_path = PATH_RELAYS + "/" + split_path[1] + "/sessions/" + split_path[2] + ".json"
 			} else if len(split_path) == 2 {
-				if split_path[1] == "sewers" {
-					json_path = "./config.json"
-				} else {
+				if split_path[1] != "sewers" {
+					// Configure relay
 					json_path = PATH_RELAYS + "/" + split_path[1] + "/" + split_path[1] + ".json"
+				} else {
+					// Configure sewers
+					json_path = "./config.json"
 				}
 			}
+
+			req.ParseForm()
 
 			if len(req.Form) > 0 {
 				Configure(json_path, req.Form)

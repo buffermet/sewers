@@ -22,7 +22,7 @@ const(
 
 var(
 	VERSION = "1.0"
-	USER_AGENT = "sewers/" + VERSION + " HTTP Test Session"
+	USER_AGENT = "Sewers/" + VERSION + " HTTP Test Session"
 )
 
 func WhoAmI() string {

@@ -1,0 +1,18 @@
+{
+  "os": "Linux Debian 4.15.11-1kali1",
+  "device": "Acer Aspire",
+  "hostname": "cah7Ir",
+  "encryption_key_one": "EAsCaCeNTegv1cHcmnMaIEowIXAFK9AQ",
+  "encryption_key_two": "shrooms888jO3Hgxb43hjJFKsamoa942",
+  "sewers_get_tag": "emoticons",
+  "sewers_post_tag": "offline",
+  "interpreter_get_tag": "fetch",
+  "interpreter_post_tag": "online",
+  "pause_terminal": "false",
+  "relay_address": "http://chatdialtest.000webhostapp.com/chat-dial.php",
+  "session_id": "tst",
+  "fetch_rate": "240-600",
+  "fetch_rate_tag": "obf_tag_fetch_rate",
+  "fetch_schedule": [],
+  "terminal_size": "600x1200"
+}

@@ -1,0 +1,7 @@
+{
+	"relay_address": "https://chatdialtest.000webhostapp.com/chat-dial.php",
+	"sewers_post_tag": "emoticons",
+	"sewers_get_tag": "offline",
+	"interpreter_post_tag": "fetch",
+	"interpreter_get_tag": "online"
+}

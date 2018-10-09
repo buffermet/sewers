@@ -35,7 +35,7 @@
 					scrollOnOutput ? consoleContainer.scrollTop += 999999 : ""
 				}
 			} else {
-				print("Could not connect to sewers.")
+				print("<span class=\"bold grey\">&nbsp;" + await timestamp() + "&nbsp;</span><span>Could not connect to sewers.</span><br>")
 			}
 		})
 	}
@@ -292,8 +292,38 @@
 	}
 
 	// Print to console
-	const print = async string => {
-		consoleContainer.append(string)
+	const print = async html => {
+		const timestamped = document.createElement("stamp")
+
+		timestamped.setAttribute( "time", new Date() )
+		timestamped.innerHTML = html
+
+		consoleContainer.append(timestamped)
+	}
+
+	// Return readable timestamp
+	const timestamp = async () => {
+		const now = new Date()
+
+		let D = now.getDate()
+		D < 10 ? D = "0" + D : ""
+
+		let M = now.getMonth() + 1
+		M < 10 ? M = "0" + M : ""
+
+		let Y = now.getFullYear()
+		Y < 10 ? Y = "0" + Y : ""
+
+		let h = now.getHours()
+		h < 10 ? h = "0" + h : ""
+
+		let m = now.getMinutes()
+		m < 10 ? m = "0" + m : ""
+
+		let s = now.getSeconds()
+		s < 10 ? s = "0" + s : ""
+
+		return D + "-" + M + "-" + Y + " " + h + ":" + m + ":" + s
 	}
 
 	// Show message box

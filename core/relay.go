@@ -2,7 +2,7 @@ package core
 
 /*
 *	
-*	Handles relay payload generation and obfuscation.
+*	Manages and generates relays.
 *	
 */
 
@@ -99,4 +99,13 @@ func GetRelaySessions(relay string) string {
 	}
 
 	return sessions
+}
+
+func GenerateRelay(payload_type string) []byte {
+	raw_payload, e := ioutil.ReadFile(PATH_RELAYS + "/" + payload_type + "/raw." + payload_type)
+	if e != nil {
+		LogToConsole( BOLD_RED + "ERROR" + STD + " Unable to retrieve raw relay payload: " + BOLD + PATH_RELAYS + "/" + payload_type + "/" + "raw." + payload_type + STD + "\n[" + BOLD_RED + "STACK TRACE" + STD + "]\n" + e.Error() )
+	}
+
+	return raw_payload
 }
