@@ -20,8 +20,8 @@ const(
 )
 
 var(
-	obf_var_encryption_key = []byte("taish6ooP6iexo6oi8YuKaph1Shai2vi")
-	obf_var_relay_address = "http://0.0.0.0:81/chat-dial.php"
+	obf_var_encryption_key = []byte("00000000000000000000000000000000")
+	obf_var_relay_address = ""
 	obf_var_user_agent = "Sewers Interpreter (Linux) Reverse HTTP Test Session"
 )
 
