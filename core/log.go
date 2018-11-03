@@ -16,7 +16,7 @@ import(
 )
 
 const(
-	STD = "\x1b[5;37;m"
+	STD = "\x1b[0m"
 	BOLD = "\x1b[1m"
 	BOLD_GREY = "\x1b[1;30m"
 	BOLD_RED = "\x1b[1;31m"
