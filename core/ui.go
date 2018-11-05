@@ -13,6 +13,7 @@ import(
 	"strconv"
 	"net/http"
 	"io/ioutil"
+	"encoding/json"
 	"os"
 )
 
@@ -136,10 +137,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 			var(
 				packet_id string
 				session_id string
-				relay_address string
-				encryption_key_one string
-				// encryption_key_two string
-				request_tag string
+				relay_id string
 			)
 
 			f := req.Form
@@ -148,86 +146,80 @@ func serve(res http.ResponseWriter, req *http.Request) {
 					packet_id = value[0]
 				} else if param == "session_id" {
 					session_id = value[0]
-				} else if param == "relay_address" {
-					relay_address = value[0]
-				} else if param == "encryption_key_one" {
-					encryption_key_one = value[0]
-				// } else if param == "encryption_key_two" {
-				// 	encryption_key_two = value[0]
-				} else if param == "request_tag" {
-					request_tag = value[0]
+				} else if param == "relay_id" {
+					relay_id = value[0]
 				}
 			}
 
 			response := ""
 
-			if session_id != "" && relay_address != "" && encryption_key_one != "" && request_tag != "" {
-				if packet_id == "" {
-					LogToConsole(BOLD_YELLOW + "REQUEST" + STD + " " + BOLD + "GET" + STD + " " + ip_string + " tried to fetch packet list from " + BOLD_YELLOW + session_id + STD +" at " + BOLD + relay_address + STD)
+			if session_id != "" && relay_id != "" {
+				var c map[string]interface{}
+				if e := json.Unmarshal( []byte( GetSession(relay_id, session_id) ), &c ); e != nil {
+					Log( "ERROR " + e.Error() )
+				}
 
-					response = SendHTTPRequest(relay_address, request_tag, session_id, "nil")
+				res.Header().Set("Content-Type", "text/plain")
+
+				if packet_id == "" {
+					LogToConsole(BOLD_YELLOW + "REQUEST" + STD + " " + BOLD + "GET" + STD + " " + ip_string + " tried to fetch packet list from session " + BOLD_YELLOW + session_id + STD +" at relay " + BOLD + relay_id + STD)
+
+					response = SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), session_id, "nil" )
 
 					fmt.Fprintf(res, response)
 					return
 				} else {
-					LogToConsole(BOLD_YELLOW + "REQUEST" + STD + " " + ip_string + " tried to fetch packet " + BOLD_YELLOW + packet_id + STD + " from " + BOLD_YELLOW + session_id + STD + " at " + BOLD + relay_address + STD)
+					LogToConsole(BOLD_YELLOW + "REQUEST" + STD + " " + ip_string + " tried to fetch packet " + BOLD_YELLOW + packet_id + STD + " from session " + BOLD_YELLOW + session_id + STD + " at relay " + BOLD + relay_id + STD)
 
-					enc_response := SendHTTPRequest(relay_address, request_tag, session_id, packet_id)
+					enc_response := SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), session_id, packet_id )
 					enc_response_bytes := []byte(enc_response)
-					key := []byte(encryption_key_one)
+					key := []byte( c["encryption_key_one"].(string) )
 
 					dec_response, e := Decrypt(key, enc_response_bytes)
 					if e != nil {
-						LogToConsole( BOLD_BLUE + "RESPONSE" + STD + " " + BOLD_RED + "ERROR" + STD + " " + ip_string + " was unable to decrypt response from interpreter.\npacket_id : " + packet_id + "\nsession_id : " + session_id + "\nrelay_address : " + relay_address + "\nrequest_tag : " + request_tag + "\nlength : " + strconv.Itoa( len(enc_response) ) + "\n[" + BOLD_RED + "STACK TRACE" + STD + "]\n" + e.Error() )
+						LogToConsole( BOLD_BLUE + "RESPONSE" + STD + " " + BOLD_RED + "ERROR" + STD + " " + ip_string + " was unable to decrypt response from interpreter.\npacket_id: " + packet_id + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\nrequest_tag: " + c["sewers_get_tag"].(string) + "\nlength: " + strconv.Itoa( len(enc_response) ) + "\n[" + BOLD_RED + "STACK TRACE" + STD + "]\n" + e.Error() )
 						fmt.Fprintf(res, "")
 						return
 					}
 
-					LogToConsole(BOLD_BLUE + "RESPONSE" + STD + " fetched by " + ip_string + "\nsession_id : " + session_id + "\nrelay_address : " + relay_address + "\npacket_id : " + packet_id + "\nencrypted response length : " + strconv.Itoa( len(enc_response) ) + "\ndecrypted response length : " + strconv.Itoa( len(dec_response) ) )
-
-					// DEBUG
-					// fmt.Println( enc_response + "\n---------------\n" + string(dec_response) )
+					LogToConsole(BOLD_BLUE + "RESPONSE" + STD + " fetched by " + ip_string + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\npacket_id: " + packet_id + "\nencrypted response length: " + strconv.Itoa( len(enc_response) ) + "\ndecrypted response length: " + strconv.Itoa( len(dec_response) ) )
 
 					fmt.Fprintf( res, string(dec_response) )
-					return
 				}
+			} else {
+				LogToConsole(BOLD_YELLOW + "REQUEST" + STD + " " + BOLD_RED + "ERROR" + STD + " " + ip_string + " tried to send a malformed packet.\npacket_id: " + packet_id + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id)
 			}
-
-			// Error if not returned.
-			LogToConsole(BOLD_YELLOW + "REQUEST" + STD + " " + BOLD_RED + "ERROR" + STD + " " + ip_string + " tried to send a malformed packet.\npacket_id : " + packet_id + "\nsession_id : " + session_id + "\nrelay_address : " + relay_address + "\nrequest_tag : " + request_tag)
 		} else if strings.HasPrefix(req.URL.Path, "/post") {
 			req.ParseForm()
 
 			var(
 				body string
 				session_id string
-				relay_address string
-				encryption_key_one string
-				// encryption_key_two string
-				request_tag string
+				relay_id string
 			)
 
-			f := req.Form
-			for param, value := range f {
+			form := req.Form
+			for param, value := range form {
 				if param == "body" {
 					body = value[0]
 				} else if param == "session_id" {
 					session_id = value[0]
-				} else if param == "relay_address" {
-					relay_address = value[0]
-				} else if param == "encryption_key_one" {
-					encryption_key_one = value[0]
-				// } else if param == "encryption_key_two" {
-				// 	encryption_key_two = value[0]
-				} else if param == "request_tag" {
-					request_tag = value[0]
+				} else if param == "relay_id" {
+					relay_id = value[0]
 				}
 			}
 
-			if body != "" && session_id != "" && relay_address != "" && encryption_key_one != "" && request_tag != "" {
-				LogToConsole(BOLD_YELLOW + "REQUEST" + STD + " " + BOLD + "POST" + STD + " " + ip_string + " sent a packet to " + BOLD_YELLOW + session_id + STD + "\ncommand : " + body + "\nrelay_address : " + relay_address + "\nrequest_tag : " + request_tag)
+			if body != "" && session_id != "" && relay_id != "" {
+				var c map[string]interface{}
+				if e := json.Unmarshal( []byte( GetSession(relay_id, session_id) ), &c ); e != nil {
+					Log( "ERROR " + e.Error() )
+				}
 
-				encrypt_key_bytes := []byte(encryption_key_one)
+				res.Header().Set("Content-Type", "text/plain")
+
+				LogToConsole( BOLD_YELLOW + "REQUEST" + STD + " " + BOLD + "POST" + STD + " " + ip_string + " sent a packet to " + BOLD_YELLOW + session_id + STD + "\ncommand: " + body + "\nrelay_address: " + c["relay_address"].(string) + "\nrequest_tag: " + c["sewers_post_tag"].(string) )
+
+				encrypt_key_bytes := []byte( c["encryption_key_one"].(string) )
 				payload_bytes := []byte(body)
 
 				enc_payload, e := Encrypt(encrypt_key_bytes, payload_bytes)
@@ -236,14 +228,12 @@ func serve(res http.ResponseWriter, req *http.Request) {
 				}
 				enc_payload_string := string(enc_payload)
 
-				SendHTTPRequest(relay_address, request_tag, session_id, enc_payload_string)
+				SendHTTPRequest(c["relay_address"].(string), c["sewers_post_tag"].(string), session_id, enc_payload_string)
 
 				fmt.Fprintf(res, "OK")
-				return
+			} else {
+				LogToConsole( BOLD_YELLOW + "REQUEST" + STD + " " + BOLD_RED + "ERROR" + STD + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id)
 			}
-
-			// Error if not returned.
-			LogToConsole(BOLD_YELLOW + "REQUEST" + STD + " " + BOLD_RED + "ERROR" + STD + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nrelay_address: " + relay_address + "\nrequest_tag: " + request_tag)
 		} else if req.URL.Path == "/quit" {
 			LogToConsole(ip_string + " has shut down sewers.")
 

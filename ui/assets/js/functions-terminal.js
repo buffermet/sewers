@@ -127,9 +127,7 @@
 		const params = new String(
 			"?body=" + data + 
 			"&session_id=" + session_id + 
-			"&encryption_key_one=" + session_config.encryption_key_one + 
-			"&relay_address=" + relay_config.relay_address + 
-			"&request_tag=" + relay_config.sewers_post_tag
+			"&relay_id=" + relay
 		)
 
 		showNetworkIndicator()
@@ -141,7 +139,13 @@
 
 	// Change fetch rate
 	const changeFetchRate = async (min, max) => {
-		sendForm("POST", "/post", "body=" + session_config.fetch_rate_tag + " " + min + " " + max + "&session_id=" + session_id + "&encryption_key_one=" + session_config.encryption_key_one + "&relay_address=" + relay_config.relay_address + "&request_tag=" + relay_config.sewers_post_tag)
+		const form = new String(
+			"body=" + session_config.fetch_rate_tag + " " + min + " " + max + 
+			"&session_id=" + session_id + 
+			"&relay_id=" + relay
+		)
+
+		sendForm("POST", "/post", form)
 		.then(async res=>{
 			if (res.status == 200) {
 				print("<span>Interpreter will be fetching packets every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds as soon as it fetches packets.<br></span>")
@@ -160,8 +164,14 @@
 			moveLoadLine()
 		})
 
-		// Make this send a form.
-		let res = await sendForm("GET", "/get" + "?packet_id=&session_id=" + session_id + "&encryption_key_one=" + session_config.encryption_key_one + "&relay_address=" + relay_config.relay_address + "&request_tag=" + relay_config.sewers_get_tag, "")
+		// Make this send a form instead of params
+		const params = new String(
+			"?packet_id=" + 
+			"&session_id=" + session_id + 
+			"&relay_id=" + relay
+		)
+
+		let res = await sendForm("GET", "/get" + params, "")
 
 		if (res.status == 200) {
 			let response = res.responseText
@@ -172,8 +182,14 @@
 				for (i = 0; i < packets.length; i++) {
 					let packetID = packets[i]
 
-					// Make this send a form.
-					res = await sendRequest("GET", "/get" + "?packet_id=" + packetID + "&session_id=" + session_id + "&encryption_key_one=" + session_config.encryption_key_one + "&relay_address=" + relay_config.relay_address + "&request_tag=" + relay_config.sewers_get_tag, "")
+					// Make this send a form instead of params
+					const params = new String(
+						"?packet_id=" + packetID + 
+						"&session_id=" + session_id + 
+						"&relay_id=" + relay
+					)
+
+					res = await sendRequest("GET", "/get" + params, "")
 
 					response = res.responseText
 
