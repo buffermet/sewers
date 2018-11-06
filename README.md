@@ -1,7 +1,7 @@
 <p align="center">
   :warning:  Work in progress, <b>do not use</b>.
   <br>
-  <img width="210px" type="image/svg+xml" src="https://raw.githubusercontent.com/yungtravla/cdn/master/github.com/yungtravla/sewers/logo.svg">
+  <img width="210px" type="image/svg+xml" src="https://yungtravla.github.io/cdn/github.com/yungtravla/sewers/logo.svg">
 </p>
 
 <br>
