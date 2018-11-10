@@ -341,9 +341,6 @@ html body div.scrollcontainer div.container div.sessionlist div.session {
 html body div.scrollcontainer div.container div.sessionlist div.session {
 	background-image: none;
 }
-html body div.scrollcontainer div.container div.sessionlist div.session.unknown {
-	background-color: rgba(50,0,0,.75)
-}
 html body div.scrollcontainer div.container div.relaylist div.relay:hover,
 html body div.scrollcontainer div.container div.sessionlist div.session:hover {
 	background-color: rgba(255,255,255,.05);
@@ -354,7 +351,8 @@ html body div.scrollcontainer div.container div.sessionlist div.session:hover {
 	-o-transition: background-color 0s linear;
 }
 html body div.scrollcontainer div.container div.sessionlist div.session.unknown:hover {
-	background-color: rgba(75,25,25,.75)
+	background-color: rgba(0,0,0,.5);
+	cursor: default;
 }
 html body div.scrollcontainer div.container div.relaylist div.relay:active,
 html body div.scrollcontainer div.container div.sessionlist div.session:active {
@@ -404,6 +402,8 @@ html body div.scrollcontainer div.container div.sessionlist div.session div.icon
 }
 html body div.scrollcontainer div.container div.sessionlist div.session div.icon.unknown {
 	background: url(../images/unknown.svg);
+	background-size: 15% !important;
+	opacity: .1;
 }
 html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop {
 	background: url(../images/laptop.svg);

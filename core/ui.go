@@ -9,6 +9,7 @@ package core
 import(
 	"log"
 	"fmt"
+	"regexp"
 	"strings"
 	"strconv"
 	"net/http"
@@ -54,6 +55,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 		} else if strings.HasSuffix(req.URL.Path, ".html") || 
 		          strings.HasSuffix(req.URL.Path, ".css") || 
 		          strings.HasSuffix(req.URL.Path, ".js") || 
+		          strings.HasSuffix(req.URL.Path, ".ico") || 
 		          strings.HasSuffix(req.URL.Path, ".svg") || 
 		          strings.HasSuffix(req.URL.Path, ".png") || 
 		          strings.HasSuffix(req.URL.Path, ".jpg") || 
@@ -97,21 +99,21 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 			fmt.Fprintf(res, "OK")
 		} else if strings.HasPrefix(req.URL.Path, "/config") {
-			path := strings.Replace(req.URL.Path, "/", "", 1)
+			path := regexp.MustCompile(`^/`).ReplaceAllString(req.URL.Path, "")
+
 			split_path := strings.Split(path, "/")
 
 			json_path := ""
-
 			if len(split_path) > 2 {
-				// Configure session
+				// Request is intended for a session config.
 				json_path = PATH_RELAYS + "/" + split_path[1] + "/sessions/" + split_path[2] + ".json"
 			} else if len(split_path) == 2 {
-				if split_path[1] != "sewers" {
-					// Configure relay
-					json_path = PATH_RELAYS + "/" + split_path[1] + "/" + split_path[1] + ".json"
-				} else {
-					// Configure sewers
+				if split_path[1] == "sewers" {
+					// Request is intended for sewers config.
 					json_path = "./config.json"
+				} else {
+					// Request is intended for a relay config.
+					json_path = PATH_RELAYS + "/" + split_path[1] + "/" + split_path[1] + ".json"
 				}
 			}
 

@@ -109,15 +109,16 @@
 			icon = "<img width=\"12px\" src=\"../../assets/images/os_linux.svg\" />"
 		}
 
-		print(" " + icon + " <span class=\"bold\">" + session_config.os + "<br></span>" + 
-			"<span class=\"grey\">Device&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span> <span class=\"bold\">" + session_config.device + "<br></span>" + 
-			"<span class=\"grey\">Hostname&nbsp;&nbsp;&nbsp;:</span> <span class=\"bold\">" + session_config.hostname + "<br></span>" + 
-			"<span class=\"grey\">Session&nbsp;ID&nbsp;:</span> <span class=\"bold\">" + session_config.session_id + "<br></span>" + 
-			"<span class=\"grey\">User-Agent&nbsp;:</span> <span class=\"bold\">" + session_config.user_agent + "<br><br></span>" + 
+		print(" " + icon + " <span class=\"bold\">Interpreter<br></span>" + 
+			"<span class=\"cyan\">OS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\" style=\"overflow:hidden\">" + session_config.os + "<br></span>" + 
+			"<span class=\"cyan\">Device&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.device + "<br></span>" + 
+			"<span class=\"cyan\">Hostname&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.hostname + "<br></span>" + 
+			"<span class=\"cyan\">Session&nbsp;ID&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.session_id + "<br></span>" + 
+			"<span class=\"cyan\">User-Agent&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.user_agent + "<br><br></span>" + 
 			"<span>Interpreter is fetching packets every <span class=\"bold\">" + session_config.fetch_rate.replace("-", "</span> to <span class=\"bold\">") + "</span> seconds</span>.<br></span>" + 
 			"<hr>" + 
 			"<span class=\"bold\"><img src=\"/assets/images/os_linux.svg\" width=\"12px\"> Sewers v1.0<br></span>" + 
-			"<span class=\"grey\">User-Agent&nbsp;:</span> <span class=\"bold\">" + await getsewersUserAgent() + "<br><br></span>" + 
+			"<span class=\"orange\">User-Agent&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + await getsewersUserAgent() + "<br><br></span>" + 
 			"<span>Type <span class=\"orange bold\">?</span>, <span class=\"orange bold\">h</span> or <span class=\"orange bold\">help</span> for more info.<br></span>"
 		)
 	}
@@ -203,22 +204,22 @@
 						if ( plaintext.startsWith("\xff\xd8\xff") || plaintext.startsWith("\xFF\xD8\xFF") ) {
 							const type = "image/jpg"
 
-							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
+							print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
 							sleep(0.1).then(async()=>{ print("<hr>") })
 						} else if ( plaintext.startsWith("\x89PNG\r\n\x1a\n") || plaintext.startsWith("\x89PNG\r\n\x1A\n") ) {
 							const type = "image/png"
 
-							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
+							print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
 							sleep(0.1).then(async()=>{ print("<hr>") })
 						} else if ( plaintext.startsWith("GIF87a") || plaintext.startsWith("GIF89a") ) {
 							const type = "image/gif"
 
-							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
+							print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
 							sleep(0.1).then(async()=>{ print("<hr>") })
 						} else if ( plaintext.startsWith("<?xml") && plaintext.indexOf("<svg") >= 0 || plaintext.startsWith("<svg") ) {
 							const type = "image/svg+xml"
 
-							print("<img title=\"Response ID: " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
+							print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await escapeHTML(response) + "\" /><br>")
 							sleep(0.1).then(async()=>{ print("<hr>") })
 						} else {
 							let stdout = await escapeHTML(plaintext)

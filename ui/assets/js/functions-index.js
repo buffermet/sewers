@@ -155,10 +155,11 @@
 
 							sendRequest("GET", url, "").then(async res=>{
 								if (res.status == 200) {
-									let session = sessionlist[i]
+									let session_id = sessionlist[i]
 
-									if (res.responseText != "nil") {
-										sessionConfig = JSON.parse(res.responseText)
+									if (res.responseText != "") {
+										let sessionConfig = JSON.parse(res.responseText)
+
 										device = ( sessionConfig.os.indexOf("Android" || "android") >= 0 ) 
 											? "phone" 
 											: ( sessionConfig.os.indexOf("Darwin" || "darwin") >= 0 ) 
@@ -168,6 +169,7 @@
 											: ( sessionConfig.device.indexOf("Acer Aspire") >= 0 ) 
 											? "laptop" 
 											: "unknown"
+
 										logo = ( sessionConfig.device.indexOf("Acer") >= 0 ) 
 											? "acer" 
 											: ( sessionConfig.os.indexOf("Android" || "android") >= 0 ) 
@@ -186,11 +188,11 @@
 												<div class="logo ` + await escapeHTML(logo) + `"></div>
 											</div>
 											<span class="device">` + await escapeHTML(sessionConfig.device) + `</span>
-											<span class="id">` + await escapeHTML(session) + `</span>
+											<span class="id">` + await escapeHTML(session_id) + `</span>
 											<span class="hostname">` + await escapeHTML(sessionConfig.hostname) + `</span>
 										`
 										div.onclick = async () => {
-											openTerminal(relay, session)
+											openTerminal(relay, session_id)
 										}
 
 										document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
@@ -200,13 +202,10 @@
 										div.className = "session unknown"
 										div.innerHTML = `
 											<div class="icon unknown"></div>
-											<span class="device">` + await escapeHTML(sessionConfig.device) + `</span>
-											<span class="id">` + await escapeHTML(session) + `</span>
-											<span class="hostname">undefined</span>
+											<span class="device">unknown device</span>
+											<span class="id">` + await escapeHTML(session_id) + `</span>
+											<span class="hostname">unknown hostname</span>
 										`
-										div.onclick = async () => {
-											openTerminal(relay, session)
-										}
 
 										document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
 									}
