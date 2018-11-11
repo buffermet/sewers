@@ -329,6 +329,7 @@ html body div.scrollcontainer div.container div.sessionlist div.session {
 	background-repeat: no-repeat;
 	background-size: 35%;
 	background-position: 50% 50%;
+	border-radius: 5px;
 	cursor: pointer;
 	font-size: 14px;
 	color: #FFF;

@@ -55,7 +55,7 @@
 	}
 
 	const getSewersUserAgent = async () => {
-		let res = await sendRequest("GET", "/useragent", "")
+		let res = await sendRequest("GET", "/useragent", null)
 
 		return res.responseText
 	}
@@ -391,6 +391,11 @@
 		const relayNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage")
 		const SessionsNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage")
 
+		newsMessage.classList.add('hide')
+
+		const relays = document.querySelectorAll("html body div.scrollcontainer div.container div.relaylist div.relay")
+		const sessions = document.querySelectorAll("html body div.scrollcontainer div.container div.sessionlist div.session")
+
 		// Cycle
 		newsRelays = {
 			0: relays.length + " relay" + (relays.length > 1 || relays.length < 1 ? "s" : ""),
@@ -400,8 +405,6 @@
 			0: sessions.length + " session" + (sessions.length > 1 || sessions.length < 1 ? "s" : ""),
 			1: "User-Agent: <span style=\"font-weight:bold\">" + await escapeHTML( await getSewersUserAgent() ) + "</span>",
 		}
-
-		newsMessage.classList.add('hide')
 
 		if ( currentRelaysNews == Object.keys(newsRelays).length ) {
 			currentRelaysNews = 0
@@ -421,10 +424,20 @@
 				SessionsNewsMessage.classList.remove("hide")
 				currentSessionsNews += 1
 			}
-		}, 360)
+		}, 400)
 	}
 
-	// Close sewers
+	// Hide and shut down sewers.
 	const quit = async () => {
-		location = "/quit"
+		self.stop()
+
+		sendRequest("GET", "/quit", null)
+		.then(async()=>{
+			document.documentElement.innerHTML = ""
+			document.title = "Untitled"
+
+			setTimeout(async()=>{
+				self.location = self.location
+			}, 200)
+		})
 	}

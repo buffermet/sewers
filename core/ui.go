@@ -127,6 +127,8 @@ func serve(res http.ResponseWriter, req *http.Request) {
 					LogToConsole( BOLD_RED + "ERROR" + STD + " Unable to retrieve " + BOLD + json_path + STD + "\n[" + BOLD_RED + "STACK TRACE" + STD + "]\n" + e.Error() )
 				}
 
+				res.Header().Set("Content-Type", "application/json")
+
 				fmt.Fprintf( res, string(body) )
 			}
 		} else if req.URL.Path == "/host" {
