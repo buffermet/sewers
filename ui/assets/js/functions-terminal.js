@@ -158,19 +158,14 @@
 
 	// Fetch new packets from interpreter
 	const fetchPackets = async () => {
-		showNetworkIndicator()
-
-		await resetLoadLine()
-		sleep(0.1).then(async()=>{
-			moveLoadLine()
-		})
-
 		// Make this send a form instead of params
 		const params = new String(
 			"?packet_id=" + 
 			"&session_id=" + session_id + 
 			"&relay_id=" + relay
 		)
+
+		showNetworkIndicator()
 
 		let res = await sendForm("GET", "/get" + params, "")
 
@@ -240,34 +235,34 @@
 	// Start auto fetcher
 	const startAutoFetching = async (min, max) => {
 		if (auto_fetching) {
-			print("<span>Waiting for auto fetcher...<br></span>")
-
 			auto_fetching = false
 
-			autoFetcher = async () => {
-				startAutoFetching(min, max)
-			}
+			load_line.classList.add("stop")
 
-			return
-		}
+			startAutoFetching(min, max)
+		} else {
+			auto_fetching = true
 
-		auto_fetching = true
-
-		fetch_delay = randTime(min, max) * 1000
-
-		fetchPackets()
-
-		autoFetcher = async () => {
-			fetch_delay = await randTime(min, max) * 1000
+			fetch_delay = randTime(min, max) * 1000
 
 			fetchPackets()
 
-			setTimeout(autoFetcher, fetch_delay) // wait for loadline
+			autoFetcher = async () => {
+				if (auto_fetching) {
+					fetch_delay = await randTime(min, max) * 1000
+
+					startLoadLine()
+
+					setTimeout(autoFetcher, fetch_delay)
+
+					fetchPackets()
+				}
+			}
+
+			autoFetcher()
+
+			print("<span>Fetching new packets from relay every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds.<br></span>")
 		}
-
-		autoFetcher()
-
-		print("<span>Fetching new packets from relay every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds.<br></span>")
 	}
 
 	// Stop auto fetcher
@@ -276,11 +271,11 @@
 			auto_fetching = false
 			fetch_delay = 1000
 
-			print("<span>Stopping auto fetcher...<br></span>")
+			autoFetcher = async () => {}
 
-			autoFetcher = async () => {
-				print("<span>Auto fetcher stopped.<br></span>")
-			}
+			load_line.classList.add("stop")
+
+			print("<span>Auto fetcher stopped.<br></span>")
 		} else {
 			print("<span>Auto fetcher is not running.</span>")
 		}
@@ -309,32 +304,20 @@
 	}
 
 	// Move loadline
-	const moveLoadLine = async () => {
-		load_line.style.transition = "left " + fetch_delay + "ms linear"
-		load_line.style.webkitTransition = "left " + fetch_delay + "ms linear"
-		load_line.style.mozTransition = "left " + fetch_delay + "ms linear"
-		load_line.style.msTransition = "left " + fetch_delay + "ms linear"
-		load_line.style.oTransition = "left " + fetch_delay + "ms linear"
+	const startLoadLine = async () => {
+		load_line.classList.add("stop")
 
-		load_line.style.left = "calc(100% + " + new_width + "px)"
-	}
+		setTimeout(async()=>{
+			const delay = fetch_delay - 600
 
-	// Reset loadline
-	const resetLoadLine = async () => {
-		new_width = parseInt( 720 / (fetch_delay / 1000) )
-		if (new_width < 5) {
-			new_width = 5
-		}
+			load_line.style.transition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
+			load_line.style.webkitTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
+			load_line.style.mozTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
+			load_line.style.msTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
+			load_line.style.oTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
 
-		load_line.style.width = new_width + "px"
-
-		load_line.style.transition = "left 0s linear"
-		load_line.style.webkitTransition = "left 0s linear"
-		load_line.style.mozTransition = "left 0s linear"
-		load_line.style.msTransition = "left 0s linear"
-		load_line.style.oTransition = "left 0s linear"
-
-		load_line.style.left = "-" + new_width + "px"
+			load_line.classList.remove("stop")
+		}, 100)
 	}
 
 	// Scroll to bottom

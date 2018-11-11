@@ -109,18 +109,20 @@ html body form {
 }
 html body form div.loadline {
 	position: absolute;
-	left: -720px;
-	width: 720px;
+	right: 0;
+	width: 0%;
 	height: 1px;
-	background: url(../../assets/images/loadline.svg);
-	background-size: 100%;
+	background-color: white;
+	opacity: 1;
 }
-html body form div.loadline.reset {
-	transition: left 0s linear !important;
-	-webkit-transition: left 0s linear !important;
-	-moz-transition: left 0s linear !important;
-	-ms-transition: left 0s linear !important;
-	-o-transition: left 0s linear !important;
+html body form div.loadline.stop {
+	opacity: 0;
+	width: 100%;
+	transition: none !important;
+	-webkit-transition: none !important;
+	-moz-transition: none !important;
+	-ms-transition: none !important;
+	-o-transition: none !important;
 }
 html body form textarea {
 	margin: 0;
