@@ -124,7 +124,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 			} else {
 				body, e := ioutil.ReadFile(json_path)
 				if e != nil {
-					LogToConsole( BOLD_RED + "ERROR" + STD + " Unable to retrieve " + BOLD + json_path + STD + "\n[" + BOLD_RED + "STACK TRACE" + STD + "]\n" + e.Error() )
+					LogToConsole(BOLD_RED + "ERROR" + STD + " Unable to read " + BOLD + json_path + STD)
 				}
 
 				res.Header().Set("Content-Type", "application/json")

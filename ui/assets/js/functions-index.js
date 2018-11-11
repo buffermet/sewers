@@ -152,6 +152,8 @@
 						for (let i = 0; i < sessionlist.length; i++) {
 							let url = "./session/" + relay.replace(".json", "") + "/" + sessionlist[i]
 
+							let div = document.createElement("div")
+
 							sendRequest("GET", url, "").then(async res=>{
 								if (res.status == 200) {
 									let session_id = sessionlist[i]
@@ -159,28 +161,31 @@
 									if (res.responseText != "") {
 										let sessionConfig = JSON.parse(res.responseText)
 
-										device = ( sessionConfig.os.indexOf("Android" || "android") >= 0 ) 
-											? "phone" 
-											: ( sessionConfig.os.indexOf("Darwin" || "darwin") >= 0 ) 
-											? "laptop"
-											: ( sessionConfig.os.indexOf("cygwin" || "cygwin" || "mswin" || "mingw" || "bccwin" || "wince" || "emx") >= 0 ) 
-											? "laptop" 
-											: ( sessionConfig.device.indexOf("Acer Aspire") >= 0 ) 
-											? "laptop" 
+										device = ( sessionConfig.os.match(/android/i) ) 
+												? "phone" 
+											: ( sessionConfig.os.match(/darwin/i) ) 
+												? "laptop"
+											: ( sessionConfig.os.match(/cygwin|mswin|mingw|bccwin|wince|emx/i) ) 
+												? "laptop" 
+											: ( sessionConfig.device.match(/acer aspire/i) ) 
+												? "laptop" 
 											: "unknown"
 
-										logo = ( sessionConfig.device.indexOf("Acer") >= 0 ) 
-											? "acer" 
-											: ( sessionConfig.os.indexOf("Android" || "android") >= 0 ) 
-											? "android" 
-											: ( sessionConfig.os.indexOf("Darwin" || "darwin") >= 0 ) 
-											? "apple" 
-											: ( sessionConfig.os.indexOf("cygwin" || "cygwin" || "mswin" || "mingw" || "bccwin" || "wince" || "emx") >= 0 ) 
-											? "windows" 
+										logo = ( sessionConfig.device.match(/acer/i) ) 
+												? "acer" 
+											: ( sessionConfig.os.match(/thinkpad/i) ) 
+												? "thinkpad" 
+											: ( sessionConfig.os.match(/lenovo/i) ) 
+												? "lenovo" 
+											: ( sessionConfig.os.match(/android/i) ) 
+												? "android" 
+											: ( sessionConfig.os.match(/darwin/i) ) 
+												? "apple" 
+											: ( sessionConfig.os.match(/cygwin|mswin|mingw|bccwin|wince|emx/i) ) 
+												? "windows" 
 											: "unknown"
 
-										let div = document.createElement("div")
-
+										div.onclick = async () => { openTerminal(relay, session_id) }
 										div.className = "session"
 										div.innerHTML = `
 											<div class="icon ` + await escapeHTML(device) + `">
@@ -190,24 +195,17 @@
 											<span class="id" title="Session ID">` + await escapeHTML(session_id) + `</span>
 											<span class="hostname" title="Hostname">` + await escapeHTML(sessionConfig.hostname) + `</span>
 										`
-										div.onclick = async () => {
-											openTerminal(relay, session_id)
-										}
-
-										document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
 									} else {
-										let div = document.createElement("div")
-
 										div.className = "session unknown"
 										div.innerHTML = `
 											<div class="icon unknown"></div>
-											<span class="device">unknown device</span>
-											<span class="id">` + await escapeHTML(session_id) + `</span>
-											<span class="hostname">unknown hostname</span>
+											<span class="device" title="Device">unknown device</span>
+											<span class="id" title="Session ID">` + await escapeHTML(session_id) + `</span>
+											<span class="hostname" title="Hostname">unknown hostname</span>
 										`
-
-										document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
 									}
+
+									document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
 								}
 							})
 						}

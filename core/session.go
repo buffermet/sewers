@@ -31,7 +31,7 @@ type Session struct {
 func GetSession(relay, session string) string {
 	session_config, e := ioutil.ReadFile(PATH_RELAYS + "/" + relay + "/sessions/" + session + ".json")
 	if e != nil {
-		LogToConsole( BOLD_RED + "ERROR" + STD + " Unable to retrieve " + BOLD + "relays/" + relay + "/sessions/" + session + ".json" + STD + "\n[" + BOLD_RED + "STACK TRACE" + STD + "]\n" + e.Error() )
+		LogToConsole(BOLD_RED + "ERROR" + STD + " Unable to read " + BOLD + "relays/" + relay + "/sessions/" + session + ".json" + STD)
 	} else {
 		return string(session_config)
 	}
