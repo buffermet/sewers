@@ -74,6 +74,7 @@ html body div.fade div.messagebox div.button {
 	margin-right: 12px;
 	margin-top: 20px;
 	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
 }
 html body div.fade div.messagebox div.button:hover {
 	background: rgb(62,62,62);
@@ -126,6 +127,7 @@ html body div.fade div.modal div.optionbox ul li {
 	font-size: 16px;
 	color: #FFF;
 	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
 }
 html body div.fade div.modal div.optionbox ul li:hover {
 	background: #161616;
@@ -148,6 +150,7 @@ html body div.fade div.modal div.optionbox div.bottom {
 	color: #FFF;
 	border-top: 1px solid #0b0b0b;
 	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
 }
 html body div.fade div.modal div.optionbox div.bottom div {
 	float: left;
@@ -331,6 +334,7 @@ html body div.scrollcontainer div.container div.sessionlist div.session {
 	background-position: 50% 50%;
 	border-radius: 5px;
 	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
 	font-size: 14px;
 	color: #FFF;
 	transition: background-color 200ms linear;
@@ -529,6 +533,7 @@ html body div.console div.clear {
 	color: #FFF;
 	background-color: rgba(0,0,0,.75);
 	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
 	transition: background-color 200ms linear;
 	-webkit-transition: background-color 200ms linear;
 	-moz-transition: background-color 200ms linear;
