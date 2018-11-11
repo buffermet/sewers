@@ -77,6 +77,9 @@
 		sleep(0.4).then(()=>{
 			container.innerHTML = skeleton
 
+			const relayNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage")
+			relayNewsMessage.classList.add("hide")
+
 			sendRequest("GET", "/get_relays", "").then(async res=>{
 				const response = res.responseText
 
@@ -142,6 +145,9 @@
 					<div class="space"></div>
 				</div>
 			`
+
+			const SessionsNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage")
+			SessionsNewsMessage.classList.add("hide")
 
 			backbutton.classList.remove("hidden")
 
