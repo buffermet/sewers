@@ -413,6 +413,9 @@ html body div.scrollcontainer div.container div.sessionlist div.session div.icon
 html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop {
 	background: url(../images/laptop.svg);
 }
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop2 {
+	background: url(../images/laptop2.svg);
+}
 html body div.scrollcontainer div.container div.sessionlist div.session div.icon.phone {
 	background: url(../images/phone.svg);
 }
@@ -420,7 +423,10 @@ html body div.scrollcontainer div.container div.sessionlist div.session div.icon
 	background: url(../images/router.svg);
 }
 html body div.scrollcontainer div.container div.sessionlist div.session div.icon.acer {
-	background: url(../images/acer.svg);
+	background: url(../images/brand_acer.svg);
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.thinkpad {
+	background: url(../images/brand_thinkpad.svg);
 }
 html body div.scrollcontainer div.container div.sessionlist div.session div.icon.android {
 	background: url(../images/os_android.svg);
@@ -442,6 +448,11 @@ html body div.scrollcontainer div.container div.sessionlist div.session div.icon
 	top: 72px;
 	height: 10px;
 	background-image: url(../images/brand_acer.svg);
+}
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop div.logo.thinkpad {
+	top: 72px;
+	height: 10px;
+	background-image: url(../images/brand_thinkpad.svg);
 }
 html body div.scrollcontainer div.container div.sessionlist div.session div.icon.phone div.logo.android {
 	top: 71px;
