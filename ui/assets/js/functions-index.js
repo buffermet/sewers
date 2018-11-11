@@ -186,9 +186,9 @@
 											<div class="icon ` + await escapeHTML(device) + `">
 												<div class="logo ` + await escapeHTML(logo) + `"></div>
 											</div>
-											<span class="device">` + await escapeHTML(sessionConfig.device) + `</span>
-											<span class="id">` + await escapeHTML(session_id) + `</span>
-											<span class="hostname">` + await escapeHTML(sessionConfig.hostname) + `</span>
+											<span class="device" title="Device">` + await escapeHTML(sessionConfig.device) + `</span>
+											<span class="id" title="Session ID">` + await escapeHTML(session_id) + `</span>
+											<span class="hostname" title="Hostname">` + await escapeHTML(sessionConfig.hostname) + `</span>
 										`
 										div.onclick = async () => {
 											openTerminal(relay, session_id)
