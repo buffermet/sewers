@@ -110,11 +110,11 @@
 		}
 
 		print(" " + icon + " <span class=\"bold\">Interpreter<br></span>" + 
-			"<span class=\"cyan\">OS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\" style=\"overflow:hidden\">" + session_config.os + "<br></span>" + 
-			"<span class=\"cyan\">Device&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.device + "<br></span>" + 
-			"<span class=\"cyan\">Hostname&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.hostname + "<br></span>" + 
 			"<span class=\"cyan\">Session&nbsp;ID&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.session_id + "<br></span>" + 
-			"<span class=\"cyan\">User-Agent&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.user_agent + "<br><br></span>" + 
+			"<span class=\"cyan\">User-Agent&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.user_agent + "<br></span>" + 
+			"<span class=\"cyan\">Hostname&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.hostname + "<br></span>" + 
+			"<span class=\"cyan\">Device&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.device + "<br></span>" + 
+			"<span class=\"cyan\">OS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\" style=\"overflow:hidden\">" + session_config.os + "<br><br></span>" + 
 			"<span>Interpreter is fetching packets every <span class=\"bold\">" + session_config.fetch_rate.replace("-", "</span> to <span class=\"bold\">") + "</span> seconds</span>.<br></span>" + 
 			"<hr>" + 
 			"<span class=\"bold\"><img src=\"/assets/images/os_linux.svg\" width=\"12px\"> Sewers v1.0<br></span>" + 
