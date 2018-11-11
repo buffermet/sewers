@@ -4,7 +4,7 @@ html body div.menu {
 	top: 0px;
 	height: 26px;
 	width: 100%;
-	background: rgba(0,0,0,0.8);
+	background-color: rgba(0,0,0,0.8);
 	user-select: none;
 	text-align: center;
 	-webkit-user-select: none;
@@ -22,6 +22,7 @@ html body div.menu div.item {
 	font-family: "OpenSans-Regular";
 	font-size: 13px;
 	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
 	transition: margin-left 200ms linear;
 	-webkit-transition: margin-left 200ms linear;
 	-moz-transition: margin-left 200ms linear;
@@ -30,6 +31,9 @@ html body div.menu div.item {
 }
 html body div.menu div.item.hidden {
 	margin-left: -33px;
+}
+html body div.menu div.item.noclick {
+	cursor: default !important;
 }
 html body div.menu div.item.left {
 	float: left;
@@ -43,16 +47,16 @@ html body div.menu div.item.center:last-of-type {
 	border-right: none;
 }
 html body div.menu div.item:hover {
-	background: rgba(11,11,11,1);
+	background-color: rgba(11,11,11,1);
 }
 html body div.menu div.item:active {
-	background: rgba(20,20,20,1);
+	background-color: rgba(20,20,20,1);
 }
 html body div.menu div.item.no-click:active {
-	background: rgba(11,11,11,1);
+	background-color: rgba(11,11,11,1);
 }
 html body div.menu div.item.no-hover:hover {
-	background: none;
+	background-color: none;
 }
 html body div.menu div.item.no-cursor {
 	cursor: default !important;
@@ -82,10 +86,10 @@ html body div.menu div.item.left span.ip div.status {
 	margin-right: 6px;
 }
 html body div.menu div.item.left span.ip div.status.active {
-	background: rgb(33, 255, 0);
+	background-color: rgb(33, 255, 0);
 }
 html body div.menu div.item.left span.ip div.status.inactive {
-	background: rgba(120,120,120,1)
+	background-color: rgba(120,120,120,1)
 }
 html body div.menu div.item div.icon {
 	position: relative;
@@ -203,7 +207,7 @@ html body div.submenu div.subitem div.icon div.icon.rec {
 	width: 6px;
 	height: 6px;
 	border-radius: 100px;
-	background: red;
+	background-color: red;
 	box-shadow: 0px 0 0 1px white;
 }
 html body div.submenu div.subitem div.icon div.icon.rec {
@@ -214,11 +218,11 @@ html body div.submenu div.subitem div.icon div.icon.rec {
 }
 html body div.menu div.item div.icon div.icon.rec.off,
 html body div.submenu div.subitem div.icon div.icon.rec.off {
-	background: #222;
+	background-color: #222;
 }
 html body div.menu div.item[name=statusled].online {
 	padding: 0px 2px 0 2px;
-	background: rgba(100,255,100,.5);
+	background-color: rgba(100,255,100,.5);
 	animation-duration: 1s;
 	-webkit-animation-duration: 1s;
 	animation-name: onlineblinking;
@@ -235,7 +239,7 @@ html body div.menu div.item[name=javascript] input {
 	width: 100%;
 	height: 100%;
 	border: none;
-	background: none;
+	background-color: none;
 	color: #888;
 	padding: 0px;
 	opacity: 0;
@@ -249,7 +253,7 @@ html body div.menu div.item[name=javascript] input {
 html body div.menu div.item[name=javascript] input:focus {
 	opacity: 1;
 	width: 100px;
-	background: rgb(11,11,11);
+	background-color: rgb(11,11,11);
 	padding-left: 7px;
 	padding-right: 7px;
 	border-right: 1px solid black;
@@ -288,7 +292,8 @@ html body div.menu div.item div.submenu div.subitem {
 	width: 100%;
 	line-height: 29px;
 	text-align: left;
-	background: rgba(0,0,0,0.8);
+	background-color: rgba(0,0,0,0.8);
+	cursor: pointer;
 }
 html body div.menu div.item div.submenu div.submodule {
 	text-indent: 6px;
@@ -297,13 +302,13 @@ html body div.menu div.item div.submenu div.submodule {
 	line-height: 29px;
 	text-align: left;
 	cursor: default;
-	background: rgba(0,0,0,0.8);
+	background-color: rgba(0,0,0,0.8);
 }
 html body div.menu div.item div.submenu div.subitem:hover {
-	background: rgba(11,11,11,1);
+	background-color: rgba(11,11,11,1);
 }
 html body div.menu div.item div.submenu div.subitem:active {
-	background: rgba(20,20,20,1);
+	background-color: rgba(20,20,20,1);
 }
 html body div.menu div.item div.submenu div.subitem:last-of-type {
 	border-bottom: none;
