@@ -429,7 +429,17 @@
 
 	// Escape HTML
 	const escapeHTML = async data => {
-		return data.replace(/\&/g, "&amp;").replace(/\</g,"&lt;").replace(/\>/g,"&gt;").replace(/\"/g, "&quot;").replace(/\'/g,"&#39;").replace(/\//g, "&#x2F;").replace(/ /g, "&nbsp;").replace(/\t/g, "&emsp;").replace(/\n/g, "<br>")
+		return new String(data)
+		.replace(/\&/g, "&amp;")
+		.replace(/\</g,"&lt;")
+		.replace(/\>/g,"&gt;")
+		.replace(/\"/g, "&quot;")
+		.replace(/\'/g,"&#39;")
+		.replace(/\\/g, "&#92;")
+		.replace(/\//g, "&#x2F;")
+		.replace(/ /g, "&nbsp;")
+		.replace(/\t/g, "&emsp;")
+		.replace(/\n/g, "<br>")
 	}
 
 	// Strip strings (the Ruby way)
