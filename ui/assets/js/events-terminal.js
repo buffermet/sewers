@@ -3,8 +3,11 @@
 
 	// Focus input field unless selecting span text
 	self.addEventListener("click", async event=>{
-		if (event.currentTarget.tagName != "SPAN" && event.currentTarget.tagName != "INPUT") {
-			textarea.focus()
+		switch (event.currentTarget.tagName) {
+			case "SPAN":
+			case "INPUT":
+			default:
+				textarea.focus()
 		}
 	})
 

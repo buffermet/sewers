@@ -11,6 +11,26 @@
 		})
 	}
 
+	// Escape HTML
+	const escapeHTML = async data => {
+		return new String(data)
+		.replace(/\&/g, "&amp;")
+		.replace(/\</g,"&lt;")
+		.replace(/\>/g,"&gt;")
+		.replace(/\"/g, "&quot;")
+		.replace(/\'/g,"&#39;")
+		.replace(/\\/g, "&#92;")
+		.replace(/\//g, "&#x2F;")
+		.replace(/ /g, "&nbsp;")
+		.replace(/\t/g, "&emsp;")
+		.replace(/\n/g, "<br>")
+	}
+
+	// Strip strings
+	const strip = async data => {
+		return data.replace(/^\s*/, "").replace(/\s*$/, "")
+	}
+
 	// Generate random string
 	const randomString = async (min, max) => {
 		const length = ( min + ( Math.random() * (max - min) ) )
@@ -425,26 +445,6 @@
 				addStream(streamID, "STREAMCAM")
 			}
 		}
-	}
-
-	// Escape HTML
-	const escapeHTML = async data => {
-		return new String(data)
-		.replace(/\&/g, "&amp;")
-		.replace(/\</g,"&lt;")
-		.replace(/\>/g,"&gt;")
-		.replace(/\"/g, "&quot;")
-		.replace(/\'/g,"&#39;")
-		.replace(/\\/g, "&#92;")
-		.replace(/\//g, "&#x2F;")
-		.replace(/ /g, "&nbsp;")
-		.replace(/\t/g, "&emsp;")
-		.replace(/\n/g, "<br>")
-	}
-
-	// Strip strings (the Ruby way)
-	const strip = async data => {
-		return data.replace(/^\s*/, "").replace(/\s*$/, "")
 	}
 
 	// Network activity indicator
