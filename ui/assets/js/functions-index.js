@@ -10,7 +10,17 @@
 
 	// Escape HTML
 	const escapeHTML = async data => {
-		return new String(data).replace(/\&/g, "&amp;").replace(/\</g,"&lt;").replace(/\>/g,"&gt;").replace(/\"/g, "&quot;").replace(/\'/g,"&#39;").replace(/\//g, "&#x2F;").replace(/ /g, "&nbsp;").replace(/\t/g, "&emsp;").replace(/\n/g, "<br>")
+		return new String(data)
+		.replace(/\&/g, "&amp;")
+		.replace(/\</g,"&lt;")
+		.replace(/\>/g,"&gt;")
+		.replace(/\"/g, "&quot;")
+		.replace(/\'/g,"&#39;")
+		.replace(/\\/g, "&#92;")
+		.replace(/\//g, "&#x2F;")
+		.replace(/ /g, "&nbsp;")
+		.replace(/\t/g, "&emsp;")
+		.replace(/\n/g, "<br>")
 	}
 
 	// Log to console
@@ -161,35 +171,11 @@
 									if (res.responseText != "") {
 										let sessionConfig = JSON.parse(res.responseText)
 
-										device = ( sessionConfig.os.match(/android/i) ) 
-												? "phone" 
-											: ( sessionConfig.os.match(/darwin/i) ) 
-												? "laptop"
-											: ( sessionConfig.os.match(/cygwin|mswin|mingw|bccwin|wince|emx/i) ) 
-												? "laptop" 
-											: ( sessionConfig.device.match(/acer aspire/i) ) 
-												? "laptop" 
-											: "unknown"
-
-										logo = ( sessionConfig.device.match(/acer/i) ) 
-												? "acer" 
-											: ( sessionConfig.os.match(/thinkpad/i) ) 
-												? "thinkpad" 
-											: ( sessionConfig.os.match(/lenovo/i) ) 
-												? "lenovo" 
-											: ( sessionConfig.os.match(/android/i) ) 
-												? "android" 
-											: ( sessionConfig.os.match(/darwin/i) ) 
-												? "apple" 
-											: ( sessionConfig.os.match(/cygwin|mswin|mingw|bccwin|wince|emx/i) ) 
-												? "windows" 
-											: "unknown"
-
 										div.onclick = async () => { openTerminal(relay, session_id) }
 										div.className = "session"
 										div.innerHTML = `
-											<div class="icon ` + await escapeHTML(device) + `">
-												<div class="logo ` + await escapeHTML(logo) + `"></div>
+											<div class="icon ` + await escapeHTML(sessionConfig.icon) + `">
+												<div class="logo ` + await escapeHTML(sessionConfig.logo) + `"></div>
 											</div>
 											<span class="device" title="Device">` + await escapeHTML(sessionConfig.device) + `</span>
 											<span class="id" title="Session ID">` + await escapeHTML(session_id) + `</span>

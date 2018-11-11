@@ -444,14 +444,16 @@ html body div.scrollcontainer div.container div.sessionlist div.session div.icon
 	background-repeat: no-repeat;
 	background-position: center;
 }
-html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop div.logo.acer {
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop div.logo.acer,
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop2 div.logo.acer {
 	top: 72px;
 	height: 10px;
 	background-image: url(../images/brand_acer.svg);
 }
-html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop div.logo.thinkpad {
-	top: 72px;
-	height: 10px;
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop div.logo.thinkpad,
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop2 div.logo.thinkpad {
+	top: 70px;
+	height: 14px;
 	background-image: url(../images/brand_thinkpad.svg);
 }
 html body div.scrollcontainer div.container div.sessionlist div.session div.icon.phone div.logo.android {
