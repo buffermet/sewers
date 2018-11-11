@@ -595,7 +595,7 @@ html body div.console div.consolecontainer {
 	padding: 3px;
 	color: #FFF;
 	font-family: monospace;
-	font-size: 12px;
+	font-size: 1em;
 	text-shadow: 0 -1px 0px black;
 	overflow: hidden;	
 	overflow-y: scroll;

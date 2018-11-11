@@ -52,7 +52,7 @@ html body div.scrollBox div.terminal {
 	padding: 3px;
 	color: #FFF;
 	font-family: monospace;
-	font-size: 12px;
+	font-size: 1em;
 	text-shadow: 0 -1px 0px black;
 	word-break: break-all;
 }
@@ -105,7 +105,6 @@ html body form {
 	height: calc(100vh - 26px - 12px - 11px);
 	min-height: 40px;
 	width: 100%;
-	font-size: 12px;
 }
 html body form div.loadline {
 	position: absolute;
@@ -133,7 +132,7 @@ html body form textarea {
 	border: none;
 	border-top: 1px solid rgba(255,255,255,0.05);
 	text-shadow: 0 -1px 0px black;
-	font-size: 12px;
+	font-size: 1em;
 	padding: 3px;
 	background: transparent;
 	resize: none;

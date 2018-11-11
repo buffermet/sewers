@@ -88,13 +88,15 @@
 
 					for (let i = 0; i < Object.keys(relay_configs).length; i++) {
 						const relay = document.createElement("div")
+						const relay_address = await escapeHTML(relay_configs[i].RelayAddress)
+						const relay_id = await escapeHTML(relay_configs[i].RelayID)
 
 						relay.name = await escapeHTML(relay_configs[i].RelayID)
 						relay.className = "relay"
 						relay.innerHTML = `
 							<span class="relaynumber">RELAY ` + (i + 1) + `</span>
-							<span class="name" title="Relay name">` + await escapeHTML(relay_configs[i].RelayID) + `</span>
-							<span class="url" title="Relay address">` + await escapeHTML(relay_configs[i].RelayAddress) + `</span>
+							<span class="name" title="` + relay_id + `">` + relay_id + `</span>
+							<span class="url" title="` + relay_address + `">` + relay_address + `</span>
 						`
 						relay.onclick = async () => {
 							showSessions(relay_configs[i].RelayID)
@@ -102,29 +104,20 @@
 
 						document.querySelector("html body div.scrollcontainer div.container div.relaylist div.space").before(relay)
 					}
-
-					sleep(0.72).then(()=>{
-						currentRelaysNews = 0
-
-						cycleNews().then(async()=>{
-							container.classList.remove("hide")
-							container.classList.remove("nopointerevents")
-						})
-					})
 				} else {
 					let span = document.createElement("span")
 					span.class = "nonefound"
 					span.innerText = "No relays found"
 
 					document.querySelector("html body div.scrollcontainer div.container div.relaylist div.space").before(span)
-
-					currentRelaysNews = 0
-
-					cycleNews().then(async()=>{
-						container.classList.remove("hide")
-						container.classList.remove("nopointerevents")
-					})
 				}
+
+				currentRelaysNews = 0
+
+				cycleNews().then(async()=>{
+					container.classList.remove("hide")
+					container.classList.remove("nopointerevents")
+				})
 			})
 		})
 
@@ -230,12 +223,6 @@
 							<span class="hostname">gateway</span>
 						`
 						document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
-
-						currentSessionsNews = 0
-						cycleNews()
-
-						container.classList.remove("hide")
-						container.classList.remove("nopointerevents")
 					} else {
 						print(response)
 
@@ -247,12 +234,6 @@
 
 						document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(span)
 						document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
-
-						currentSessionsNews = 0
-						cycleNews()
-
-						container.classList.remove("hide")
-						container.classList.remove("nopointerevents")
 					}
 				} else {
 					let span = document.createElement("span")
@@ -260,13 +241,14 @@
 					span.innerText = "Unable to connect to relay"
 
 					document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(span)
+				}
 
-					currentSessionsNews = 0
-					cycleNews()
+				currentSessionsNews = 0
 
+				cycleNews().then(async()=>{
 					container.classList.remove("hide")
 					container.classList.remove("nopointerevents")
-				}
+				})
 			})
 		})
 
