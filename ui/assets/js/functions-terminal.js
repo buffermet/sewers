@@ -103,17 +103,6 @@
 		}
 	}
 
-	// Get current User-Agent of sewers (used in requests sent to relays)
-	const getsewersUserAgent = async () => {
-		return new Promise(resolve=>{
-			sendRequest("GET", "/useragent", "").then(res=>{
-				if (res.status == 200) {
-					resolve(res.responseText)
-				}
-			})
-		})
-	}
-
 	const printSessionInfo = async () => {
 		let icon = ""
 
@@ -130,15 +119,17 @@
 		}
 
 		print(" " + icon + " <span class=\"bold\">Interpreter<br></span>" + 
-			"<span class=\"cyan\">Session&nbsp;ID&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.session_id + "<br></span>" + 
-			"<span class=\"cyan\">User-Agent&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.user_agent + "<br></span>" + 
-			"<span class=\"cyan\">Hostname&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.hostname + "<br></span>" + 
 			"<span class=\"cyan\">Device&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.device + "<br></span>" + 
-			"<span class=\"cyan\">OS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\" style=\"overflow:hidden\">" + session_config.os + "<br><br></span>" + 
+			"<span class=\"cyan\">Hostname&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.hostname + "<br></span>" + 
+			"<span class=\"cyan\">OS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\" style=\"overflow:hidden\">" + session_config.os + "<br></span>" + 
+			"<span class=\"cyan\">Session&nbsp;ID&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.session_id + "<br></span>" + 
+			"<span class=\"cyan\">User-Agent&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.user_agent + "<br><br></span>" + 
 			"<span>Interpreter is fetching packets every <span class=\"bold\">" + session_config.fetch_rate.replace("-", "</span> to <span class=\"bold\">") + "</span> seconds</span>.<br></span>" + 
 			"<hr>" + 
 			"<span class=\"bold\"><img src=\"/assets/images/os_linux.svg\" width=\"12px\"> Sewers v1.0<br></span>" + 
-			"<span class=\"orange\">User-Agent&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + await getsewersUserAgent() + "<br><br></span>" + 
+			"<span class=\"orange\">Relay Address&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + relay_config.relay_address + "<br></span>" + 
+			"<span class=\"orange\">Relay ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + relay + "<br></span>" + 
+			"<span class=\"orange\">User-Agent&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + relay_config.user_agent + "<br><br></span>" + 
 			"<span>Type <span class=\"orange bold\">?</span>, <span class=\"orange bold\">h</span> or <span class=\"orange bold\">help</span> for more info.<br></span>"
 		)
 	}

@@ -6,7 +6,7 @@ package core
 *	
 */
 
-import(
+import (
 	"log"
 	"fmt"
 	"regexp"
@@ -18,7 +18,7 @@ import(
 	"os"
 )
 
-var(
+var (
 	UI_PORT = "8042"
 )
 
@@ -29,10 +29,10 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 	if strings.HasPrefix(req.RemoteAddr, "127.0.0.1:") {
 		allow_connections = true
-		ip_string = BOLD_GREEN + req.RemoteAddr + STD
+		ip_string = BOLD_GREEN + req.RemoteAddr + RESET
 	} else {
 		allow_connections = false
-		ip_string = BOLD_RED + req.RemoteAddr + STD
+		ip_string = BOLD_RED + req.RemoteAddr + RESET
 	}
 
 	// Serve
@@ -124,7 +124,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 			} else {
 				body, e := ioutil.ReadFile(json_path)
 				if e != nil {
-					LogToConsole(BOLD_RED + "ERROR" + STD + " Unable to read " + BOLD + json_path + STD)
+					LogToConsole(BOLD_RED + "ERROR" + RESET + " Unable to read " + BOLD + json_path + RESET)
 				}
 
 				res.Header().Set("Content-Type", "application/json")
@@ -133,12 +133,23 @@ func serve(res http.ResponseWriter, req *http.Request) {
 			}
 		} else if req.URL.Path == "/host" {
 			fmt.Fprintf( res, WhoAmI() )
-		} else if req.URL.Path == "/useragent" {
-			fmt.Fprintf(res, USER_AGENT)
+		} else if strings.HasPrefix(req.URL.Path, "/useragent") {
+			relay_id := regexp.MustCompile(`^/useragent/`).ReplaceAllString(req.URL.Path, "")
+
+			if regexp.MustCompile(`^[a-zA-Z0-9._-]+$`).FindString(relay_id) != "" {
+				enc_config := GetRelayConfig(relay_id)
+
+				var config map[string]interface{}
+				if e := json.Unmarshal( []byte(enc_config), &config ); e != nil {
+					LogToConsole(BOLD_RED + "ERROR" + RESET + " Could not decode JSON file " + BOLD + PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json" + RESET + "\n" + e.Error() )
+				}
+
+				fmt.Fprintf( res, config["user_agent"].(string) )
+			}
 		} else if strings.HasPrefix(req.URL.Path, "/get") {
 			req.ParseForm()
 
-			var(
+			var (
 				packet_id string
 				session_id string
 				relay_id string
@@ -166,37 +177,37 @@ func serve(res http.ResponseWriter, req *http.Request) {
 				res.Header().Set("Content-Type", "text/plain")
 
 				if packet_id == "" {
-					LogToConsole(BOLD_YELLOW + "REQUEST" + STD + " " + BOLD + "GET" + STD + " " + ip_string + " tried to fetch packet list from session " + BOLD_YELLOW + session_id + STD +" at relay " + BOLD + relay_id + STD)
+					LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD + "GET" + RESET + " " + ip_string + " tried to fetch packet list from session " + BOLD_YELLOW + session_id + RESET +" at relay " + BOLD + relay_id + RESET)
 
-					response = SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), session_id, "nil" )
+					response = SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), c["user_agent"].(string), session_id, "nil" )
 
 					fmt.Fprintf(res, response)
 					return
 				} else {
-					LogToConsole(BOLD_YELLOW + "REQUEST" + STD + " " + ip_string + " tried to fetch packet " + BOLD_YELLOW + packet_id + STD + " from session " + BOLD_YELLOW + session_id + STD + " at relay " + BOLD + relay_id + STD)
+					LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + ip_string + " tried to fetch packet " + BOLD_YELLOW + packet_id + RESET + " from session " + BOLD_YELLOW + session_id + RESET + " at relay " + BOLD + relay_id + RESET)
 
-					enc_response := SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), session_id, packet_id )
+					enc_response := SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), c["user_agent"].(string), session_id, packet_id )
 					enc_response_bytes := []byte(enc_response)
 					key := []byte( c["encryption_key_one"].(string) )
 
 					dec_response, e := Decrypt(key, enc_response_bytes)
 					if e != nil {
-						LogToConsole( BOLD_BLUE + "RESPONSE" + STD + " " + BOLD_RED + "ERROR" + STD + " " + ip_string + " was unable to decrypt response from interpreter.\npacket_id: " + packet_id + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\nrequest_tag: " + c["sewers_get_tag"].(string) + "\nlength: " + strconv.Itoa( len(enc_response) ) + "\n[" + BOLD_RED + "STACK TRACE" + STD + "]\n" + e.Error() )
+						LogToConsole( BOLD_BLUE + "RESPONSE" + RESET + " " + BOLD_RED + "ERROR" + RESET + " " + ip_string + " was unable to decrypt response from interpreter.\npacket_id: " + packet_id + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\nrequest_tag: " + c["sewers_get_tag"].(string) + "\nlength: " + strconv.Itoa( len(enc_response) ) + "\n[" + BOLD_RED + "STACK TRACE" + RESET + "]\n" + e.Error() )
 						fmt.Fprintf(res, "")
 						return
 					}
 
-					LogToConsole(BOLD_BLUE + "RESPONSE" + STD + " fetched by " + ip_string + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\npacket_id: " + packet_id + "\nencrypted response length: " + strconv.Itoa( len(enc_response) ) + "\ndecrypted response length: " + strconv.Itoa( len(dec_response) ) )
+					LogToConsole(BOLD_BLUE + "RESPONSE" + RESET + " fetched by " + ip_string + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\npacket_id: " + packet_id + "\nencrypted response length: " + strconv.Itoa( len(enc_response) ) + "\ndecrypted response length: " + strconv.Itoa( len(dec_response) ) )
 
 					fmt.Fprintf( res, string(dec_response) )
 				}
 			} else {
-				LogToConsole(BOLD_YELLOW + "REQUEST" + STD + " " + BOLD_RED + "ERROR" + STD + " " + ip_string + " tried to send a malformed packet.\npacket_id: " + packet_id + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id)
+				LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD_RED + "ERROR" + RESET + " " + ip_string + " tried to send a malformed packet.\npacket_id: " + packet_id + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id)
 			}
 		} else if strings.HasPrefix(req.URL.Path, "/post") {
 			req.ParseForm()
 
-			var(
+			var (
 				body string
 				session_id string
 				relay_id string
@@ -221,22 +232,22 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 				res.Header().Set("Content-Type", "text/plain")
 
-				LogToConsole( BOLD_YELLOW + "REQUEST" + STD + " " + BOLD + "POST" + STD + " " + ip_string + " sent a packet to " + BOLD_YELLOW + session_id + STD + "\ncommand: " + body + "\nrelay_address: " + c["relay_address"].(string) + "\nrequest_tag: " + c["sewers_post_tag"].(string) )
+				LogToConsole( BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD + "POST" + RESET + " " + ip_string + " sent a packet to " + BOLD_YELLOW + session_id + RESET + "\ncommand: " + body + "\nrelay_address: " + c["relay_address"].(string) + "\nrequest_tag: " + c["sewers_post_tag"].(string) )
 
 				encrypt_key_bytes := []byte( c["encryption_key_one"].(string) )
 				payload_bytes := []byte(body)
 
 				enc_payload, e := Encrypt(encrypt_key_bytes, payload_bytes)
 				if e != nil {
-					LogToConsole( BOLD_YELLOW + "REQUEST" + STD + " " + BOLD_RED + "ERROR" + STD + " " + ip_string + " Could not encrypt payload.\nData: " + body + "\n[" + BOLD_RED + "STACK TRACE" + STD + "]\n" + e.Error() )
+					LogToConsole( BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD_RED + "ERROR" + RESET + " " + ip_string + " Could not encrypt payload.\nData: " + body + "\n[" + BOLD_RED + "STACK TRACE" + RESET + "]\n" + e.Error() )
 				}
 				enc_payload_string := string(enc_payload)
 
-				SendHTTPRequest(c["relay_address"].(string), c["sewers_post_tag"].(string), session_id, enc_payload_string)
+				SendHTTPRequest(c["relay_address"].(string), c["sewers_post_tag"].(string), c["user_agent"].(string), session_id, enc_payload_string)
 
 				fmt.Fprintf(res, "OK")
 			} else {
-				LogToConsole( BOLD_YELLOW + "REQUEST" + STD + " " + BOLD_RED + "ERROR" + STD + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id)
+				LogToConsole( BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD_RED + "ERROR" + RESET + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id)
 			}
 		} else if req.URL.Path == "/quit" {
 			LogToConsole(ip_string + " has shut down sewers.")
@@ -257,7 +268,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 }
 
 func Start() {
-	LogToConsole( "Server started on " + BOLD + "http://0.0.0.0:" + UI_PORT + STD + " by " + BOLD + WhoAmI() + STD )
+	LogToConsole( "Server started on " + BOLD + "http://0.0.0.0:" + UI_PORT + RESET + " by " + BOLD + WhoAmI() + RESET )
 
 	http.HandleFunc("/", serve)
 	log.Fatal( http.ListenAndServe(":" + UI_PORT, nil) )

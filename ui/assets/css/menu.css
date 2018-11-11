@@ -20,7 +20,7 @@ html body div.menu div.item {
 	line-height: 26px;
 	color: #FFF;
 	font-family: "OpenSans-Regular";
-	font-size: 13px;
+	font-size: 12px;
 	cursor: pointer;
 	-webkit-tap-highlight-color: transparent;
 	transition: margin-left 200ms linear;

@@ -1,149 +1,153 @@
 <!DOCTYPE html>
-<head>
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
-	<meta name="apple-mobile-web-app-status-bar-style" content="#000000">
-	<meta name="msapplication-navbutton-color" content="#000000">
-	<meta name="theme-color" content="#000000">
-	<title>Relays</title>
-	<link rel="icon" type="image/png" href="./assets/images/favicon.png">
-	<link rel="stylesheet" type="text/css" href="./assets/css/colors.css">
-	<link rel="stylesheet" type="text/css" href="./assets/css/fonts.css">
-	<link rel="stylesheet" type="text/css" href="./assets/css/menu.css">
-	<link rel="stylesheet" type="text/css" href="./assets/css/index.css">
-</head>
-<body>
-	<div class="background"></div>
-	<div class="fade hide">
-		<div class="messagebox down">
-			<span class="title"></span>
-			<div class="message"></div>
-			<div class="corner"></div>
-		</div>
-		<div class="modalbox settings down">
-			<div class="optionbox">
-				<ul>
-					<li class="selected">Option 1</li>
-					<li>Option 2</li>
-				</ul>
-				<div class="bottom">
-					<div class="save">Save</div>
-					<div class="cancel">Cancel</div>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="#000000">
+		<meta name="msapplication-navbutton-color" content="#000000">
+		<meta name="theme-color" content="#000000">
+		<title>Relays</title>
+		<link rel="icon" type="image/png" href="./assets/images/favicon.png">
+		<link rel="stylesheet" type="text/css" href="./assets/css/colors.css">
+		<link rel="stylesheet" type="text/css" href="./assets/css/fonts.css">
+		<link rel="stylesheet" type="text/css" href="./assets/css/menu.css">
+		<link rel="stylesheet" type="text/css" href="./assets/css/index.css">
+	</head>
+	<body>
+		<div class="background"></div>
+		<div class="fade hide">
+			<div class="messagebox down">
+				<span class="title"></span>
+				<div class="message"></div>
+				<div class="corner"></div>
+			</div>
+			<div class="modalbox settings down">
+				<div class="optionbox">
+					<ul>
+						<li class="selected">Option 1</li>
+						<li>Option 2</li>
+					</ul>
+					<div class="bottom">
+						<div class="save">Save</div>
+						<div class="cancel">Cancel</div>
+					</div>
 				</div>
-			</div>
-			<div class="menupage">
-				<div class="one">
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-					qui officia deserunt mollit anim id est laborum.
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="menu">
-		<div class="item left hidden">
-			<div class="icon back" title="Back to relays"></div>
-		</div>
-		<div class="item left noclick">
-			<div class="icon plus"></div>
-			<div class="submenu">
-				<div class="subitem" name="newrelay" title="Configure a new relay">&nbsp;New relay</div>
-				<div class="subitem" name="newinterpreter" title="Configure a new interpreter">&nbsp;New interpreter</div>
-			</div>
-		</div>
-		<div class="item left noclick">
-			<div class="icon link"></div>
-			<div class="submenu">
-				<div class="subitem" title="One"><div class="icon proxy-icon"></div>&nbsp;One</div>
-				<div class="subitem" title="Two"><div class="icon proxy-icon"></div>&nbsp;Two</div>
-			</div>
-		</div>
-		<div class="userlist">
-			<div class="item left noclick nohover" title="Active users">
-				<span class="ip"><div class="status active"></div>1</span>
-				<div class="submenu">
-					<div class="submodule">
-						<div class="row">
-							<div class="tab" name="ip">127.0.0.1</div>
-							<div class="tab" name="lastactive">Active 54 seconds ago.</div>
-						</div>
+				<div class="menupage">
+					<div class="one">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+						qui officia deserunt mollit anim id est laborum.
 					</div>
 				</div>
 			</div>
-			<div class="item left noclick nohover" title="Inactive users">
-				<span class="ip"><div class="status inactive"></div>0</span>
+		</div>
+		<div class="menu">
+			<div class="item left hidden">
+				<div class="icon back" title="Back to relays"></div>
+			</div>
+			<div class="item left noclick">
+				<div class="icon plus"></div>
 				<div class="submenu">
-					<div class="submodule"></div>
+					<div class="subitem" name="newrelay" title="Configure a new relay">&nbsp;New relay</div>
+					<div class="subitem" name="newinterpreter" title="Configure a new interpreter">&nbsp;New interpreter</div>
 				</div>
 			</div>
-		</div>
-		<div class="item right" name="quit" title="Quit sewers">
-			<div class="icon io"></div>
-		</div>
-		<div class="item right no-left-border" name="settings" title="Preferences">
-			<div class="icon settings"></div>
-		</div>
-	</div>
-	<div class="scrollcontainer">
-		<div class="container hide"></div>
-	</div>
-	<div class="console">
-		<div class="clear">CLEAR</div>
-		<div class="topbar">
-			<div class="padding"></div>
-			<div class="padding"></div>
-			<div class="handle">
-				<div class="top"></div>
-				<div class="bottom"></div>
+			<div class="item left noclick">
+				<div class="icon link"></div>
+				<div class="submenu">
+					<div class="subitem" title="One"><div class="icon proxy-icon"></div>&nbsp;One</div>
+					<div class="subitem" title="Two"><div class="icon proxy-icon"></div>&nbsp;Two</div>
+				</div>
+			</div>
+			<div class="userlist">
+				<div class="item left noclick nohover" title="Active users">
+					<span class="ip"><div class="status active"></div>1</span>
+					<div class="submenu">
+						<div class="submodule">
+							<div class="row">
+								<div class="tab" name="ip">127.0.0.1</div>
+								<div class="tab" name="lastactive">Active 54 seconds ago.</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="item left noclick nohover" title="Inactive users">
+					<span class="ip"><div class="status inactive"></div>0</span>
+					<div class="submenu">
+						<div class="submodule"></div>
+					</div>
+				</div>
+			</div>
+			<div class="item right" name="quit" title="Quit sewers">
+				<div class="icon io"></div>
+			</div>
+			<div class="item right no-left-border" name="settings" title="Preferences">
+				<div class="icon settings"></div>
 			</div>
 		</div>
-		<div class="consolecontainer selectable"></div>
-	</div>
-</body>
-<script type="text/javascript">
+		<div class="scrollcontainer">
+			<div class="container hide"></div>
+		</div>
+		<div class="console">
+			<div class="clear">CLEAR</div>
+			<div class="topbar">
+				<div class="padding"></div>
+				<div class="padding"></div>
+				<div class="handle">
+					<div class="top"></div>
+					<div class="bottom"></div>
+				</div>
+			</div>
+			<div class="consolecontainer selectable"></div>
+		</div>
+	</body>
+	<script type="text/javascript">
 
-	// Set variables
-	let config = {}
+		// Set variables
+		let config = {}
 
-	let webConsole = document.querySelector("html body div.console"),
-	    consoleContainer = document.querySelector("html body div.console div.consolecontainer"),
-	    consoleClear = document.querySelector("html body div.console div.clear"),
-	    topbar = document.querySelector("html body div.console div.topbar"),
-	    consoleLog,
-	    scrollOnOutput = true
+		let webConsole = document.querySelector("html body div.console"),
+		    consoleContainer = document.querySelector("html body div.console div.consolecontainer"),
+		    consoleClear = document.querySelector("html body div.console div.clear"),
+		    topbar = document.querySelector("html body div.console div.topbar"),
+		    consoleLog,
+		    scrollOnOutput = true
 
-	let terminals = []
+		let terminals = []
 
-	let backbutton = document.querySelector("div.icon.back").parentElement
+		let backbutton = document.querySelector("div.icon.back").parentElement
 
-	let scrollContainer = document.querySelector("html body div.scrollcontainer"),
-	    container = document.querySelector("html body div.scrollcontainer div.container"),
-	    relayList = document.querySelector("html body div.scrollcontainer div.container div.relaylist"),
-	    relays = document.querySelectorAll("html body div.scrollcontainer div.container div.relaylist div.relay"),
-	    sessions = document.querySelectorAll("html body div.scrollcontainer div.container div.sessionlist div.session"),
-	    newsMessage = document.querySelector("html body div.scrollcontainer div.container div div.header span.newsmessage"),
-	    newsMessageRelays = document.querySelectorAll("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage"),
-	    newsMessageSessions = document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage"),
-	    newsRelays,
-	    newsSessions,
-	    currentRelaysNews = 0,
-	    currentSessionsNews = 0
+		let scrollContainer = document.querySelector("html body div.scrollcontainer"),
+		    container = document.querySelector("html body div.scrollcontainer div.container"),
+		    relayList = document.querySelector("html body div.scrollcontainer div.container div.relaylist"),
+		    relays = document.querySelectorAll("html body div.scrollcontainer div.container div.relaylist div.relay"),
+		    sessions = document.querySelectorAll("html body div.scrollcontainer div.container div.sessionlist div.session"),
+		    newsMessage = document.querySelector("html body div.scrollcontainer div.container div div.header span.newsmessage"),
+		    newsMessageRelays = document.querySelectorAll("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage"),
+		    newsMessageSessions = document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage"),
+		    newsRelays,
+		    newsSessions,
+		    currentRelaysNews = 0,
+		    currentSessionsNews = 0
 
-	let messageBox = document.querySelector("html body div.fade div.messagebox"),
-	    messageTitle = document.querySelector("html body div.fade div.messagebox span.title"),
-	    messageBody = document.querySelector("html body div.fade div.messagebox div.message"),
-	    fade = document.querySelector("html body div.fade")
+		let currentRelay,
+		    relayUserAgent
 
-	let modalBoxes = document.querySelectorAll("html body div.fade div.modalbox"),
-	    openModalBox = document.querySelector("html body div.fade div.modalbox.open"),
-	    menuCancel = document.querySelector("html body div.fade div.modalbox div.optionbox div.bottom div.cancel")
+		let messageBox = document.querySelector("html body div.fade div.messagebox"),
+		    messageTitle = document.querySelector("html body div.fade div.messagebox span.title"),
+		    messageBody = document.querySelector("html body div.fade div.messagebox div.message"),
+		    fade = document.querySelector("html body div.fade")
 
-	let lastIP
+		let modalBoxes = document.querySelectorAll("html body div.fade div.modalbox"),
+		    openModalBox = document.querySelector("html body div.fade div.modalbox.open"),
+		    menuCancel = document.querySelector("html body div.fade div.modalbox div.optionbox div.bottom div.cancel")
 
-	let resizeConsole = false,
-	    dragStart
+		let lastIP
 
-</script>
-<script src="./assets/js/transport.js"></script>
-<script src="./assets/js/functions-index.js"></script>
-<script src="./assets/js/events-index.js"></script>
-<script src="./assets/js/initiate-index.js"></script>
+		let resizeConsole = false,
+		    dragStart
+
+	</script>
+	<script src="./assets/js/transport.js"></script>
+	<script src="./assets/js/functions-index.js"></script>
+	<script src="./assets/js/events-index.js"></script>
+	<script src="./assets/js/initiate-index.js"></script>
 </html>

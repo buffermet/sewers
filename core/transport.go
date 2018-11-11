@@ -12,21 +12,25 @@ import(
 	"io/ioutil"
 )
 
-func SendHTTPRequest(relay_address, request_type, session_id, payload string) string {
+func SendHTTPRequest(relay_address, request_type, user_agent, session_id, payload string) string {
 	packet := request_type + "\n" + session_id + "\n" + payload
 	p := strings.NewReader(packet)
 
 	req, e := http.NewRequest("POST", relay_address, p)
 	if e != nil {
-		LogToConsole( BOLD_RED + "ERROR" + STD + " " + e.Error() )
+		LogToConsole( BOLD_RED + "ERROR" + RESET + " " + e.Error() )
 	}
 
-	req.Header.Set("User-Agent", USER_AGENT)
+	if (user_agent == "") {
+		req.Header.Set("User-Agent", USER_AGENT)
+	} else {
+		req.Header.Set("User-Agent", user_agent)
+	}
 
 	client := &http.Client{}
 	res, e := client.Do(req)
 	if e != nil {
-		LogToConsole( BOLD_RED + "ERROR" + STD + " " + e.Error() )
+		LogToConsole( BOLD_RED + "ERROR" + RESET + " " + e.Error() )
 	}
 
 	defer res.Body.Close()

@@ -566,7 +566,7 @@ html body div.console div.clear:active {
 }
 html body div.console div.topbar {
 	position: absolute;
-	bottom: 0;
+	top: 0;
 	height: 1px;
 	width: 100%;
 	background: rgb(60,60,60);

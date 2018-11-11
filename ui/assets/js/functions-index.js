@@ -35,7 +35,7 @@
 
 	// Fetch console log
 	const fetchLog = async () => {
-		sendRequest("GET", "/console_log", "").then(async res=>{
+		sendRequest("GET", "/console_log", "").then(async(res)=>{
 			if (res.status == 200) {
 				let response = res.responseText.replace(/\n/g, "<br>")
 
@@ -50,22 +50,34 @@
 		})
 	}
 
-	const getSewersConfig = async () => {
+	const getRelayConfig = async relay_id => {
 		return new Promise(async resolve=>{
-			sendRequest("GET", "/config/sewers", "").then(async res=>{
+			sendRequest("GET", "/config/" + relay_id, "").then(async(res)=>{
 				if (res.status == 200) {
-					config = JSON.parse(res.responseText)
-					resolve()
+					resolve(res.responseText)
 				} else {
 					print("Could not fetch sewers config.")
-					resolve()
+					resolve("")
 				}
 			})
 		})
 	}
 
-	const getSewersUserAgent = async () => {
-		let res = await sendRequest("GET", "/useragent", null)
+	const getSewersConfig = async () => {
+		return new Promise(async resolve=>{
+			sendRequest("GET", "/config/sewers", "").then(async(res)=>{
+				if (res.status == 200) {
+					resolve(res.responseText)
+				} else {
+					print("Could not fetch sewers config.")
+					resolve("")
+				}
+			})
+		})
+	}
+
+	const whoAmI = async () => {
+		let res = await sendRequest("GET", "/host", null)
 
 		return res.responseText
 	}
@@ -90,7 +102,7 @@
 			const relayNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage")
 			relayNewsMessage.classList.add("hide")
 
-			sendRequest("GET", "/get_relays", "").then(async res=>{
+			sendRequest("GET", "/get_relays", "").then(async(res)=>{
 				const response = res.responseText
 
 				if (response.length > 0) {
@@ -134,7 +146,14 @@
 		relays = document.querySelectorAll("html body div.scrollcontainer div.container div.relaylist div.relay")
 	}
 
-	const showSessions = async relay => {
+	const showSessions = async relay_id => {
+		currentRelay = relay_id
+
+		let res = await sendRequest("GET", "/config/" + relay_id, null)
+		let currentRelayConfig = JSON.parse(res.responseText)
+
+		relayUserAgent = currentRelayConfig.user_agent
+
 		container.classList.add("hide")
 		container.classList.add("nopointerevents")
 
@@ -142,7 +161,7 @@
 			container.innerHTML = `
 				<div class="sessionlist">
 					<div class="header">
-						<h1>` + await escapeHTML(relay) + `</h1>
+						<h1>` + await escapeHTML(relay_id) + `</h1>
 						<span class="newsmessage">&nbsp;</span>
 					</div>
 					<div class="space"></div>
@@ -154,24 +173,24 @@
 
 			backbutton.classList.remove("hidden")
 
-			sendRequest("GET", "/relay/" + relay, "").then(async res=>{
+			sendRequest("GET", "/relay/" + relay_id, "").then(async(res)=>{
 				if (res.status == 200) {
 					if ( res.responseText != "nil" && res.responseText.match(/([a-zA-Z]+)/) ) {
 						let sessionlist = res.responseText.split(",")
 
 						for (let i = 0; i < sessionlist.length; i++) {
-							let url = "./session/" + relay.replace(".json", "") + "/" + sessionlist[i]
+							let url = "./session/" + relay_id.replace(".json", "") + "/" + sessionlist[i]
 
 							let div = document.createElement("div")
 
-							sendRequest("GET", url, "").then(async res=>{
+							sendRequest("GET", url, "").then(async(res)=>{
 								if (res.status == 200) {
 									let session_id = sessionlist[i]
 
 									if (res.responseText != "") {
 										let sessionConfig = JSON.parse(res.responseText)
 
-										div.onclick = async () => { openTerminal(relay, session_id) }
+										div.onclick = async () => { openTerminal(relay_id, session_id) }
 										div.className = "session"
 										div.innerHTML = `
 											<div class="icon ` + await escapeHTML(sessionConfig.icon) + `">
@@ -327,9 +346,9 @@
 
 	// Show modal
 	const showPreferences = async () => {
-		try {
-			const openModal = document.querySelector("html body div.fade div.modal.settings")
+		const openModal = document.querySelector("html body div.fade div.modal.settings")
 
+		if (openModal) {
 			openModal.classList.add("open")
 
 			fade.classList.remove("hide")
@@ -338,7 +357,7 @@
 				openModal.classList.remove("down")
 				updateCSS()
 			}, 180)
-		} catch (ignore){}
+		}
 	}
 
 	// Hide modal
@@ -371,11 +390,11 @@
 		// Cycle
 		newsRelays = {
 			0: relays.length + " relay" + (relays.length > 1 || relays.length < 1 ? "s" : ""),
-			1: "User-Agent: <span style=\"font-weight:bold\">" + await escapeHTML( await getSewersUserAgent() ) + "</span>",
+			1: "Host: <span style=\"font-weight:bold\">" + await escapeHTML( await whoAmI() ) + "</span>",
 		}
 		newsSessions = {
 			0: sessions.length + " session" + (sessions.length > 1 || sessions.length < 1 ? "s" : ""),
-			1: "User-Agent: <span style=\"font-weight:bold\">" + await escapeHTML( await getSewersUserAgent() ) + "</span>",
+			1: "User-Agent: <span style=\"font-weight:bold\">" + await escapeHTML(relayUserAgent) + "</span>",
 		}
 
 		if ( currentRelaysNews == Object.keys(newsRelays).length ) {
@@ -410,6 +429,6 @@
 
 			setTimeout(async()=>{
 				self.location = self.location
-			}, 200)
+			}, 600)
 		})
 	}

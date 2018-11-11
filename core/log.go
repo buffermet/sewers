@@ -16,7 +16,7 @@ import(
 )
 
 const(
-	STD = "\x1b[0m"
+	RESET = "\x1b[0m"
 	BOLD = "\x1b[1m"
 	BOLD_GREY = "\x1b[1;30m"
 	BOLD_RED = "\x1b[1;31m"
@@ -39,20 +39,20 @@ func Timestamp() string {
 }
 
 func Log(message string) {
-	timestamp := BOLD_GREY + " " + Timestamp() + " " + STD
+	timestamp := BOLD_GREY + " " + Timestamp() + " " + RESET
 
 	fmt.Println(timestamp + message)
 }
 
 func LogToConsole(message string) {
-	timestamp := BOLD_GREY + " " + Timestamp() + " " + STD
+	timestamp := BOLD_GREY + " " + Timestamp() + " " + RESET
 
 	message = timestamp + message
 
 	fmt.Println(message)
 
 	html_string := strings.Replace(message, " ", "&nbsp;", -1)
-	html_string = strings.Replace(html_string, STD,                HTML_STD, -1)
+	html_string = strings.Replace(html_string, RESET,              HTML_STD, -1)
 	html_string = strings.Replace(html_string, BOLD,               HTML_BOLD, -1)
 	html_string = strings.Replace(html_string, BOLD_GREY,          HTML_BOLD_GREY, -1)
 	html_string = strings.Replace(html_string, BOLD_RED,           HTML_BOLD_RED, -1)

@@ -88,7 +88,7 @@ func obf_func_send_request(obf_var_request_type, obf_const_session_id, obf_var_r
 }
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
+	rand.Seed( time.Now().UnixNano() )
 	obf_var_rate := 1 + rand.Intn(2-1)
 	for {
 		obf_var_res := obf_func_send_request(obf_const_get_tag, obf_const_session_id, "nil")

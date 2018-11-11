@@ -22,7 +22,7 @@ func Configure(json_path string, new_json_data map[string][]string) {
 	// Encode old config
 	var json_encoded map[string]interface{}
 	if e := json.Unmarshal( []byte(json_data), &json_encoded ); e != nil {
-		LogToConsole( BOLD_RED + "ERROR" + STD + " Invalid JSON file: " + BOLD + json_path + STD + "\n[" + BOLD_RED + "STACK TRACE" + STD + "]" + "\n" + e.Error() )
+		LogToConsole( BOLD_RED + "ERROR" + RESET + " Invalid JSON file: " + BOLD + json_path + RESET + "\n[" + BOLD_RED + "STACK TRACE" + RESET + "]" + "\n" + e.Error() )
 	}
 
 	// Set new config
@@ -33,7 +33,7 @@ func Configure(json_path string, new_json_data map[string][]string) {
 	// Indent config
 	json_indented, e := json.MarshalIndent(json_encoded, "", "\t")
 	if e != nil {
-		LogToConsole( BOLD_RED + "ERROR" + STD + " Could not indent JSON data.\n[" + BOLD_RED + "STACK TRACE" + STD + "]" + "\n" + e.Error() )
+		LogToConsole( BOLD_RED + "ERROR" + RESET + " Could not indent JSON data.\n[" + BOLD_RED + "STACK TRACE" + RESET + "]" + "\n" + e.Error() )
 	}
 
 	// Write new config
