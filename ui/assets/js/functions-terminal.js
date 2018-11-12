@@ -452,51 +452,59 @@
 
 	// Input handler
 	const onCommand = async () => {
-		let cmd = textarea.value
+		const cmd = textarea.value
+
+		textarea.value = ""
 
 		parseCommand(cmd)
 	}
 
 	// StdIn handler
 	const parseCommand = async cmd => {
-		textarea.value = ""
+		cmd_history_i = 0
 
-		if (cmd.length > 0) {
+		print( request_tag + "<span title='" + await timestamp() + "'>" + await escapeHTML(cmd) + "</span><br>" )
+
+		if ( !cmd.match(/^\s*$/) ) {
 			if (cmd_history[0] != cmd) {
 				cmd_history.unshift(cmd)
 			}
-		}
-		cmd_history_i = 0
 
-		print(request_tag + "<span title='" + await timestamp() + "'>" + await escapeHTML(cmd) + "</span><br>")
-
-		// Parse command
-		if (cmd.length > 0) {
+			// Parse command
 			if ( cmd.match(/^\s*\#/) ) {
 				return
-			} else if (cmd.split(" ")[0] == "startautofetching") {
+			} else if ( cmd.match(/^\s*startautofetching /) ) {
+				cmd = await strip(cmd)
+
 				if (cmd.split(" ")[3]) {
-					print("Too many arguments.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
+					print( "Too many arguments.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" )
 				} else if (!cmd.split(" ")[2]) {
-					print("Not enough arguments.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
+					print( "Not enough arguments.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" )
 				} else if ( parseInt(cmd.split(" ")[1]) >= parseInt(cmd.split(" ")[2]) ) {
-					print("Minimum value must be less than maximum.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
+					print( "Minimum value must be less than maximum.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" )
 				} else if ( parseInt(cmd.split(" ")[1]) < 1 ) {
-					print("Minimum value must be at least 1.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
+					print( "Minimum value must be at least 1.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" )
 				} else {
-					min = parseInt( cmd.split(" ")[1] )
-					max = parseInt( cmd.split(" ")[2] )
+					const min = parseInt( cmd.split(" ")[1] ),
+					      max = parseInt( cmd.split(" ")[2] )
+
 					startAutoFetching(min, max)
 				}
-			} else if (cmd == "clear") {
+			} else if ( cmd.match(/^\s*clear\s*$/) ) {
 				clear()
-			} else if (cmd == "exit") {
+			} else if ( cmd.match(/^\s*exit\s*$/) ) {
 				self.close() || alert("You can only use this in pop-up mode.")
-			} else if (cmd.toLowerCase() == "?" || cmd.toLowerCase() == "help" || cmd.toLowerCase() == "h" || cmd.toLowerCase() == "commands" || cmd.toLowerCase() == "usage") {
+			} else if ( 
+				cmd.match(/^\s*[?]\s*$/) 
+				|| cmd.match(/^\s*h\s*$/) 
+				|| cmd.match(/^\s*help\s*$/) 
+				|| cmd.match(/^\s*commands\s*$/) 
+				|| cmd.match(/^\s*usage\s*$/) 
+			) {
 				printCommands()
-			} else if (cmd.toLowerCase() == "checkstreams") {
+			} else if ( cmd.match(/^\s*checkstreams\s*$/) ) {
 				checkStreams()
-			} else if (cmd == "reset") {
+			} else if ( cmd.match(/^\s*reset\s*$/) ) {
 				if (warnOnReset) {
 					self.location = location.href
 				}	else {
@@ -504,39 +512,45 @@
 					window.onbeforeunload = ""
 					self.location = location.href
 				}
-			} else if (cmd == "stopautofetching") {
+			} else if ( cmd.match(/^\s*stopautofetching\s*$/) ) {
 				stopAutoFetching()
-			} else if (cmd.split(" ")[0].toLowerCase() == "streammon") {
-				streamMon(cmd.split(" ")[1], cmd.split(" ")[2])
-			} else if (cmd.split(" ")[0].toLowerCase() == "streammic") {
-				streamMic(cmd.split(" ")[1])
-			} else if (cmd.split(" ")[0].toLowerCase() == "info") {
+			} else if ( cmd.match(/^\s*streammon /) ) {
+				const args = cmd.split(" ")
+
+				streamMon( args[1], args[2] )
+			} else if ( cmd.match(/^\s*streammic /) ) {
+				streamMic( cmd.split(" ")[1] )
+			} else if ( cmd.match(/^\s*info\s*$/) ) {
 				printSessionInfo()
-			} else if (cmd == "fetch") {
+			} else if ( cmd.match(/^\s*fetch\s*$/) ) {
 				fetchPackets()
-			} else if (cmd.split(" ")[0].toLowerCase() == "fetchrate") {
-				if (cmd.split(" ")[3]) {
-					print("Too many arguments.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
-				} else if (!cmd.split(" ")[2]) {
-					print("Not enough arguments.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
-				} else if ( parseInt(cmd.split(" ")[1]) >= parseInt(cmd.split(" ")[2]) ) {
-					print("Minimum value must be less than maximum.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
-				} else if ( parseInt(cmd.split(" ")[1]) < 1 ) {
-					print("Minimum value must be at least 1.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>")
+			} else if ( cmd.match(/^\s*fetchrate /) ) {
+				cmd = await strip(cmd)
+
+				const args = cmd.split(" ")
+
+				if (args[3]) {
+					print( "Too many arguments.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" )
+				} else if (!args[2]) {
+					print( "Not enough arguments.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" )
+				} else if ( parseInt(args[1]) >= parseInt(args[2]) ) {
+					print( "Minimum value must be less than maximum.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" )
+				} else if ( parseInt(args[1]) < 1 ) {
+					print( "Minimum value must be at least 1.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" )
 				} else {
-					min = parseInt( cmd.split(" ")[1] )
-					max = parseInt( cmd.split(" ")[2] )
+					const min = parseInt( args[1] ),
+					      max = parseInt( args[2] )
+
 					changeFetchRate(min, max)
 				}
-			} else if (cmd.split(" ")[0].toLowerCase() == "shell" || cmd.split(" ")[0].toLowerCase() == "sh") {
-				cmd = cmd.split(" ")
-				cmd.splice(cmd[0], 1)
-				cmd = encodeURIComponent( cmd.join(" ") )
-				stdIn( await strip(cmd) )
-			} else if ( cmd.match(/^xss /) ) {
-				const js_cmd = cmd.replace(/^xss /, "")
+			} else if ( cmd.match(/^\s*shell /) || cmd.match(/^\s*sh /) ) {
+				const shell_command = await strip( encodeURIComponent( cmd.replace(/^\s*(?:shell|sh)\s*/, "") ) )
 
-				parseXSSCommand(js_cmd)
+				stdIn(shell_command)
+			} else if ( cmd.match(/^xss /) ) {
+				const xss_command = cmd.replace(/^xss /, "")
+
+				parseXSSCommand(xss_command)
 			} else {
 				print( await escapeHTML(cmd) + ": command not found. Type <span class=\"bold orange\">help</span> to see a list of commands.<br>" )
 			}
