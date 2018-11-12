@@ -194,7 +194,7 @@
 						"&relay_id=" + relay
 					)
 
-					res = await sendForm("POST", "/get" + form, "")
+					res = await sendForm("POST", "/get", form)
 
 					response = res.responseText
 
