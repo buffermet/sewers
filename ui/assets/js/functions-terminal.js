@@ -169,16 +169,15 @@
 
 	// Fetch new packets from interpreter
 	const fetchPackets = async () => {
-		// Make this send a form instead of params
-		const params = new String(
-			"?packet_id=" + 
+		const form = new String(
+			"packet_id=" + 
 			"&session_id=" + session_id + 
 			"&relay_id=" + relay
 		)
 
 		showNetworkIndicator()
 
-		let res = await sendForm("GET", "/get" + params, "")
+		let res = await sendForm("POST", "/get", form)
 
 		if (res.status == 200) {
 			let response = res.responseText
@@ -189,14 +188,13 @@
 				for (i = 0; i < packets.length; i++) {
 					let packetID = packets[i]
 
-					// Make this send a form instead of params
-					const params = new String(
-						"?packet_id=" + packetID + 
+					const form = new String(
+						"packet_id=" + packetID + 
 						"&session_id=" + session_id + 
 						"&relay_id=" + relay
 					)
 
-					res = await sendRequest("GET", "/get" + params, "")
+					res = await sendForm("POST", "/get" + form, "")
 
 					response = res.responseText
 

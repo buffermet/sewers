@@ -14,7 +14,7 @@
 		})
 	}
 
-	const sendForm = async (method, address, params) => {
+	const sendForm = async (method, address, body) => {
 		return new Promise(resolve=>{
 			let req = new XMLHttpRequest()
 			req.open(method, address)
@@ -24,11 +24,11 @@
 					resolve(req)
 				}
 			}
-			req.send(params)
+			req.send(body)
 		})
 	}
 
-	const sendJSON = async (method, address, json) => {
+	const sendJSON = async (method, address, body) => {
 		return new Promise(resolve=>{
 			let req = new XMLHttpRequest()
 			req.open(method, address)
@@ -38,6 +38,6 @@
 					resolve(req)
 				}
 			}
-			req.send( JSON.stringify(json) )
+			req.send( JSON.stringify(body) )
 		})
 	}
