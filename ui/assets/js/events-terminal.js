@@ -20,21 +20,22 @@
 					|| jsfield === document.activeElement
 				) 
 			) {
-				oldValue = textarea.value
-				newValue = oldValue + event.key
+				const oldValue = textarea.value,
+				      newValue = oldValue + event.key
+
 				textarea.value = newValue
+
 				textarea.focus()
 			}
 
 			// Scroll to bottom on StdIn if applicable
 			if (scrollOnInput) {
-				if (scrollBox.scrol)
-				if (!jsfield === document.activeElement) {
+				if (document.activeElement !== jsfield) {
 					scrollToBottom()
 				}
 			}
 			if (scrollOnJsInput) {
-				if (jsfield === document.activeElement) {
+				if (document.activeElement === jsfield) {
 					scrollToBottom()
 				}
 			}

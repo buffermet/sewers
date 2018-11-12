@@ -419,6 +419,9 @@ html body div.scrollcontainer div.container div.sessionlist div.session div.icon
 html body div.scrollcontainer div.container div.sessionlist div.session div.icon.phone {
 	background: url(../images/phone.svg);
 }
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.phone2 {
+	background: url(../images/phone2.svg);
+}
 html body div.scrollcontainer div.container div.sessionlist div.session div.icon.router {
 	background: url(../images/router.svg);
 }
