@@ -166,8 +166,6 @@ func serve(res http.ResponseWriter, req *http.Request) {
 				}
 			}
 
-			response := ""
-
 			if session_id != "" && relay_id != "" {
 				var c map[string]interface{}
 				if e := json.Unmarshal( []byte( GetSession(relay_id, session_id) ), &c ); e != nil {
@@ -179,7 +177,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 				if packet_id == "" {
 					LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD + "GET" + RESET + " " + ip_string + " tried to fetch packet list from session " + BOLD_YELLOW + session_id + RESET +" at relay " + BOLD + relay_id + RESET)
 
-					response = SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), c["user_agent"].(string), session_id, "nil" )
+					response := SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), c["user_agent"].(string), session_id, "nil" )
 
 					fmt.Fprintf(res, response)
 					return
@@ -243,11 +241,11 @@ func serve(res http.ResponseWriter, req *http.Request) {
 				}
 				enc_payload_string := string(enc_payload)
 
-				SendHTTPRequest(c["relay_address"].(string), c["sewers_post_tag"].(string), c["user_agent"].(string), session_id, enc_payload_string)
+				SendHTTPRequest( c["relay_address"].(string), c["sewers_post_tag"].(string), c["user_agent"].(string), session_id, enc_payload_string )
 
 				fmt.Fprintf(res, "OK")
 			} else {
-				LogToConsole( BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD_RED + "ERROR" + RESET + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id)
+				LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD_RED + "ERROR" + RESET + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id)
 			}
 		} else if req.URL.Path == "/quit" {
 			LogToConsole(ip_string + " has shut down sewers.")

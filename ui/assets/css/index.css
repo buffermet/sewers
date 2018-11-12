@@ -467,7 +467,7 @@ html body div.scrollcontainer div.container div.sessionlist div.session div.icon
 	background-image: url(../images/tor.png);
 }
 html body div.scrollcontainer div.container div.sessionlist div.session div.icon.router div.logo.tplink {
-	top: 113px;
+	top: 110.5px;
 	left: 26px;
 	height: 4px;
 	background-image: url(../images/tplink_black.svg);
