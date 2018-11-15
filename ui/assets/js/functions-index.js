@@ -3,7 +3,7 @@
 
 	// Sleep
 	const sleep = async seconds => {
-		return new Promise(async resolve=>{
+		return new Promise(async(resolve)=>{
 			setTimeout(resolve, seconds * 1000)
 		})
 	}
@@ -35,7 +35,7 @@
 
 	// Fetch console log
 	const fetchLog = async () => {
-		sendRequest("GET", "/console_log", "").then(async(res)=>{
+		sendRequest("GET", "/console_log", null).then(async(res)=>{
 			if (res.status == 200) {
 				let response = res.responseText.replace(/\n/g, "<br>")
 
@@ -51,26 +51,26 @@
 	}
 
 	const getRelayConfig = async relay_id => {
-		return new Promise(async resolve=>{
-			sendRequest("GET", "/config/" + relay_id, "").then(async(res)=>{
+		return new Promise(async(resolve)=>{
+			sendRequest("GET", "/config/" + relay_id, null).then(async(res)=>{
 				if (res.status == 200) {
 					resolve(res.responseText)
 				} else {
 					print("Could not fetch sewers config.")
-					resolve("")
+					resolve()
 				}
 			})
 		})
 	}
 
 	const getSewersConfig = async () => {
-		return new Promise(async resolve=>{
-			sendRequest("GET", "/config/sewers", "").then(async(res)=>{
+		return new Promise(async(resolve)=>{
+			sendRequest("GET", "/config/sewers", null).then(async(res)=>{
 				if (res.status == 200) {
 					resolve(res.responseText)
 				} else {
 					print("Could not fetch sewers config.")
-					resolve("")
+					resolve()
 				}
 			})
 		})
@@ -102,16 +102,17 @@
 			const relayNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage")
 			relayNewsMessage.classList.add("hide")
 
-			sendRequest("GET", "/get_relays", "").then(async(res)=>{
+			sendRequest("GET", "/get_relays", null).then(async(res)=>{
 				const response = res.responseText
 
 				if (response.length > 0) {
 					const relay_configs = JSON.parse(response)
 
 					for (let i = 0; i < Object.keys(relay_configs).length; i++) {
-						const relay = document.createElement("div")
-						const relay_address = await escapeHTML(relay_configs[i].RelayAddress)
-						const relay_id = await escapeHTML(relay_configs[i].RelayID)
+						const relay_address = await escapeHTML(relay_configs[i].RelayAddress),
+						      relay_id = await escapeHTML(relay_configs[i].RelayID)
+
+						let relay = document.createElement("div")
 
 						relay.name = await escapeHTML(relay_configs[i].RelayID)
 						relay.className = "relay"
@@ -173,7 +174,7 @@
 
 			backbutton.classList.remove("hidden")
 
-			sendRequest("GET", "/relay/" + relay_id, "").then(async(res)=>{
+			sendRequest("GET", "/relay/" + relay_id, null).then(async(res)=>{
 				if (res.status == 200) {
 					if ( res.responseText != "nil" && res.responseText.match(/([a-zA-Z]+)/) ) {
 						let sessionlist = res.responseText.split(",")
@@ -183,7 +184,7 @@
 
 							let div = document.createElement("div")
 
-							sendRequest("GET", url, "").then(async(res)=>{
+							sendRequest("GET", url, null).then(async(res)=>{
 								if (res.status == 200) {
 									let session_id = sessionlist[i]
 
@@ -281,6 +282,20 @@
 		}
 	}
 
+	// Network activity indicator
+	const showNetworkIndicator = async () => {
+		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
+
+		network_indicator.classList.remove("hidden")
+	}
+
+	// Network activity indicator
+	const hideNetworkIndicator = async () => {
+		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
+
+		network_indicator.classList.add("hidden")
+	}
+
 	// Print to console
 	const print = async html => {
 		const timestamped = document.createElement("stamp")
@@ -295,22 +310,18 @@
 	const timestamp = async () => {
 		const now = new Date()
 
-		let D = now.getDate()
+		let D = now.getDate(),
+		    M = now.getMonth() + 1,
+		    Y = now.getFullYear(),
+		    h = now.getHours(),
+		    m = now.getMinutes(),
+		    s = now.getSeconds()
+
 		D < 10 ? D = "0" + D : ""
-
-		let M = now.getMonth() + 1
 		M < 10 ? M = "0" + M : ""
-
-		let Y = now.getFullYear()
 		Y < 10 ? Y = "0" + Y : ""
-
-		let h = now.getHours()
 		h < 10 ? h = "0" + h : ""
-
-		let m = now.getMinutes()
 		m < 10 ? m = "0" + m : ""
-
-		let s = now.getSeconds()
 		s < 10 ? s = "0" + s : ""
 
 		return D + "-" + M + "-" + Y + " " + h + ":" + m + ":" + s

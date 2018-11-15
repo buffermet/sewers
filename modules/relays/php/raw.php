@@ -63,9 +63,9 @@
 	}
 
 	// Sewers GET request
-	if ( $obf_var_req_type == $obf_var_sewers_get_tag && $obf_var_session_id != "nil" ) {
+	if ( $obf_var_req_type == $obf_var_sewers_get_tag && $obf_var_session_id != "" ) {
 		if ( is_dir("./" . $obf_var_res_dir . "/" . $obf_var_session_id) ) {
-			if ($obf_var_body == "nil") {
+			if ($obf_var_body == "") {
 				echo join( ",", obf_func_scanDir("./" . $obf_var_res_dir . "/" . $obf_var_session_id) );
 			} else {
 				if ( is_file("./" . $obf_var_res_dir . "/" . $obf_var_session_id . "/" . $obf_var_body) ) {
@@ -80,7 +80,7 @@
 			http_response_code(404);
 			die();
 		}
-	} elseif ( $obf_var_req_type == $obf_var_sewers_get_tag && $obf_var_session_id == "nil" ) {
+	} elseif ( $obf_var_req_type == $obf_var_sewers_get_tag && $obf_var_session_id == "" ) {
 		echo join( ",", obf_func_scanDir("./" . $obf_var_res_dir) );
 	}
 
@@ -93,14 +93,14 @@
 	}
 
 	// Interpreter GET request
-	if ($obf_var_req_type == $obf_var_interpreter_get_tag && $obf_var_session_id != "nil" ) {
+	if ($obf_var_req_type == $obf_var_interpreter_get_tag && $obf_var_session_id != "" ) {
 		if ( !is_dir("./" . $obf_var_res_dir . "/" . $obf_var_session_id) ) {
 			mkdir("./" . $obf_var_res_dir . "/" . $obf_var_session_id);
 		}
 		if ( !is_dir("./" . $obf_var_req_dir . "/" . $obf_var_session_id) ) {
 			mkdir("./" . $obf_var_req_dir . "/" . $obf_var_session_id);
 		}
-		if ($obf_var_body == "nil") {
+		if ($obf_var_body == "") {
 			$obf_var_req_dir_entries = obf_func_scanDir("./" . $obf_var_req_dir . "/" . $obf_var_session_id);
 			if ( count($obf_var_req_dir_entries) > 0 ) {
 				echo join(",", $obf_var_req_dir_entries);

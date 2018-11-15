@@ -68,11 +68,11 @@ func GetRelays() string {
 				relay_id := strings.Replace(relay_configs[i], ".json", "", 1)
 				relay_address := json_decoded["relay_address"].(string)
 
-				relay_slice := Relay{}
-				relay_slice.RelayID = relay_id
-				relay_slice.RelayAddress = relay_address
+				relay := Relay{}
+				relay.RelayID = relay_id
+				relay.RelayAddress = relay_address
 
-				relays = append(relays, relay_slice)
+				relays = append(relays, relay)
 			} else {
 				LogToConsole( BOLD_RED + "ERROR" + RESET + BOLD + relay_path + RESET + " is missing one of the following parameters: 'relay_address', 'sewers_post_tag' or 'sewers_get_tag'" + "\n[" + BOLD_RED + "STACK TRACE" + RESET + "]\n" + e.Error() )
 			}
@@ -103,7 +103,7 @@ func GetRelaySessions(relay string) string {
 		get_tag := json_decoded["sewers_get_tag"].(string)
 		user_agent := json_decoded["user_agent"].(string)
 
-		sessions = SendHTTPRequest(relay_address, get_tag, user_agent, "nil", "nil")
+		sessions = SendHTTPRequest(relay_address, get_tag, user_agent, "", "")
 	} else {
 		LogToConsole( BOLD_RED + "ERROR" + RESET + " " + BOLD + relay + ".json" + RESET + " is missing a \"relay_address\" and/or \"get_tag\" property." )
 	}

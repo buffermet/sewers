@@ -10,7 +10,7 @@
 	})
 	document.addEventListener("mousemove", async event => {
 		if (resizeConsole) {
-			let offset = self.innerHeight - event.clientY
+			const offset = self.innerHeight - event.clientY
 
 			if ( event.clientY > 75 && event.clientY < ( self.innerHeight - 50 ) ) {
 				webConsole.style.height = offset + "px"
@@ -21,7 +21,7 @@
 	})
 	document.addEventListener("touchmove", async event => {
 		if (resizeConsole) {
-			let offset = self.innerHeight - event.clientY
+			const offset = self.innerHeight - event.clientY
 
 			if ( event.clientY > 75 && event.clientY < ( self.innerHeight - 50 ) ) {
 				webConsole.style.height = offset + "px"
