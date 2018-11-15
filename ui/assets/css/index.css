@@ -17,11 +17,11 @@ html body div.background {
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 60%;
-	height: 60%;
-	background-image: url(../images/relaysbg.svg);
-	background-size: contain;
-	background-repeat: no-repeat;
+	/*width: 100%;*/
+	/*height: 100%;*/
+	/*background-image: url(../images/relaysbg.svg);*/
+	/*background-size: contain;*/
+	/*background-repeat: no-repeat;*/
 }
 html body div.fade {
 	transition: opacity 360ms ease-in;
@@ -416,6 +416,9 @@ html body div.scrollcontainer div.container div.sessionlist div.session div.icon
 html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop2 {
 	background: url(../images/laptop2.svg);
 }
+html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop3 {
+	background: url(../images/laptop3.svg);
+}
 html body div.scrollcontainer div.container div.sessionlist div.session div.icon.phone {
 	background: url(../images/phone.svg);
 }
@@ -447,29 +450,27 @@ html body div.scrollcontainer div.container div.sessionlist div.session div.icon
 	background-repeat: no-repeat;
 	background-position: center;
 }
-html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop div.logo.acer,
-html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop2 div.logo.acer {
+html body div.scrollcontainer div.container div.sessionlist div.session div[class^="icon laptop"] div.logo.acer {
 	top: 71px;
 	height: 10px;
 	background-image: url(../images/brand_acer.svg);
 }
-html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop div.logo.thinkpad,
-html body div.scrollcontainer div.container div.sessionlist div.session div.icon.laptop2 div.logo.thinkpad {
+html body div.scrollcontainer div.container div.sessionlist div.session div[class^="icon laptop"] div.logo.thinkpad {
 	top: 68px;
 	height: 14px;
 	background-image: url(../images/brand_thinkpad.svg);
 }
-html body div.scrollcontainer div.container div.sessionlist div.session div.icon.phone div.logo.android {
+html body div.scrollcontainer div.container div.sessionlist div.session div[class^="icon phone"] div.logo.android {
 	top: 71px;
 	height: 18px;
 	background-image: url(../images/os_android.svg);
 }
-html body div.scrollcontainer div.container div.sessionlist div.session div.icon.phone div.logo.tor {
+html body div.scrollcontainer div.container div.sessionlist div.session div[class^="icon phone"] div.logo.tor {
 	top: 68px;
 	height: 24px;
 	background-image: url(../images/tor.png);
 }
-html body div.scrollcontainer div.container div.sessionlist div.session div.icon.router div.logo.tplink {
+html body div.scrollcontainer div.container div.sessionlist div.session div[class^="icon router"] div.logo.tplink {
 	top: 110.5px;
 	left: 26px;
 	height: 4px;

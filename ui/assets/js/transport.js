@@ -7,9 +7,11 @@
 			req.open(method, address)
 			req.onreadystatechange = async () => {
 				if (req.readyState == 4) {
+					hideNetworkIndicator()
 					resolve(req)
 				}
 			}
+			showNetworkIndicator()
 			req.send(body)
 		})
 	}
@@ -21,9 +23,11 @@
 			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
 			req.onreadystatechange = async () => {
 				if (req.readyState == 4) {
+					hideNetworkIndicator()
 					resolve(req)
 				}
 			}
+			showNetworkIndicator()
 			req.send(body)
 		})
 	}
@@ -35,9 +39,11 @@
 			req.setRequestHeader("Content-Type", "application/json")
 			req.onreadystatechange = async () => {
 				if (req.readyState == 4) {
+					hideNetworkIndicator()
 					resolve(req)
 				}
 			}
+			showNetworkIndicator()
 			req.send( JSON.stringify(body) )
 		})
 	}

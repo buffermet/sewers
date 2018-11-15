@@ -39,13 +39,13 @@ func Timestamp() string {
 }
 
 func Log(message string) {
-	timestamp := BOLD_GREY + " " + Timestamp() + " " + RESET
+	timestamp := " " + BOLD_GREY + Timestamp() + RESET + " "
 
 	fmt.Println(timestamp + message)
 }
 
 func LogToConsole(message string) {
-	timestamp := BOLD_GREY + " " + Timestamp() + " " + RESET
+	timestamp := " " + BOLD_GREY + Timestamp() + RESET + " "
 
 	message = timestamp + message
 

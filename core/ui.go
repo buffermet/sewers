@@ -7,6 +7,7 @@ package core
 */
 
 import (
+	"os"
 	"log"
 	"fmt"
 	"regexp"
@@ -15,15 +16,34 @@ import (
 	"net/http"
 	"io/ioutil"
 	"encoding/json"
-	"os"
+
+	"golang.org/x/net/websocket"
 )
 
 var (
 	UI_PORT = "8042"
 )
 
+func stream(ws *websocket.Conn) {
+	var allow_connections bool
+	var ip_string string
+
+	if strings.HasPrefix(ws.Request().RemoteAddr, "127.0.0.1:") {
+		allow_connections = true
+		ip_string = BOLD_GREEN + ws.Request().RemoteAddr + RESET
+	} else {
+		allow_connections = false
+		ip_string = BOLD_RED + ws.Request().RemoteAddr + RESET
+	}
+
+	LogToConsole(ip_string + " tried to open a websocket")
+
+	if allow_connections {
+
+	}
+}
+
 func serve(res http.ResponseWriter, req *http.Request) {
-	// Authenticate
 	var allow_connections bool
 	var ip_string string
 
@@ -268,6 +288,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 func Start() {
 	LogToConsole( "Server started on " + BOLD + "http://0.0.0.0:" + UI_PORT + RESET + " by " + BOLD + WhoAmI() + RESET )
 
+	http.Handle( "/stream", websocket.Handler(stream) )
 	http.HandleFunc("/", serve)
 	log.Fatal( http.ListenAndServe(":" + UI_PORT, nil) )
 }

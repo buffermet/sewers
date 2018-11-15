@@ -94,8 +94,7 @@
 		return D + "-" + M + "-" + Y + " " + h + ":" + m + ":" + s
 	}
 
-	// Print commands
-	const printCommands = async () => {
+	const printHelp = async () => {
 		const res = await sendRequest("GET", "/help.html", "")
 
 		if (res.status == 200) {
@@ -104,21 +103,27 @@
 	}
 
 	const printSessionInfo = async () => {
-		let icon = ""
+		let icon = "",
+		    os_name
 
 		if ( session_config.os.indexOf("Android" || "android") >= 0 ) {
 			icon = "<img width=\"12px\" src=\"../../assets/images/os_android.svg\" />"
+			os_name = "Android"
 		} else if ( session_config.os.indexOf("iOS" || "ios") >= 0 ) {
 			icon = "<img width=\"12px\" src=\"../../assets/images/os_apple.svg\" />"
+			os_name = "iOS"
 		} else if ( session_config.os.indexOf("cygwin" || "cygwin" || "mswin" || "mingw" || "bccwin" || "wince" || "emx") >= 0 ) {
 			icon = "<img width=\"12px\" src=\"../../assets/images/os_windows.svg\" />"
+			os_name = "Windows"
 		} else if ( session_config.os.indexOf("Darwin" || "darwin") >= 0 ) {
 			icon = "<img width=\"12px\" src=\"../../assets/images/os_apple.svg\" />"
+			os_name = "macOS"
 		} else if ( session_config.os.indexOf("Linux" || "linux") >= 0 ) {
 			icon = "<img width=\"12px\" src=\"../../assets/images/os_linux.svg\" />"
+			os_name = "Linux"
 		}
 
-		print(" " + icon + " <span class=\"bold\">Interpreter<br></span>" + 
+		print(" " + icon + " <span class=\"bold\">" + os_name + " Interpreter<br></span>" + 
 			"<span class=\"cyan\">Device&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.device + "<br></span>" + 
 			"<span class=\"cyan\">Hostname&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.hostname + "<br></span>" + 
 			"<span class=\"cyan\">OS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\" style=\"overflow:hidden\">" + session_config.os + "<br></span>" + 
@@ -126,7 +131,7 @@
 			"<span class=\"cyan\">User-Agent&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.user_agent + "<br><br></span>" + 
 			"<span>Interpreter is fetching packets every <span class=\"bold\">" + session_config.fetch_rate.replace("-", "</span> to <span class=\"bold\">") + "</span> seconds</span>.<br></span>" + 
 			"<hr>" + 
-			"<span class=\"bold\"><img src=\"/assets/images/os_linux.svg\" width=\"12px\"> Sewers v1.0<br></span>" + 
+			" <img src=\"/assets/images/os_linux.svg\" width=\"12px\"><span class=\"bold\"> " + navigator.os + " Sewers v1.0<br></span>" + 
 			"<span class=\"orange\">Relay Address&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + relay_config.relay_address + "<br></span>" + 
 			"<span class=\"orange\">Relay ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + relay + "<br></span>" + 
 			"<span class=\"orange\">User-Agent&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + relay_config.user_agent + "<br><br></span>" + 
@@ -136,17 +141,13 @@
 
 	// Return StdIn to sewers
 	const stdIn = async data => {
-		const params = new String(
-			"?body=" + data + 
+		const form = new String(
+			"body=" + data + 
 			"&session_id=" + session_id + 
 			"&relay_id=" + relay
 		)
 
-		showNetworkIndicator()
-
-		sendForm("POST", "/post" + params, "").then(res=>{
-			hideNetworkIndicator()
-		})
+		sendForm("POST", "/post", form)
 	}
 
 	// Change fetch rate
@@ -174,8 +175,6 @@
 			"&session_id=" + session_id + 
 			"&relay_id=" + relay
 		)
-
-		showNetworkIndicator()
 
 		let res = await sendForm("POST", "/get", form)
 
@@ -235,10 +234,6 @@
 				}
 			}
 		}
-
-		sleep(1).then(async()=>{
-			hideNetworkIndicator()
-		})
 	}
 
 	// Start auto fetcher
@@ -349,6 +344,20 @@
 		let linebreaks = "<br>".repeat(clearBreaks)
 
 		print(linebreaks)
+	}
+
+	const parseUserAgent = async () => {
+		if ( navigator.userAgent.match(/android/i) ) {
+			navigator.os = "Android"
+		} else if ( navigator.userAgent.match(/ios/i) ) {
+			navigator.os = "iOS"
+		} else if ( navigator.userAgent.match(/windows/i) ) {
+			navigator.os = "Windows"
+		} else if ( navigator.userAgent.match(/mac os/i) ) {
+			navigator.os = "macOS"
+		} else if ( navigator.userAgent.match(/linux/i) ) {
+			navigator.os = "Linux"
+		}
 	}
 
 	// Append new stream to menu
@@ -501,7 +510,7 @@
 				|| cmd.match(/^\s*commands\s*$/) 
 				|| cmd.match(/^\s*usage\s*$/) 
 			) {
-				printCommands()
+				printHelp()
 			} else if ( cmd.match(/^\s*checkstreams\s*$/) ) {
 				checkStreams()
 			} else if ( cmd.match(/^\s*reset\s*$/) ) {
