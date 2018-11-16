@@ -197,7 +197,6 @@ func serve(res http.ResponseWriter, req *http.Request) {
 					response := SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), c["user_agent"].(string), session_id, "" )
 
 					fmt.Fprintf(res, response)
-					return
 				} else {
 					LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + ip_string + " tried to fetch packet " + BOLD_YELLOW + packet_id + RESET + " from session " + BOLD_YELLOW + session_id + RESET + " at relay " + BOLD + relay_id + RESET)
 
@@ -212,7 +211,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 						return
 					}
 
-					LogToConsole(BOLD_BLUE + "RESPONSE" + RESET + " fetched by " + ip_string + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\npacket_id: " + packet_id + "\nencrypted response length: " + strconv.Itoa( len(enc_response) ) + "\ndecrypted response length: " + strconv.Itoa( len(dec_response) ) )
+					LogToConsole( BOLD_BLUE + "RESPONSE" + RESET + " fetched by " + ip_string + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\npacket_id: " + packet_id + "\nencrypted response length: " + strconv.Itoa( len(enc_response) ) + "\ndecrypted response length: " + strconv.Itoa( len(dec_response) ) )
 
 					fmt.Fprintf( res, string(dec_response) )
 				}

