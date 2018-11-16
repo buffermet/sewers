@@ -176,7 +176,7 @@
 
 			sendRequest("GET", "/relay/" + relay_id, null).then(async(res)=>{
 				if (res.status == 200) {
-					if ( res.responseText != "nil" && res.responseText.match(/([a-zA-Z]+)/) ) {
+					if ( res.responseText != "" && res.responseText.match(/([a-zA-Z]+)/) ) {
 						let sessionlist = res.responseText.split(",")
 
 						for (let i = 0; i < sessionlist.length; i++) {
@@ -228,7 +228,7 @@
 						`
 						document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
 					} else {
-						print(response)
+						print( escapeHTML(res.responseText) )
 
 						let span = document.createElement("span")
 						let div = document.createElement("div")
@@ -284,16 +284,16 @@
 
 	// Network activity indicator
 	const showNetworkIndicator = async () => {
-		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
+		// const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
 
-		network_indicator.classList.remove("hidden")
+		// network_indicator.classList.remove("hidden")
 	}
 
 	// Network activity indicator
 	const hideNetworkIndicator = async () => {
-		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
+		// const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
 
-		network_indicator.classList.add("hidden")
+		// network_indicator.classList.add("hidden")
 	}
 
 	// Print to console

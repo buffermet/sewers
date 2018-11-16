@@ -502,7 +502,7 @@
 			} else if ( cmd.match(/^\s*clear\s*$/) ) {
 				clear()
 			} else if ( cmd.match(/^\s*exit\s*$/) ) {
-				self.close() || alert("You can only use this in pop-up mode.")
+				self.close() || alert("You can only use this in pop-up windows.")
 			} else if ( 
 				cmd.match(/^\s*[?]\s*$/) 
 				|| cmd.match(/^\s*h\s*$/) 
@@ -516,7 +516,7 @@
 			} else if ( cmd.match(/^\s*reset\s*$/) ) {
 				if (warnOnReset) {
 					self.location = location.href
-				}	else {
+				} else {
 					document.body.innerHTML = ""
 					window.onbeforeunload = ""
 					self.location = location.href
@@ -568,7 +568,14 @@
 		textarea.focus()
 	}
 
-	// XSS input handler
+	const parseXSSCommand = async cmd => {
+		print( 
+			request_tag + " <span class=\"bold red\">XSS</span>" + " <span>" + await timestamp() + "</span><br>" + 
+			"<span class=\"red\">" + await escapeHTML(cmd) + "</span><br>" + 
+			"<span>" + eval(cmd) + "</span><br>" 
+		)
+	}
+
 	const onXSSCommand = async () => {
 		const command = jsfield.value
 
@@ -577,13 +584,4 @@
 		parseXSSCommand(command)
 
 		textarea.focus()
-	}
-
-	// XSS input handler
-	const parseXSSCommand = async cmd => {
-		const esc_cmd = await escapeHTML(cmd)
-
-		print(request_tag + " <span class=\"bold red\">XSS</span> <span>" + await timestamp() + "</span><br>")
-		print("<span class=\"red\">" + esc_cmd + "</span><br>")
-		print( eval(cmd) + "<br>" )
 	}

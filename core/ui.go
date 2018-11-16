@@ -68,9 +68,6 @@ func serve(res http.ResponseWriter, req *http.Request) {
 		} else if strings.HasPrefix(req.URL.Path, "/terminal") {
 			LogToConsole(ip_string + " requested " + req.URL.Path)
 
-			// session_id := strings.Replace(req.URL.Path, "/terminal/", "", 1)
-			// session_id = strings.Split(session_id, "/")[0]
-
 			http.ServeFile(res, req, PATH_UI + "/terminal.html")
 		} else if strings.HasSuffix(req.URL.Path, ".html") || 
 		          strings.HasSuffix(req.URL.Path, ".css") || 
@@ -197,7 +194,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 				if packet_id == "" {
 					LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD + "GET" + RESET + " " + ip_string + " tried to fetch packet list from session " + BOLD_YELLOW + session_id + RESET +" at relay " + BOLD + relay_id + RESET)
 
-					response := SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), c["user_agent"].(string), session_id, "nil" )
+					response := SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), c["user_agent"].(string), session_id, "" )
 
 					fmt.Fprintf(res, response)
 					return
