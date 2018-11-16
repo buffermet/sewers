@@ -39,7 +39,7 @@ func stream(ws *websocket.Conn) {
 	LogToConsole(ip_string + " tried to open a websocket")
 
 	if allow_connections {
-
+		ws.Write( []byte("test") )
 	}
 }
 
@@ -192,26 +192,40 @@ func serve(res http.ResponseWriter, req *http.Request) {
 				res.Header().Set("Content-Type", "text/plain")
 
 				if packet_id == "" {
-					LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD + "GET" + RESET + " " + ip_string + " tried to fetch packet list from session " + BOLD_YELLOW + session_id + RESET +" at relay " + BOLD + relay_id + RESET)
+					LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD + "GET" + RESET + " " + ip_string + " tried to fetch packet list from interpreter " + BOLD_YELLOW + session_id + "/" + relay_id + RESET)
 
 					response := SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), c["user_agent"].(string), session_id, "" )
 
-					fmt.Fprintf(res, response)
-				} else {
-					LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + ip_string + " tried to fetch packet " + BOLD_YELLOW + packet_id + RESET + " from session " + BOLD_YELLOW + session_id + RESET + " at relay " + BOLD + relay_id + RESET)
+					defer response.Body.Close()
 
-					enc_response := SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), c["user_agent"].(string), session_id, packet_id )
-					enc_response_bytes := []byte(enc_response)
+					body, e := ioutil.ReadAll(response.Body)
+					if e != nil {
+						LogToConsole( BOLD_RED + "ERROR" + RESET + " Could not read response body (" + e.Error() + ")" )
+					}
+
+					fmt.Fprintf( res, string(body) )
+				} else {
+					LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + ip_string + " tried to fetch packet " + BOLD_YELLOW + packet_id + RESET + " from interpreter " + BOLD_YELLOW + session_id + "/" + relay_id + RESET)
+
+					response := SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), c["user_agent"].(string), session_id, packet_id )
+
+					defer response.Body.Close()
+
+					body, e := ioutil.ReadAll(response.Body)
+					if e != nil {
+						LogToConsole( BOLD_RED + "ERROR" + RESET + " Could not read response body (" + e.Error() + ")" )
+					}
+
 					key := []byte( c["encryption_key_one"].(string) )
 
-					dec_response, e := Decrypt(key, enc_response_bytes)
+					dec_response, e := Decrypt(key, body)
 					if e != nil {
-						LogToConsole( BOLD_BLUE + "RESPONSE" + RESET + " " + BOLD_RED + "ERROR" + RESET + " " + ip_string + " was unable to decrypt response from interpreter.\npacket_id: " + packet_id + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\nrequest_tag: " + c["sewers_get_tag"].(string) + "\nlength: " + strconv.Itoa( len(enc_response) ) + "\n[" + BOLD_RED + "STACK TRACE" + RESET + "]\n" + e.Error() )
+						LogToConsole( BOLD_BLUE + "RESPONSE" + RESET + " " + BOLD_RED + "ERROR" + RESET + " " + ip_string + " was unable to decrypt response from interpreter.\npacket_id: " + packet_id + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\nrequest_tag: " + c["sewers_get_tag"].(string) + "\nlength: " + strconv.Itoa( len(body) ) + "\n[" + BOLD_RED + "STACK TRACE" + RESET + "]\n" + e.Error() )
 						fmt.Fprintf(res, "")
 						return
 					}
 
-					LogToConsole( BOLD_BLUE + "RESPONSE" + RESET + " fetched by " + ip_string + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\npacket_id: " + packet_id + "\nencrypted response length: " + strconv.Itoa( len(enc_response) ) + "\ndecrypted response length: " + strconv.Itoa( len(dec_response) ) )
+					LogToConsole( BOLD_BLUE + "RESPONSE" + RESET + " fetched by " + ip_string + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\npacket_id: " + packet_id + "\nencrypted response length: " + strconv.Itoa( len(body) ) + "\ndecrypted response length: " + strconv.Itoa( len(dec_response) ) )
 
 					fmt.Fprintf( res, string(dec_response) )
 				}
@@ -244,8 +258,6 @@ func serve(res http.ResponseWriter, req *http.Request) {
 					Log( "ERROR " + e.Error() )
 				}
 
-				res.Header().Set("Content-Type", "text/plain")
-
 				LogToConsole( BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD + "POST" + RESET + " " + ip_string + " sent a packet to " + BOLD_YELLOW + session_id + RESET + "\ncommand: " + body + "\nrelay_address: " + c["relay_address"].(string) + "\nrequest_tag: " + c["sewers_post_tag"].(string) )
 
 				encrypt_key_bytes := []byte( c["encryption_key_one"].(string) )
@@ -257,7 +269,58 @@ func serve(res http.ResponseWriter, req *http.Request) {
 				}
 				enc_payload_string := string(enc_payload)
 
-				SendHTTPRequest( c["relay_address"].(string), c["sewers_post_tag"].(string), c["user_agent"].(string), session_id, enc_payload_string )
+				go SendHTTPRequest( c["relay_address"].(string), c["sewers_post_tag"].(string), c["user_agent"].(string), session_id, enc_payload_string )
+
+				res.Header().Set("Content-Type", "text/plain")
+
+				fmt.Fprintf(res, "OK")
+			} else {
+				LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD_RED + "ERROR" + RESET + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id)
+			}
+		} else if req.URL.Path == "/fetchrate" {
+			req.ParseForm()
+
+			var (
+				body string
+				session_id string
+				relay_id string
+			)
+
+			form := req.Form
+			for param, value := range form {
+				if param == "body" {
+					body = value[0]
+				} else if param == "session_id" {
+					session_id = value[0]
+				} else if param == "relay_id" {
+					relay_id = value[0]
+				}
+			}
+
+			new_fetch_rate := regexp.MustCompile(`^.* ([1-9][0-9]*) ([1-9][0-9]*)$`).ReplaceAllString(body, "$1-$2")
+
+			if regexp.MustCompile(`^[1-9][0-9]*-[1-9][0-9]*$`).FindString(new_fetch_rate) != "" && session_id != "" && relay_id != "" {
+				var c map[string]interface{}
+				if e := json.Unmarshal( []byte( GetSession(relay_id, session_id) ), &c ); e != nil {
+					LogToConsole( BOLD_RED + "ERROR" + RESET + " Could not change fetch rate of interpreter " + BOLD + relay_id + "/" + session_id + RESET +  "(" + e.Error() + ")" )
+				}
+
+				old_fetch_rate := c["fetch_rate"].(string)
+
+				LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD + "POST" + RESET + " " + ip_string + " tried to change the fetch rate of " + BOLD_YELLOW + relay_id + "/" + session_id + RESET + " from " + BOLD + old_fetch_rate + RESET + " to " + BOLD + new_fetch_rate + RESET)
+
+				encrypt_key_bytes := []byte( c["encryption_key_one"].(string) )
+				payload_bytes := []byte(body)
+
+				enc_payload, e := Encrypt(encrypt_key_bytes, payload_bytes)
+				if e != nil {
+					LogToConsole( BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD_RED + "ERROR" + RESET + " " + ip_string + " Could not encrypt payload.\nData: " + body + "\n[" + BOLD_RED + "STACK TRACE" + RESET + "]\n" + e.Error() )
+				}
+				enc_payload_string := string(enc_payload)
+
+				go SendHTTPRequest( c["relay_address"].(string), c["sewers_post_tag"].(string), c["user_agent"].(string), session_id, enc_payload_string )
+
+				res.Header().Set("Content-Type", "text/plain")
 
 				fmt.Fprintf(res, "OK")
 			} else {

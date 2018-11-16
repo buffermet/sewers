@@ -158,7 +158,7 @@
 			"&relay_id=" + relay
 		)
 
-		sendForm("POST", "/post", form)
+		sendForm("POST", "/fetchrate", form)
 		.then(async res=>{
 			if (res.status == 200) {
 				print("<span>Interpreter will be fetching packets every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds as soon as it fetches packets.<br></span>")

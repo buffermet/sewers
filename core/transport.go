@@ -6,17 +6,16 @@ package core
 *	
 */
 
-import(
+import (
 	"strings"
 	"net/http"
-	"io/ioutil"
 )
 
-func SendHTTPRequest(relay_address, request_type, user_agent, session_id, payload string) string {
+func SendHTTPRequest(relay_address, request_type, user_agent, session_id, payload string) *http.Response {
 	packet := request_type + "\n" + session_id + "\n" + payload
-	p := strings.NewReader(packet)
+	packet_reader := strings.NewReader(packet)
 
-	req, e := http.NewRequest("POST", relay_address, p)
+	req, e := http.NewRequest("POST", relay_address, packet_reader)
 	if e != nil {
 		LogToConsole( BOLD_RED + "ERROR" + RESET + " " + e.Error() )
 	}
@@ -33,12 +32,6 @@ func SendHTTPRequest(relay_address, request_type, user_agent, session_id, payloa
 		LogToConsole( BOLD_RED + "ERROR" + RESET + " " + e.Error() )
 	}
 
-	defer res.Body.Close()
-
-	b, _ := ioutil.ReadAll(res.Body)
-
-	body := string(b)
-
 	/* DEBUG */
 
 	// fmt.Println("\n---PACKET---\n")
@@ -46,5 +39,5 @@ func SendHTTPRequest(relay_address, request_type, user_agent, session_id, payloa
 	// fmt.Println("\n---RESPONSE---\n")
 	// fmt.Println(body)
 
-	return body
+	return res
 }

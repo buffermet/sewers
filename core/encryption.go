@@ -9,7 +9,7 @@ package core
 *	
 */
 
-import(
+import (
 	"crypto/aes"
 	"crypto/rand"
 	"crypto/cipher"
@@ -26,7 +26,6 @@ func Encrypt(key, payload []byte) ([]byte, error) {
 	}
 
 	encoded_payload := base64.StdEncoding.EncodeToString(payload)
-
 	ciphertext := make( []byte, aes.BlockSize + len(encoded_payload) )
 
 	iv := ciphertext[:aes.BlockSize]
@@ -35,7 +34,6 @@ func Encrypt(key, payload []byte) ([]byte, error) {
 	}
 
 	cfb := cipher.NewCFBEncrypter(blockcipher, iv)
-
 	cfb.XORKeyStream( ciphertext[aes.BlockSize:], []byte(encoded_payload) )
 
 	return []byte( base64.StdEncoding.EncodeToString(ciphertext) ), nil
@@ -57,11 +55,9 @@ func Decrypt(key, payload []byte) ([]byte, error) {
 	}
 
 	iv := payload[:aes.BlockSize]
-
 	payload = payload[aes.BlockSize:]
 
 	cfb := cipher.NewCFBDecrypter(blockcipher, iv)
-
 	cfb.XORKeyStream(payload, payload)
 
 	return payload, nil

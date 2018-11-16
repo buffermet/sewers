@@ -6,7 +6,7 @@ package core
 *	
 */
 
-import(
+import (
 	"log"
 	"io/ioutil"
 	"encoding/json"

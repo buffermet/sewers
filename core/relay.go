@@ -103,7 +103,16 @@ func GetRelaySessions(relay string) string {
 		get_tag := json_decoded["sewers_get_tag"].(string)
 		user_agent := json_decoded["user_agent"].(string)
 
-		sessions = SendHTTPRequest(relay_address, get_tag, user_agent, "", "")
+		response := SendHTTPRequest(relay_address, get_tag, user_agent, "", "")
+
+		defer response.Body.Close()
+
+		body, e := ioutil.ReadAll(response.Body)
+		if e != nil {
+			LogToConsole( BOLD_RED + "ERROR" + RESET + " Could not read response body (" + e.Error() + ")" )
+		}
+
+		sessions = string(body)
 	} else {
 		LogToConsole( BOLD_RED + "ERROR" + RESET + " " + BOLD + relay + ".json" + RESET + " is missing a \"relay_address\" and/or \"get_tag\" property." )
 	}

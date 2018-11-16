@@ -6,12 +6,12 @@ package core
 *	
 */
 
-import(
+import (
 	"strings"
 	"os/exec"
 )
 
-const(
+const (
 	PATH_UI     = "./ui"
 	PATH_RELAYS = "./relays"
 	PATH_MODULES_RELAYS       = "./modules/relays"
@@ -20,7 +20,7 @@ const(
 	PATH_MODULES_PLUGINS      = "./modules/plugins"
 )
 
-var(
+var (
 	VERSION = "1.0"
 	USER_AGENT = "Sewers/" + VERSION + " HTTP Test Session"
 )
