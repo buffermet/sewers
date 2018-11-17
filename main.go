@@ -7,9 +7,9 @@ package main
 */
 
 import(
-	"github.com/yungtravla/sewers/core"
+	ui "github.com/yungtravla/sewers/core/ui"
 )
 
 func main() {
-	core.Start()
+	ui.Start()
 }

@@ -26,15 +26,8 @@ var (
 )
 
 func WhoAmI() string {
-	user, e := exec.Command("whoami").Output()
-	if e != nil {
-		Log( e.Error() )
-	}
-
-	hostname, e := exec.Command("hostname").Output()
-	if e != nil {
-		Log( e.Error() )
-	}
+	user, _ := exec.Command("whoami").Output()
+	hostname, _ := exec.Command("hostname").Output()
 
 	return strings.TrimSpace( string(user) ) + "@" + strings.TrimSpace( string(hostname) )
 }

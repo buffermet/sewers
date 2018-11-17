@@ -7,7 +7,7 @@
 		await showRelays()
 
 		fetchLog()
-		setInterval(fetchLog, 1000) // make websocket
+		setInterval(fetchLog, 400) // make websocket
 
 		setInterval(cycleNews, 4000)
 		setTimeout(async()=>{ container.classList.remove("hide") }, 720)

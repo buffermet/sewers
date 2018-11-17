@@ -618,10 +618,13 @@ html body div.console div.consolecontainer {
 	color: #FFF;
 	font-family: monospace;
 	font-size: 1em;
-	text-shadow: 0 -1px 0px black;
 	overflow: hidden;	
 	overflow-y: scroll;
 	word-break: break-all;
+}
+html body div.console div.consolecontainer span::selection {
+	background-color: #FFF;
+	color: #000;
 }
 .selectable {
 	user-select: text;

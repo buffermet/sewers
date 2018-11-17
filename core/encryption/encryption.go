@@ -10,13 +10,13 @@ package core
 */
 
 import (
+	"io"
+	"log"
+	"errors"
 	"crypto/aes"
 	"crypto/rand"
 	"crypto/cipher"
 	"encoding/base64"
-	"io"
-	"log"
-	"errors"
 )
 
 func Encrypt(key, payload []byte) ([]byte, error) {

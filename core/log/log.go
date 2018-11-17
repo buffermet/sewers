@@ -11,8 +11,9 @@ import(
 	"fmt"
 	"time"
 	"strings"
-	"net/http"
 	"io/ioutil"
+
+	environment "github.com/yungtravla/sewers/core/environment"
 )
 
 const(
@@ -20,7 +21,7 @@ const(
 	BOLD = "\x1b[1m"
 	ON_GREEN = "\x1b[30;42m"
 	ON_YELLOW = "\x1b[30;43m"
-	RED_ON_YELLOW = "\x1b[91;43m"
+	WHITE_ON_RED = "\x1b[1;41m"
 	BOLD_GREY = "\x1b[1;30m"
 	BOLD_RED = "\x1b[1;31m"
 	BOLD_GREEN = "\x1b[1;32m"
@@ -29,15 +30,15 @@ const(
 	BOLD_BLACK_ON_GREY = "\x1b[1;7;30m"
 	HTML_STD = "</span>"
 	HTML_BOLD = "<span style=\"font-weight:bold\">"
-	HTML_ON_GREEN = "<span style=\"background-color:green;color:#000;\">"
-	HTML_ON_YELLOW = "<span style=\"background-color:yellow;color:#000;\">"
-	HTML_RED_ON_YELLOW = "<span style=\"background-color:yellow;color:#F00;\">"
-	HTML_BOLD_GREY = "<span style=\"font-weight:bold;color:#444\">"
-	HTML_BOLD_RED = "<span style=\"font-weight:bold;color:#F00\">"
-	HTML_BOLD_GREEN = "<span style=\"font-weight:bold;color:#81d330\">"
-	HTML_BOLD_BLUE = "<span style=\"font-weight:bold;color:rgb(0,142,255)\">"
-	HTML_BOLD_YELLOW = "<span style=\"font-weight:bold;color:orange\">"
-	HTML_BOLD_BLACK_ON_GREY = "<span style=\"font-weight:normal;color:#000;background-color:#444\">"
+	HTML_ON_GREEN = "<span style=\"background-color:green;color:#000;text-shadow:none;\">"
+	HTML_ON_YELLOW = "<span style=\"background-color:yellow;color:#000;text-shadow:none;\">"
+	HTML_WHITE_ON_RED = "<span style=\"font-weight:bold;background-color:red;color:#FFF;text-shadow:none;\">"
+	HTML_BOLD_GREY = "<span style=\"font-weight:bold;color:#444;\">"
+	HTML_BOLD_RED = "<span style=\"font-weight:bold;color:#F00;\">"
+	HTML_BOLD_GREEN = "<span style=\"font-weight:bold;color:#81D330;\">"
+	HTML_BOLD_BLUE = "<span style=\"font-weight:bold;color:rgb(0,142,255);\">"
+	HTML_BOLD_YELLOW = "<span style=\"font-weight:bold;color:orange;\">"
+	HTML_BOLD_BLACK_ON_GREY = "<span style=\"background-color:#444;color:#000;text-shadow:none;\">"
 )
 
 func Timestamp() string {
@@ -47,41 +48,41 @@ func Timestamp() string {
 func Info(message string, log_to_console bool) {
 	timestamp := " " + BOLD_GREY + Timestamp() + RESET + " "
 
-	fmt.Println(timestamp + ON_GREEN + "INF" + RESET + " " + message)
+	fmt.Println(timestamp + message)
 
 	if log_to_console {
-		logToConsole(timestamp + ON_GREEN + "INF" + RESET + " " + message)
+		logToConsole(timestamp + message)
 	}
 }
 
 func Warn(message string, log_to_console bool) {
 	timestamp := " " + BOLD_GREY + Timestamp() + RESET + " "
 
-	fmt.Println(timestamp + RED_ON_YELLOW + "WAR" + RESET + " " + message)
+	fmt.Println(timestamp + ON_YELLOW + "WARNING" + RESET + " " + message)
 
 	if log_to_console {
-		logToConsole(timestamp + RED_ON_YELLOW + "WAR" + RESET + " " + message)
+		logToConsole(timestamp + ON_YELLOW + "WARNING" + RESET + " " + message)
 	}
 }
 
 func Error(message string, log_to_console bool) {
 	timestamp := " " + BOLD_GREY + Timestamp() + RESET + " "
 
-	fmt.Println(timestamp + RED_ON_YELLOW + "WAR" + RESET + " " + message)
+	fmt.Println(timestamp + WHITE_ON_RED + "ERROR" + RESET + " " + message)
 
 	if log_to_console {
-		logToConsole(timestamp + RED_ON_YELLOW + "WAR" + RESET + " " + message)
+		logToConsole(timestamp + WHITE_ON_RED + "ERROR" + RESET + " " + message)
 	}
 }
 
-func Time(message string, log_to_console bool) {
-	timestamp := " " + BOLD_GREY + Timestamp() + RESET + " "
-
-	fmt.Println(timestamp + message)
+func Fatal(message string, log_to_console bool) {
+	fmt.Println(WHITE_ON_RED + "!!!" + RESET + " " + message)
 
 	if log_to_console {
-		logToConsole(timestamp + message)
+		logToConsole(WHITE_ON_RED + "!!!" + RESET + " " + message)
 	}
+
+	os.Exit(1)
 }
 
 func Raw(message string, log_to_console bool) {
@@ -96,14 +97,18 @@ func logToConsole(message string) {
 	html_string := strings.Replace(message, " ", "&nbsp;", -1)
 	html_string = strings.Replace(html_string, RESET,              HTML_STD, -1)
 	html_string = strings.Replace(html_string, BOLD,               HTML_BOLD, -1)
+	html_string = strings.Replace(html_string, ON_GREEN,           HTML_ON_GREEN, -1)
+	html_string = strings.Replace(html_string, ON_YELLOW,          HTML_ON_YELLOW, -1)
+	html_string = strings.Replace(html_string, WHITE_ON_RED,       HTML_WHITE_ON_RED, -1)
 	html_string = strings.Replace(html_string, BOLD_GREY,          HTML_BOLD_GREY, -1)
 	html_string = strings.Replace(html_string, BOLD_RED,           HTML_BOLD_RED, -1)
 	html_string = strings.Replace(html_string, BOLD_GREEN,         HTML_BOLD_GREEN, -1)
 	html_string = strings.Replace(html_string, BOLD_BLUE,          HTML_BOLD_BLUE, -1)
 	html_string = strings.Replace(html_string, BOLD_YELLOW,        HTML_BOLD_YELLOW, -1)
 	html_string = strings.Replace(html_string, BOLD_BLACK_ON_GREY, HTML_BOLD_BLACK_ON_GREY, -1)
+	html_string += "\n"
 
-	logfile, e := os.OpenFile(PATH_UI + "/console_log.html", os.O_APPEND|os.O_WRONLY, 0600)
+	logfile, e := os.OpenFile(environment.PATH_UI + "/console_log.html", os.O_APPEND|os.O_WRONLY, 0600)
 	if e != nil {
 		fmt.Println( e.Error() )
 	}
@@ -116,10 +121,10 @@ func logToConsole(message string) {
 }
 
 func ClearConsole(ip string) {
-	e := ioutil.WriteFile(PATH_UI + "/console_log.html", []byte(""), 0600)
+	e := ioutil.WriteFile(environment.PATH_UI + "/console_log.html", []byte(""), 0600)
 	if e != nil {
 		fmt.Println( e.Error() )
 	}
 
-	LogToConsole(ip + " cleared the console log.")
+	Info(ip + " cleared the console log.", true)
 }

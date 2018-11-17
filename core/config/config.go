@@ -7,22 +7,23 @@ package core
 */
 
 import (
-	"log"
 	"io/ioutil"
 	"encoding/json"
+
+	log "github.com/yungtravla/sewers/core/log"
 )
 
 func Configure(json_path string, new_json_data map[string][]string) {
 	// Read old config
 	json_encoded, e := ioutil.ReadFile(json_path)
 	if e != nil {
-		log.Fatal(e)
+		log.Fatal( e.Error(), true)
 	}
 
 	// Encode old config
 	var json_decoded map[string]interface{}
 	if e := json.Unmarshal( []byte(json_encoded), &json_decoded ); e != nil {
-		LogToConsole( BOLD_RED + "ERROR" + RESET + " Invalid JSON file: " + BOLD + json_path + RESET + "\n[" + BOLD_RED + "STACK TRACE" + RESET + "]" + "\n" + e.Error() )
+		log.Error( "invalid JSON file: " + log.BOLD + json_path + log.RESET + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]" + "\n" + e.Error(), true )
 	}
 
 	// Set new config
@@ -33,7 +34,7 @@ func Configure(json_path string, new_json_data map[string][]string) {
 	// Indent config
 	json_indented, e := json.MarshalIndent(json_decoded, "", "\t")
 	if e != nil {
-		LogToConsole( BOLD_RED + "ERROR" + RESET + " Could not indent JSON data.\n[" + BOLD_RED + "STACK TRACE" + RESET + "]" + "\n" + e.Error() )
+		log.Error( "could not indent JSON data.\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]" + "\n" + e.Error(), true )
 	}
 
 	// Write new config

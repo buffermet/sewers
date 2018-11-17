@@ -37,10 +37,10 @@
 	const fetchLog = async () => {
 		sendRequest("GET", "/console_log", null).then(async(res)=>{
 			if (res.status == 200) {
-				let response = res.responseText.replace(/\n/g, "<br>")
+				const logs = res.responseText.replace(/\n/g, "<br>")
 
-				if (consoleContainer.innerHTML != response) {
-					consoleContainer.innerHTML = response
+				if (consoleContainer.innerHTML != logs) {
+					consoleContainer.innerHTML = logs
 
 					scrollOnOutput ? consoleContainer.scrollTop += 999999 : ""
 				}

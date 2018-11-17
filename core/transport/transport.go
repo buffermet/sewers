@@ -9,6 +9,9 @@ package core
 import (
 	"strings"
 	"net/http"
+
+	log "github.com/yungtravla/sewers/core/log"
+	environment "github.com/yungtravla/sewers/core/environment"
 )
 
 func SendHTTPRequest(relay_address, request_type, user_agent, session_id, payload string) *http.Response {
@@ -17,11 +20,11 @@ func SendHTTPRequest(relay_address, request_type, user_agent, session_id, payloa
 
 	req, e := http.NewRequest("POST", relay_address, packet_reader)
 	if e != nil {
-		LogToConsole( BOLD_RED + "ERROR" + RESET + " " + e.Error() )
+		log.Error( e.Error(), true )
 	}
 
 	if (user_agent == "") {
-		req.Header.Set("User-Agent", USER_AGENT)
+		req.Header.Set("User-Agent", environment.USER_AGENT)
 	} else {
 		req.Header.Set("User-Agent", user_agent)
 	}
@@ -29,7 +32,7 @@ func SendHTTPRequest(relay_address, request_type, user_agent, session_id, payloa
 	client := &http.Client{}
 	res, e := client.Do(req)
 	if e != nil {
-		LogToConsole( BOLD_RED + "ERROR" + RESET + " " + e.Error() )
+		log.Error( e.Error(), true )
 	}
 
 	/* DEBUG */
