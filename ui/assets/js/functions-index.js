@@ -102,46 +102,45 @@
 			const relayNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage")
 			relayNewsMessage.classList.add("hide")
 
-			sendRequest("GET", "/get_relays", null).then(async(res)=>{
-				const response = res.responseText
+			const res = await sendRequest("GET", "/get_relays", null)
 
-				if (response.length > 0) {
-					const relay_configs = JSON.parse(response)
+			if (res.responseText.length > 0) {
+				const relay_configs = JSON.parse(res.responseText)
 
-					for (let i = 0; i < Object.keys(relay_configs).length; i++) {
-						const relay_address = await escapeHTML(relay_configs[i].RelayAddress),
-						      relay_id = await escapeHTML(relay_configs[i].RelayID)
+				for (let i = 0; i < Object.keys(relay_configs).length; i++) {
+					const relay_address = await escapeHTML(relay_configs[i].RelayAddress),
+					      relay_id = await escapeHTML(relay_configs[i].RelayID),
+					      relay = document.createElement("div")
 
-						let relay = document.createElement("div")
-
-						relay.name = await escapeHTML(relay_configs[i].RelayID)
-						relay.className = "relay"
-						relay.innerHTML = `
-							<span class="relaynumber">RELAY ` + (i + 1) + `</span>
-							<span class="name" title="` + relay_id + `">` + relay_id + `</span>
-							<span class="url" title="` + relay_address + `">` + relay_address + `</span>
-						`
-						relay.onclick = async () => {
-							showSessions(relay_configs[i].RelayID)
-						}
-
-						document.querySelector("html body div.scrollcontainer div.container div.relaylist div.space").before(relay)
+					relay.name = await escapeHTML(relay_configs[i].RelayID)
+					relay.className = "relay"
+					relay.innerHTML = `
+						<span class="relaynumber">RELAY ` + (i + 1) + `</span>
+						<span class="name" title="` + relay_id + `">` + relay_id + `</span>
+						<span class="url" title="` + relay_address + `">` + relay_address + `</span>
+					`
+					relay.onclick = async () => {
+						showSessions(relay_configs[i].RelayID)
 					}
-				} else {
-					let span = document.createElement("span")
-					span.class = "nonefound"
-					span.innerText = "No relays found"
 
-					document.querySelector("html body div.scrollcontainer div.container div.relaylist div.space").before(span)
+					document.querySelector("html body div.scrollcontainer div.container div.relaylist div.space").before(relay)
 				}
+			} else {
+				let span = document.createElement("span")
+				span.class = "nonefound"
+				span.innerText = "No relays found"
 
-				currentRelaysNews = 0
+				document.querySelector("html body div.scrollcontainer div.container div.relaylist div.space").before(span)
+			}
 
-				cycleNews().then(async()=>{
-					container.classList.remove("hide")
-					container.classList.remove("nopointerevents")
-				})
+			currentRelaysNews = 0
+
+			cycleNews()
+			.then(async()=>{
+				container.classList.remove("hide")
+				container.classList.remove("nopointerevents")
 			})
+
 		})
 
 		relays = document.querySelectorAll("html body div.scrollcontainer div.container div.relaylist div.relay")
@@ -151,6 +150,7 @@
 		currentRelay = relay_id
 
 		const res = await sendRequest("GET", "/config/" + relay_id, null)
+		// catch stuff
 		const currentRelayConfig = JSON.parse(res.responseText)
 
 		relayUserAgent = currentRelayConfig.user_agent
