@@ -150,15 +150,16 @@
 	const showSessions = async relay_id => {
 		currentRelay = relay_id
 
-		let res = await sendRequest("GET", "/config/" + relay_id, null)
-		let currentRelayConfig = JSON.parse(res.responseText)
+		const res = await sendRequest("GET", "/config/" + relay_id, null)
+		const currentRelayConfig = JSON.parse(res.responseText)
 
 		relayUserAgent = currentRelayConfig.user_agent
 
 		container.classList.add("hide")
 		container.classList.add("nopointerevents")
 
-		sleep(0.4).then(async()=>{
+		sleep(0.4)
+		.then(async()=>{
 			container.innerHTML = `
 				<div class="sessionlist">
 					<div class="header">
@@ -174,85 +175,85 @@
 
 			backbutton.classList.remove("hidden")
 
-			sendRequest("GET", "/relay/" + relay_id, null).then(async(res)=>{
-				if (res.status == 200) {
-					if ( res.responseText != "" && res.responseText.match(/([a-zA-Z]+)/) ) {
-						let sessionlist = res.responseText.split(",")
+			const res = await sendRequest("GET", "/relay/" + relay_id, null)
 
-						for (let i = 0; i < sessionlist.length; i++) {
-							let url = "./session/" + relay_id.replace(".json", "") + "/" + sessionlist[i]
+			if (res.status == 200) {
+				if (res.responseText != "") {
+					const sessionlist = res.responseText.split(",")
 
-							let div = document.createElement("div")
+					for (let i = 0; i < sessionlist.length; i++) {
+						const url = "./session/" + relay_id.replace(".json", "") + "/" + sessionlist[i]
 
-							sendRequest("GET", url, null).then(async(res)=>{
-								if (res.status == 200) {
-									let session_id = sessionlist[i]
+						const div = document.createElement("div")
 
-									if (res.responseText != "") {
-										let sessionConfig = JSON.parse(res.responseText)
+						sendRequest("GET", url, null).then(async(res)=>{
+							if (res.status == 200) {
+								const session_id = sessionlist[i]
 
-										div.onclick = async () => { openTerminal(relay_id, session_id) }
-										div.className = "session"
-										div.innerHTML = `
-											<div class="icon ` + await escapeHTML(sessionConfig.icon) + `">
-												<div class="logo ` + await escapeHTML(sessionConfig.logo) + `"></div>
-											</div>
-											<span class="device" title="Device">` + await escapeHTML(sessionConfig.device) + `</span>
-											<span class="id" title="Session ID">` + await escapeHTML(session_id) + `</span>
-											<span class="hostname" title="Hostname">` + await escapeHTML(sessionConfig.hostname) + `</span>
-										`
-									} else {
-										div.className = "session unknown"
-										div.innerHTML = `
-											<div class="icon unknown"></div>
-											<span class="device" title="Device">unknown device</span>
-											<span class="id" title="Session ID">` + await escapeHTML(session_id) + `</span>
-											<span class="hostname" title="Hostname">unknown hostname</span>
-										`
-									}
+								if (res.responseText != "") {
+									const sessionConfig = JSON.parse(res.responseText)
 
-									document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
+									div.onclick = async () => { openTerminal(relay_id, session_id) }
+									div.className = "session"
+									div.innerHTML = `
+										<div class="icon ` + await escapeHTML(sessionConfig.icon) + `">
+											<div class="logo ` + await escapeHTML(sessionConfig.logo) + `"></div>
+										</div>
+										<span class="device" title="Device">` + await escapeHTML(sessionConfig.device) + `</span>
+										<span class="id" title="Session ID">` + await escapeHTML(session_id) + `</span>
+										<span class="hostname" title="Hostname">` + await escapeHTML(sessionConfig.hostname) + `</span>
+									`
+								} else {
+									div.className = "session unknown"
+									div.innerHTML = `
+										<div class="icon unknown"></div>
+										<span class="device" title="Device">unknown device</span>
+										<span class="id" title="Session ID">` + await escapeHTML(session_id) + `</span>
+										<span class="hostname" title="Hostname">unknown hostname</span>
+									`
 								}
-							})
-						}
-						// debug
-						div = document.createElement("div")
-						div.className = "session"
-						div.innerHTML = `
-							<div class="icon router">
-								<div class="logo tplink"></div>
-							</div>
-							<span class="device">Tor Exit TP-Link TL-WR840N</span>
-							<span class="id">aX302ioJjf0mk21</span>
-							<span class="hostname">gateway</span>
-						`
-						document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
-					} else {
-						print( escapeHTML(res.responseText) )
 
-						let span = document.createElement("span")
-						let div = document.createElement("div")
-						span.className = "nonefound"
-						span.innerText = "No interpreters found"
-						div.className = "space"
-
-						document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(span)
-						document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
+								document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
+							}
+						})
 					}
+					// debug
+					div = document.createElement("div")
+					div.className = "session"
+					div.innerHTML = `
+						<div class="icon router">
+							<div class="logo tplink"></div>
+						</div>
+						<span class="device">Tor Exit TP-Link TL-WR840N</span>
+						<span class="id">aX302ioJjf0mk21</span>
+						<span class="hostname">gateway</span>
+					`
+					document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
 				} else {
+					print( escapeHTML(res.responseText) )
+
 					let span = document.createElement("span")
+					let div = document.createElement("div")
 					span.className = "nonefound"
-					span.innerText = "Unable to connect to relay"
+					span.innerText = "No interpreters found"
+					div.className = "space"
 
 					document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(span)
+					document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
 				}
+			} else {
+				let span = document.createElement("span")
+				span.className = "nonefound"
+				span.innerText = "Unable to connect to relay"
 
-				currentSessionsNews = 0
+				document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(span)
+			}
 
-				cycleNews().then(async()=>{
-					container.classList.remove("hide")
-					container.classList.remove("nopointerevents")
-				})
+			currentSessionsNews = 0
+
+			cycleNews().then(async()=>{
+				container.classList.remove("hide")
+				container.classList.remove("nopointerevents")
 			})
 		})
 
