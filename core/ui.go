@@ -162,7 +162,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 			http.ServeFile(res, req, PATH_UI + "/console_log.html")
 		} else if req.URL.Path == "/clear_console_log" {
-			ClearConsole(res, req, ip_string)
+			ClearConsole(ip_string)
 
 			fmt.Fprintf(res, "OK")
 		} else if strings.HasPrefix(req.URL.Path, "/config") {
