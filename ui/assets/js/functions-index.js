@@ -182,7 +182,7 @@
 					const sessionlist = res.responseText.split(",")
 
 					for (let i = 0; i < sessionlist.length; i++) {
-						const url = "./session/" + relay_id.replace(".json", "") + "/" + sessionlist[i]
+						const url = "/session/" + relay_id + "/" + sessionlist[i]
 
 						const div = document.createElement("div")
 
