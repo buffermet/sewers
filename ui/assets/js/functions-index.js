@@ -96,7 +96,8 @@
 		container.classList.add("hide")
 		container.classList.add("nopointerevents")
 
-		sleep(0.4).then(()=>{
+		sleep(0.4)
+		.then(async()=>{
 			container.innerHTML = skeleton
 
 			const relayNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage")
