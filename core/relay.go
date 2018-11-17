@@ -23,12 +23,12 @@ type Relay struct {
 }
 
 func GetRelayConfig(relay_id string) string {
-	enc_config, e := ioutil.ReadFile(PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json")
+	encoded_json, e := ioutil.ReadFile(PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json")
 	if e != nil {
 		LogToConsole(BOLD_RED + "ERROR" + RESET + " Could not read relay config " + BOLD + PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json" + RESET)
 	}
 
-	return string(enc_config)
+	return string(encoded_json)
 }
 
 func GetRelays() string {
@@ -39,7 +39,7 @@ func GetRelays() string {
 	config_list, e := ioutil.ReadDir(PATH_RELAYS)
 	if e != nil {
 		LogToConsole( BOLD_RED + "ERROR" + RESET + " " + e.Error() )
-		return "{{error_relays_dir_missing}}"
+		return "{{cannot_read_relay_dir}}"
 	}
 	for _, file := range config_list {
 		relay_configs = append( relay_configs, file.Name() )
@@ -54,23 +54,21 @@ func GetRelays() string {
 		for i := 0; i < len(relay_configs); i++ {
 			relay_path := PATH_RELAYS + "/" + relay_configs[i] + "/" + relay_configs[i] + ".json"
 
-			config, e := ioutil.ReadFile(relay_path)
+			json_encoded, e := ioutil.ReadFile(relay_path)
 			if e != nil {
 				LogToConsole( BOLD_RED + "ERROR" + RESET + " " + e.Error() )
 			}
 
 			var json_decoded map[string]interface{}
-			if e := json.Unmarshal( []byte(config), &json_decoded ); e != nil {
+			if e := json.Unmarshal( []byte(json_encoded), &json_decoded ); e != nil {
 				LogToConsole( BOLD_RED + "ERROR" + RESET + " Invalid JSON file: " + BOLD + relay_path + RESET + "\n[" + BOLD_RED + "STACK TRACE" + RESET + "]\n" + e.Error() )
 			}
 
 			if json_decoded["relay_address"] != nil && json_decoded["sewers_post_tag"] != nil && json_decoded["sewers_get_tag"] != nil {
-				relay_id := strings.Replace(relay_configs[i], ".json", "", 1)
-				relay_address := json_decoded["relay_address"].(string)
-
 				relay := Relay{}
-				relay.RelayID = relay_id
-				relay.RelayAddress = relay_address
+
+				relay.RelayID = strings.Replace(relay_configs[i], ".json", "", 1)
+				relay.RelayAddress = json_decoded["relay_address"].(string)
 
 				relays = append(relays, relay)
 			} else {
@@ -85,13 +83,13 @@ func GetRelays() string {
 }
 
 func GetRelaySessions(relay string) string {
-	config, e := ioutil.ReadFile(PATH_RELAYS + "/" + relay + "/" + relay + ".json")
+	json_encoded, e := ioutil.ReadFile(PATH_RELAYS + "/" + relay + "/" + relay + ".json")
 	if e != nil {
 		LogToConsole( BOLD_RED + "ERROR" + RESET + " Unable to retrieve relay configuration: " + BOLD + relay + ".json" + RESET + "\n[" + BOLD_RED + "STACK TRACE" + RESET + "]\n" + e.Error() )
 	}
 
 	var json_decoded map[string]interface{}
-	if e := json.Unmarshal( []byte(config), &json_decoded ); e != nil {
+	if e := json.Unmarshal( []byte(json_encoded), &json_decoded ); e != nil {
 		LogToConsole( BOLD_RED + "ERROR" + RESET + " Invalid JSON file: " + BOLD + PATH_RELAYS + "/" + relay + "/" + relay + ".json" + RESET + "\n[" + BOLD_RED + "STACK TRACE" + RESET + "]\n" + e.Error() )
 	}
 
