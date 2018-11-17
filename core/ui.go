@@ -24,6 +24,56 @@ var (
 	UI_PORT = "8042"
 )
 
+func successBody(res *http.Response) string {
+	encoded := "{\"response\":\"\",\"responseType\":\"success\"}"
+
+	var decoded map[string]interface{}
+	if e := json.Unmarshal( []byte(encoded), &decoded ); e != nil {
+		LogToConsole( BOLD_RED + "ERROR" + RESET + " Invalid JSON data (" + e.Error() + ")" )
+	}
+
+	defer res.Body.Close()
+
+	body, e := ioutil.ReadAll(res.Body)
+	if e != nil {
+		LogToConsole( BOLD_RED + "ERROR" + RESET + " Could not read response body (" + e.Error() + ")" )
+	}
+
+	decoded["response"] = body
+
+	json_body, e := json.Marshal(decoded)
+	if e != nil {
+		LogToConsole( BOLD_RED + "ERROR" + RESET + " Invalid JSON data (" + e.Error() + ")" )
+	}
+
+	return string(json_body)
+}
+
+func errorBody(res *http.Response) string {
+	encoded := "{\"response\":\"\",\"responseType\":\"error\"}"
+
+	var decoded map[string]interface{}
+	if e := json.Unmarshal( []byte(encoded), &decoded ); e != nil {
+		LogToConsole( BOLD_RED + "ERROR" + RESET + " Invalid JSON data (" + e.Error() + ")" )
+	}
+
+	defer res.Body.Close()
+
+	body, e := ioutil.ReadAll(res.Body)
+	if e != nil {
+		LogToConsole( BOLD_RED + "ERROR" + RESET + " Could not read response body (" + e.Error() + ")" )
+	}
+
+	decoded["response"] = body
+
+	json_body, e := json.Marshal(decoded)
+	if e != nil {
+		LogToConsole( BOLD_RED + "ERROR" + RESET + " Invalid JSON data (" + e.Error() + ")" )
+	}
+
+	return string(json_body)
+}
+
 func stream(ws *websocket.Conn) {
 	var allow_connections bool
 	var ip_string string
@@ -39,7 +89,7 @@ func stream(ws *websocket.Conn) {
 	LogToConsole(ip_string + " tried to open a websocket")
 
 	if allow_connections {
-		ws.Write( []byte("test") )
+
 	}
 }
 
@@ -196,12 +246,12 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 					response := SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), c["user_agent"].(string), session_id, "" )
 
-					defer response.Body.Close()
-
 					body, e := ioutil.ReadAll(response.Body)
 					if e != nil {
 						LogToConsole( BOLD_RED + "ERROR" + RESET + " Could not read response body (" + e.Error() + ")" )
 					}
+
+					defer response.Body.Close()
 
 					fmt.Fprintf( res, string(body) )
 				} else {
@@ -209,12 +259,12 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 					response := SendHTTPRequest( c["relay_address"].(string), c["sewers_get_tag"].(string), c["user_agent"].(string), session_id, packet_id )
 
-					defer response.Body.Close()
-
 					body, e := ioutil.ReadAll(response.Body)
 					if e != nil {
 						LogToConsole( BOLD_RED + "ERROR" + RESET + " Could not read response body (" + e.Error() + ")" )
 					}
+
+					defer response.Body.Close()
 
 					key := []byte( c["encryption_key_one"].(string) )
 
@@ -269,11 +319,15 @@ func serve(res http.ResponseWriter, req *http.Request) {
 				}
 				enc_payload_string := string(enc_payload)
 
-				go SendHTTPRequest( c["relay_address"].(string), c["sewers_post_tag"].(string), c["user_agent"].(string), session_id, enc_payload_string )
+				response := SendHTTPRequest( c["relay_address"].(string), c["sewers_post_tag"].(string), c["user_agent"].(string), session_id, enc_payload_string )
 
 				res.Header().Set("Content-Type", "text/plain")
 
-				fmt.Fprintf(res, "OK")
+				if response.StatusCode == 200 {
+					fmt.Fprint( res, successBody(response) )
+				} else {
+					fmt.Fprint( res, errorBody(response) )
+				}
 			} else {
 				LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD_RED + "ERROR" + RESET + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id)
 			}
@@ -318,11 +372,24 @@ func serve(res http.ResponseWriter, req *http.Request) {
 				}
 				enc_payload_string := string(enc_payload)
 
-				go SendHTTPRequest( c["relay_address"].(string), c["sewers_post_tag"].(string), c["user_agent"].(string), session_id, enc_payload_string )
+				response := SendHTTPRequest( c["relay_address"].(string), c["sewers_post_tag"].(string), c["user_agent"].(string), session_id, enc_payload_string )
 
 				res.Header().Set("Content-Type", "text/plain")
 
-				fmt.Fprintf(res, "OK")
+				if response.StatusCode == 200 {
+					c["fetch_rate"] = new_fetch_rate
+
+					new_config, e := json.MarshalIndent(c, "", "\t")
+					if e != nil {
+						LogToConsole( BOLD_RED + "ERROR" + RESET + " Invalid JSON data (" + e.Error() + ")" )
+					}
+
+					SetSession( relay_id, session_id, string(new_config) )
+
+					fmt.Fprint( res, successBody(response) )
+				} else {
+					fmt.Fprint( res, errorBody(response) )
+				}
 			} else {
 				LogToConsole(BOLD_YELLOW + "REQUEST" + RESET + " " + BOLD_RED + "ERROR" + RESET + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id)
 			}

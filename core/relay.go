@@ -105,12 +105,12 @@ func GetRelaySessions(relay string) string {
 
 		response := SendHTTPRequest(relay_address, get_tag, user_agent, "", "")
 
-		defer response.Body.Close()
-
 		body, e := ioutil.ReadAll(response.Body)
 		if e != nil {
 			LogToConsole( BOLD_RED + "ERROR" + RESET + " Could not read response body (" + e.Error() + ")" )
 		}
+
+		defer response.Body.Close()
 
 		sessions = string(body)
 	} else {

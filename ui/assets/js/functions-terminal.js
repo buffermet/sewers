@@ -140,14 +140,18 @@
 	}
 
 	// Return StdIn to sewers
-	const stdIn = async data => {
+	const stdIn = async url_encoded => {
 		const form = new String(
-			"body=" + data + 
+			"body=" + url_encoded + 
 			"&session_id=" + session_id + 
 			"&relay_id=" + relay
 		)
 
+		showNetworkIndicator()
 		sendForm("POST", "/post", form)
+		.then(async(res)=>{
+			setTimeout(hideNetworkIndicator, 200)
+		})
 	}
 
 	// Change fetch rate
@@ -158,9 +162,12 @@
 			"&relay_id=" + relay
 		)
 
+		showNetworkIndicator()
 		sendForm("POST", "/fetchrate", form)
-		.then(async res=>{
+		.then(async(res)=>{
 			if (res.status == 200) {
+				setTimeout(hideNetworkIndicator, 200)
+
 				print("<span>Interpreter will be fetching packets every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds as soon as it fetches packets.<br></span>")
 
 				session_config.fetch_rate = min + "-" + max
@@ -176,7 +183,9 @@
 			"&relay_id=" + relay
 		)
 
+		showNetworkIndicator()
 		let res = await sendForm("POST", "/get", form)
+		setTimeout(hideNetworkIndicator, 200)
 
 		if (res.status == 200) {
 			let response = res.responseText
@@ -193,7 +202,9 @@
 						"&relay_id=" + relay
 					)
 
+					showNetworkIndicator()
 					res = await sendForm("POST", "/get", form)
+					setTimeout(hideNetworkIndicator, 200)
 
 					response = res.responseText
 
@@ -287,23 +298,23 @@
 
 	// Get session config
 	const getSessionConfig = async (relay, session) => {
-		let res = await sendRequest("GET", "/session/" + relay + "/" + session, "")
+		const res = await sendRequest("GET", "/session/" + relay + "/" + session, "")
 
 		if (res.status == 200) {
-			let response = JSON.parse(res.responseText)
+			const json = JSON.parse(res.responseText)
 
-			session_config = response
+			session_config = json
 		}
 	}
 
 	// Get relay config
 	const getRelayConfig = async relay => {
-		let res = await sendRequest("GET", "/config/" + relay, "")
+		const res = await sendRequest("GET", "/config/" + relay, "")
 
 		if (res.status == 200) {
-			let response = JSON.parse(res.responseText)
+			const json = JSON.parse(res.responseText)
 
-			relay_config = response
+			relay_config = json
 		}
 	}
 
@@ -373,90 +384,90 @@
 
 	// Start new monitor stream
 	const streamMon = async (bitrate, resolution) => {
-		let res = await sendRequest("POST", "/", "data=STREAMMON " + bitrate + " " + resolution + "&session_id=" + session_id)
+		// const res = await sendRequest("POST", "/", "data=STREAMMON " + bitrate + " " + resolution + "&session_id=" + session_id)
 
-		if (res.status == 200) {
-			let response = res.responseText.split(" ")
+		// if (res.status == 200) {
+		// 	let response = res.responseText.split(" ")
 
-			let streamID = response[0]
-			let streamFile = response[1]
+		// 	let streamID = response[0]
+		// 	let streamFile = response[1]
 
-			print(response_tag + " [<span class='green'>OK</span>] " + "<span>" + await timestamp() + "</span>")
+		// 	print(response_tag + " [<span class='green'>OK</span>] " + "<span>" + await timestamp() + "</span>")
 
-			if (response[0] == "Usage:") {
-				print("<span>" + response + "</span>")
-			} else {
-				print("<span>Monitor stream started.</span>")
-				print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
-				print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mon&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mon&" + streamID + "&" + streamFile + ".mp4</a></span>")
+		// 	if (response[0] == "Usage:") {
+		// 		print("<span>" + response + "</span>")
+		// 	} else {
+		// 		print("<span>Monitor stream started.</span>")
+		// 		print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
+		// 		print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mon&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mon&" + streamID + "&" + streamFile + ".mp4</a></span>")
 
-				addStream(streamID, "STREAMMON")
-			}
-		}
+		// 		addStream(streamID, "STREAMMON")
+		// 	}
+		// }
 	}
 
 	// Start new microphone stream
 	const streamMic = async bitrate => {
-		let res = await sendRequest("POST", "/", "data=STREAMMIC " + bitrate + "&session_id=" + session_id)
+		// const res = await sendRequest("POST", "/", "data=STREAMMIC " + bitrate + "&session_id=" + session_id)
 
-		if (res.status == 200) {
-			let response = res.responseText.split(" ")
+		// if (res.status == 200) {
+		// 	let response = res.responseText.split(" ")
 
-			let streamID = response[0]
-			let streamFile = response[1]
+		// 	let streamID = response[0]
+		// 	let streamFile = response[1]
 
-			print(response_tag + " [<span class='green'>OK</span>] " + "<span>" + await timestamp() + "</span>")
+		// 	print(response_tag + " [<span class='green'>OK</span>] " + "<span>" + await timestamp() + "</span>")
 
-			if (response[0] == "Usage:") {
-				print("<span>" + response + "</span>")
-			} else {
-				print("<span>Microphone stream started.</span>")
-				print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
-				print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mic&" + streamID + "&" + streamFile + ".wav\", \"" + streamFile + ".wav\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mic&" + streamID + "&" + streamFile + ".wav</a></span>")
+		// 	if (response[0] == "Usage:") {
+		// 		print("<span>" + response + "</span>")
+		// 	} else {
+		// 		print("<span>Microphone stream started.</span>")
+		// 		print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
+		// 		print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mic&" + streamID + "&" + streamFile + ".wav\", \"" + streamFile + ".wav\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mic&" + streamID + "&" + streamFile + ".wav</a></span>")
 
-				addStream(streamID, "STREAMMIC")
-			}
-		}
+		// 		addStream(streamID, "STREAMMIC")
+		// 	}
+		// }
 	}
 
 	// Start new webcam stream
 	const streamCam = async (bitrate, resolution) => {
-		print(request_tag + "<span title='" + await timestamp() + "'>Streaming webcam...</span>")
+		// print(request_tag + "<span title='" + await timestamp() + "'>Streaming webcam...</span>")
 
-		let res = await sendRequest("POST", "/", "data=STREAMCAM&session_id=" + session_id)
+		// const res = await sendRequest("POST", "/", "data=STREAMCAM&session_id=" + session_id)
 
-		if (res.status == 200) {
-			let response = res.responseText.split(" ")
+		// if (res.status == 200) {
+		// 	let response = res.responseText.split(" ")
 
-			let streamID = response[0]
-			let streamFile = response[1]
+		// 	let streamID = response[0]
+		// 	let streamFile = response[1]
 
-			print(response_tag + " [<span class='green'>OK</span>] " + "<span>" + await timestamp() + "</span>")
+		// 	print(response_tag + " [<span class='green'>OK</span>] " + "<span>" + await timestamp() + "</span>")
 
-			if (response[0] == "Usage:") {
-				print("<span>" + response + "</span>")
-			} else {
-				print("<span>Webcam stream started.</span>")
-				print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
-				print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?cam&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?cam&" + streamID + "&" + streamFile + ".mp4</a></span>")
+		// 	if (response[0] == "Usage:") {
+		// 		print("<span>" + response + "</span>")
+		// 	} else {
+		// 		print("<span>Webcam stream started.</span>")
+		// 		print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
+		// 		print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?cam&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?cam&" + streamID + "&" + streamFile + ".mp4</a></span>")
 
-				addStream(streamID, "STREAMCAM")
-			}
-		}
+		// 		addStream(streamID, "STREAMCAM")
+		// 	}
+		// }
 	}
 
 	// Network activity indicator
 	const showNetworkIndicator = async () => {
 		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
 
-		network_indicator.classList.remove("hidden")
+		network_indicator.classList.add("show")
 	}
 
 	// Network activity indicator
 	const hideNetworkIndicator = async () => {
 		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
 
-		network_indicator.classList.add("hidden")
+		network_indicator.classList.remove("show")
 	}
 
 	// Input handler
@@ -512,7 +523,7 @@
 			) {
 				printHelp()
 			} else if ( cmd.match(/^\s*checkstreams\s*$/) ) {
-				checkStreams()
+				// checkStreams()
 			} else if ( cmd.match(/^\s*reset\s*$/) ) {
 				if (warnOnReset) {
 					self.location = location.href
@@ -553,9 +564,9 @@
 					changeFetchRate(min, max)
 				}
 			} else if ( cmd.match(/^\s*shell /) || cmd.match(/^\s*sh /) ) {
-				const shell_command = await strip( encodeURIComponent( cmd.replace(/^\s*(?:shell|sh)\s*/, "") ) )
+				const shell_command = await strip( cmd.replace(/^\s*(?:shell|sh)\s*/, "") )
 
-				stdIn(shell_command)
+				stdIn( encodeURIComponent(shell_command) )
 			} else if ( cmd.match(/^xss /) ) {
 				const xss_command = cmd.replace(/^xss /, "")
 

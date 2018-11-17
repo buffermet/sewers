@@ -286,14 +286,14 @@
 	const showNetworkIndicator = async () => {
 		// const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
 
-		// network_indicator.classList.remove("hidden")
+		// network_indicator.classList.add("show")
 	}
 
 	// Network activity indicator
 	const hideNetworkIndicator = async () => {
 		// const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
 
-		// network_indicator.classList.add("hidden")
+		// network_indicator.classList.remove("show")
 	}
 
 	// Print to console

@@ -67,7 +67,7 @@
 				<input type="text" name="jsfield" placeholder="Enter code...">
 			</div>
 			<div class="item left no-cursor no-hover no-click no-right-border" title="Network activity">
-				<div class="network-indicator lds-ellipsis hidden">
+				<div class="network-indicator lds-ellipsis">
 					<div></div>
 					<div></div>
 					<div></div>
@@ -246,9 +246,9 @@
 						print( request_tag + "<span title=\"" + time + "\">Capturing screenshot...<br></span>" )
 
 						let filename = await randomString(8, 16)
-						let command = "gnome-screenshot -p -f ./" + filename + ".png &> /dev/null && cat ./" + filename + ".png && rm ./" + filename + ".png"
+						let command = "sh gnome-screenshot -p -f ./" + filename + ".png &> /dev/null && cat ./" + filename + ".png && rm ./" + filename + ".png"
 
-						stdIn( encodeURIComponent(command) )
+						parseCommand(command)
 					}
 				})
 
