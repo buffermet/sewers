@@ -230,7 +230,7 @@
 					`
 					document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
 				} else {
-					print( escapeHTML(res.responseText) )
+					print( await escapeHTML(res.responseText) )
 
 					let span = document.createElement("span")
 					let div = document.createElement("div")
