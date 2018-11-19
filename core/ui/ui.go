@@ -1,4 +1,4 @@
-package core
+package ui
 
 /*
 *	
@@ -18,13 +18,13 @@ import (
 
 	"golang.org/x/net/websocket"
 
-	log "github.com/yungtravla/sewers/core/log"
-	relay "github.com/yungtravla/sewers/core/relay"
-	config "github.com/yungtravla/sewers/core/config"
-	session "github.com/yungtravla/sewers/core/session"
-	transport "github.com/yungtravla/sewers/core/transport"
-	encryption "github.com/yungtravla/sewers/core/encryption"
-	environment "github.com/yungtravla/sewers/core/environment"
+	"github.com/yungtravla/sewers/core/log"
+	"github.com/yungtravla/sewers/core/relay"
+	"github.com/yungtravla/sewers/core/config"
+	"github.com/yungtravla/sewers/core/session"
+	"github.com/yungtravla/sewers/core/transport"
+	"github.com/yungtravla/sewers/core/encryption"
+	"github.com/yungtravla/sewers/core/environment"
 )
 
 var (
@@ -143,14 +143,14 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 			http.ServeFile(res, req, environment.PATH_UI + "" + req.URL.Path)
 		} else if req.URL.Path == "/get_relays" {
-			relays := relay.GetRelays()
+			relays := relay.GetAll()
 
 			fmt.Fprintf(res, relays)
 		} else if strings.HasPrefix(req.URL.Path, "/relay/") {
 			log.Info(ip_string + " requested " + req.URL.Path, true)
 
 			relay_id := strings.Replace(req.URL.Path, "/relay/", "", 1)
-			body := relay.GetRelaySessions(relay_id)
+			body := relay.GetSessions(relay_id)
 
 			fmt.Fprintf(res, body)
 		} else if strings.HasPrefix(req.URL.Path, "/session/") {
@@ -213,7 +213,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 			relay_id := regexp.MustCompile(`^/useragent/`).ReplaceAllString(req.URL.Path, "")
 
 			if regexp.MustCompile(`^[a-zA-Z0-9._-]+$`).FindString(relay_id) != "" {
-				enc_config := relay.GetRelayConfig(relay_id)
+				enc_config := relay.Get(relay_id)
 
 				var c map[string]interface{}
 				if e := json.Unmarshal( []byte(enc_config), &c ); e != nil {
@@ -245,7 +245,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 			if session_id != "" && relay_id != "" {
 				var c map[string]interface{}
 				if e := json.Unmarshal( []byte( session.Get(relay_id, session_id) ), &c ); e != nil {
-					log.Error( e.Error(), false )
+					log.Error( e.Error(), true )
 				}
 
 				res.Header().Set("Content-Type", "text/plain")

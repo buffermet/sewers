@@ -1,16 +1,16 @@
-package core
+package session
 
 /*
 *	
-*	Handles session payload generation and obfuscation.
+*	Handles session payload generation and configuration.
 *	
 */
 
 import(
 	"io/ioutil"
 
-	log "github.com/yungtravla/sewers/core/log"
-	environment "github.com/yungtravla/sewers/core/environment"
+	"github.com/yungtravla/sewers/core/log"
+	"github.com/yungtravla/sewers/core/environment"
 )
 
 type Session struct {
@@ -31,17 +31,20 @@ type Session struct {
 	PauseTerminal bool
 }
 
-func Get(relay, session string) string {
-	encoded, e := ioutil.ReadFile(environment.PATH_RELAYS + "/" + relay + "/sessions/" + session + ".json")
+func Get(relay_id, session_id string) string {
+	encoded, e := ioutil.ReadFile(environment.PATH_RELAYS + "/" + relay_id + "/sessions/" + session_id + ".json")
 	if e != nil {
-		log.Info("unable to read " + log.BOLD + "relays/" + relay + "/sessions/" + session + ".json" + log.RESET, true)
-	} else {
-		return string(encoded)
+		log.Warn("unknown session connected to relay: " + log.BOLD + session_id + log.RESET, true)
+		return ""
 	}
 
-	return ""
+	return string(encoded)
 }
 
-func Set(relay, session, encoded string) {
-	ioutil.WriteFile( environment.PATH_RELAYS + "/" + relay + "/sessions/" + session + ".json", []byte(encoded), 600 )
+func Set(relay_id, session_id, encoded_json string) {
+	ioutil.WriteFile( environment.PATH_RELAYS + "/" + relay_id + "/sessions/" + session_id + ".json", []byte(encoded_json), 600 )
+}
+
+func New(relay, session, encoded string) {
+
 }

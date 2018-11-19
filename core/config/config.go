@@ -1,4 +1,4 @@
-package core
+package config
 
 /*
 *	
@@ -10,7 +10,7 @@ import (
 	"io/ioutil"
 	"encoding/json"
 
-	log "github.com/yungtravla/sewers/core/log"
+	"github.com/yungtravla/sewers/core/log"
 )
 
 func Configure(json_path string, new_json_data map[string][]string) {

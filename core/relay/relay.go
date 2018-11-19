@@ -1,4 +1,4 @@
-package core
+package relay
 
 /*
 *	
@@ -7,13 +7,13 @@ package core
 */
 
 import(
+	"strings"
 	"io/ioutil"
 	"encoding/json"
-	"strings"
 
-	log "github.com/yungtravla/sewers/core/log"
-	environment "github.com/yungtravla/sewers/core/environment"
-	transport "github.com/yungtravla/sewers/core/transport"
+	"github.com/yungtravla/sewers/core/log"
+	"github.com/yungtravla/sewers/core/transport"
+	"github.com/yungtravla/sewers/core/environment"
 )
 
 type Relay struct {
@@ -26,7 +26,7 @@ type Relay struct {
 	Sessions []string
 }
 
-func GetRelayConfig(relay_id string) string {
+func Get(relay_id string) string {
 	encoded_json, e := ioutil.ReadFile(environment.PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json")
 	if e != nil {
 		log.Error("could not read relay config " + log.BOLD + environment.PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json" + log.RESET, true)
@@ -35,7 +35,7 @@ func GetRelayConfig(relay_id string) string {
 	return string(encoded_json)
 }
 
-func GetRelays() string {
+func GetAll() string {
 	relays := []Relay{}
 
 	// Read relay configs.
@@ -86,10 +86,10 @@ func GetRelays() string {
 	return string(return_bytes)
 }
 
-func GetRelaySessions(relay string) string {
+func GetSessions(relay string) string {
 	json_encoded, e := ioutil.ReadFile(environment.PATH_RELAYS + "/" + relay + "/" + relay + ".json")
 	if e != nil {
-		log.Error( "Unable to retrieve relay configuration: " + log.BOLD + relay + ".json" + log.RESET + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error(), true )
+		log.Error( "unable to retrieve relay configuration: " + log.BOLD + relay + ".json" + log.RESET + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error(), true )
 	}
 
 	var json_decoded map[string]interface{}
@@ -109,7 +109,7 @@ func GetRelaySessions(relay string) string {
 
 		body, e := ioutil.ReadAll(response.Body)
 		if e != nil {
-			log.Error( "Could not read response body (" + e.Error() + ")", true )
+			log.Error( "could not read response body (" + e.Error() + ")", true )
 		}
 
 		defer response.Body.Close()
@@ -122,10 +122,10 @@ func GetRelaySessions(relay string) string {
 	return sessions
 }
 
-func GenerateRelay(payload_type string) []byte {
+func Generate(payload_type string) []byte {
 	raw_payload, e := ioutil.ReadFile(environment.PATH_RELAYS + "/" + payload_type + "/raw." + payload_type)
 	if e != nil {
-		log.Error( "Unable to retrieve raw relay payload: " + log.BOLD + environment.PATH_RELAYS + "/" + payload_type + "/" + "raw." + payload_type + log.RESET + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error(), true )
+		log.Error( "unable to retrieve raw relay payload: " + log.BOLD + environment.PATH_RELAYS + "/" + payload_type + "/" + "raw." + payload_type + log.RESET + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error(), true )
 	}
 
 	return raw_payload

@@ -61,7 +61,6 @@
 		terminal.append(timestamped)
 
 		await shrinkInputField()
-
 		await resetClearBreaks()
 
 		if (scrollOnOutput) {

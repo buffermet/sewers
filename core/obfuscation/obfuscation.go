@@ -1,4 +1,4 @@
-package core
+package obfuscation
 
 /*
 *	
@@ -7,9 +7,9 @@ package core
 */
 
 import(
+	"time"
 	"regexp"
 	"math/rand"
-	"time"
 )
 
 func RandomString(length int) string {

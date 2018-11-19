@@ -1,4 +1,4 @@
-package core
+package transport
 
 /*
 *	
@@ -10,8 +10,8 @@ import (
 	"strings"
 	"net/http"
 
-	log "github.com/yungtravla/sewers/core/log"
-	environment "github.com/yungtravla/sewers/core/environment"
+	"github.com/yungtravla/sewers/core/log"
+	"github.com/yungtravla/sewers/core/environment"
 )
 
 func SendHTTPRequest(relay_address, request_type, user_agent, session_id, payload string) *http.Response {
