@@ -103,7 +103,7 @@
 			const relayNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage")
 			relayNewsMessage.classList.add("hide")
 
-			const res = await sendRequest("GET", "/get_relays", null)
+			const res = await sendRequest("GET", "/relays", null)
 
 			if (res.responseText.length > 0) {
 				const relay_configs = JSON.parse(res.responseText)

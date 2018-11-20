@@ -33,24 +33,20 @@ var (
 
 func successBody(res *http.Response) string {
 	encoded := "{\"response\":\"\",\"responseType\":\"success\"}"
-
 	var decoded map[string]interface{}
-	if e := json.Unmarshal( []byte(encoded), &decoded ); e != nil {
-		log.Error( "Invalid JSON data (" + e.Error() + ")", true )
-	}
+	json.Unmarshal( []byte(encoded), &decoded )
 
 	defer res.Body.Close()
-
 	body, e := ioutil.ReadAll(res.Body)
 	if e != nil {
-		log.Error( "Could not read response body (" + e.Error() + ")", true )
+		log.Error( "could not read response body (" + e.Error() + ")", true )
 	}
 
 	decoded["response"] = body
 
 	json_body, e := json.Marshal(decoded)
 	if e != nil {
-		log.Error( "Invalid JSON data (" + e.Error() + ")", true )
+		log.Error( "invalid JSON data (" + e.Error() + ")", true )
 	}
 
 	return string(json_body)
@@ -58,24 +54,20 @@ func successBody(res *http.Response) string {
 
 func errorBody(res *http.Response) string {
 	encoded := "{\"response\":\"\",\"responseType\":\"error\"}"
-
 	var decoded map[string]interface{}
-	if e := json.Unmarshal( []byte(encoded), &decoded ); e != nil {
-		log.Error( "Invalid JSON data (" + e.Error() + ")", true )
-	}
+	json.Unmarshal( []byte(encoded), &decoded )
 
 	defer res.Body.Close()
-
 	body, e := ioutil.ReadAll(res.Body)
 	if e != nil {
-		log.Error( "Could not read response body (" + e.Error() + ")", true )
+		log.Error( "could not read response body (" + e.Error() + ")", true )
 	}
 
 	decoded["response"] = body
 
 	json_body, e := json.Marshal(decoded)
 	if e != nil {
-		log.Error( "Invalid JSON data (" + e.Error() + ")", true )
+		log.Error( "invalid JSON data (" + e.Error() + ")", true )
 	}
 
 	return string(json_body)
@@ -94,9 +86,12 @@ func stream(ws *websocket.Conn) {
 	}
 
 	if allow_connections {
+
 		log.Info(ip_string + " tried to open a websocket", true)
 
 	} else {
+
+		// Received unauthenticated request.
 		log.Warn(ip_string + " tried to open a websocket", true)
 
 	}
@@ -137,13 +132,15 @@ func serve(res http.ResponseWriter, req *http.Request) {
 		          strings.HasSuffix(req.URL.Path, ".jpg") || 
 		          strings.HasSuffix(req.URL.Path, ".ttf") || 
 		          strings.HasSuffix(req.URL.Path, ".mp3") {
-			res.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+			res.Header().Set("Cache-Control", "no-cache, no-store")
 			res.Header().Set("Pragma", "no-cache")
 			res.Header().Set("Expires", "0")
 
 			http.ServeFile(res, req, environment.PATH_UI + "" + req.URL.Path)
-		} else if req.URL.Path == "/get_relays" {
+		} else if req.URL.Path == "/relays" {
 			relays := relay.GetAll()
+
+			res.Header().Set("Content-Type", "application/json")
 
 			fmt.Fprintf(res, relays)
 		} else if strings.HasPrefix(req.URL.Path, "/relay/") {
@@ -200,7 +197,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 			} else {
 				body, e := ioutil.ReadFile(json_path)
 				if e != nil {
-					log.Error("Unable to read " + log.BOLD + json_path + log.RESET, true)
+					log.Error("unable to read " + log.BOLD + json_path + log.RESET, true)
 				}
 
 				res.Header().Set("Content-Type", "application/json")
@@ -208,7 +205,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 				fmt.Fprintf( res, string(body) )
 			}
 		} else if req.URL.Path == "/host" {
-			fmt.Fprintf( res, environment.WhoAmI() )
+			fmt.Fprintf( res, environment.WHOAMI )
 		} else if strings.HasPrefix(req.URL.Path, "/useragent") {
 			relay_id := regexp.MustCompile(`^/useragent/`).ReplaceAllString(req.URL.Path, "")
 
@@ -217,7 +214,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 				var c map[string]interface{}
 				if e := json.Unmarshal( []byte(enc_config), &c ); e != nil {
-					log.Error( "Could not decode JSON file " + log.BOLD + environment.PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json" + log.RESET + "\n" + e.Error(), true )
+					log.Error( "could not decode JSON file " + log.BOLD + environment.PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json" + log.RESET + "\n" + e.Error(), true )
 				}
 
 				fmt.Fprintf( res, c["user_agent"].(string) )
@@ -257,7 +254,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 					body, e := ioutil.ReadAll(response.Body)
 					if e != nil {
-						log.Error( "Could not read response body (" + e.Error() + ")", true )
+						log.Error( "could not read response body (" + e.Error() + ")", true )
 					}
 
 					defer response.Body.Close()
@@ -270,7 +267,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 					body, e := ioutil.ReadAll(response.Body)
 					if e != nil {
-						log.Error( "Could not read response body (" + e.Error() + ")", true )
+						log.Error( "could not read response body (" + e.Error() + ")", true )
 					}
 
 					defer response.Body.Close()
@@ -366,7 +363,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 			if regexp.MustCompile(`^[1-9][0-9]*-[1-9][0-9]*$`).FindString(new_fetch_rate) != "" && session_id != "" && relay_id != "" {
 				var c map[string]interface{}
 				if e := json.Unmarshal( []byte( session.Get(relay_id, session_id) ), &c ); e != nil {
-					log.Error( "Could not change fetch rate of interpreter " + log.BOLD + relay_id + "/" + session_id + log.RESET +  "(" + e.Error() + ")", true )
+					log.Error( "could not change fetch rate of interpreter " + log.BOLD + relay_id + "/" + session_id + log.RESET +  "(" + e.Error() + ")", true )
 				}
 
 				old_fetch_rate := c["fetch_rate"].(string)
@@ -391,7 +388,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 					new_config, e := json.MarshalIndent(c, "", "\t")
 					if e != nil {
-						log.Error( "Invalid JSON data (" + e.Error() + ")", true )
+						log.Error( "invalid JSON data (" + e.Error() + ")", true )
 					}
 
 					session.Set( relay_id, session_id, string(new_config) )
@@ -422,7 +419,7 @@ func serve(res http.ResponseWriter, req *http.Request) {
 }
 
 func Start() {
-	log.Info( "Server started on " + log.BOLD + "http://0.0.0.0:" + UI_PORT + log.RESET + " by " + log.BOLD + environment.WhoAmI() + log.RESET, true )
+	log.Info( "Server started on " + log.BOLD + "http://0.0.0.0:" + UI_PORT + log.RESET + " by " + log.BOLD + environment.WHOAMI + log.RESET, true )
 
 	http.Handle( "/stream", websocket.Handler(stream) )
 	http.HandleFunc("/", serve)

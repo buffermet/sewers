@@ -36,10 +36,10 @@ const(
 	HTML_WHITE_ON_RED = "<span style=\"font-weight:bold;background-color:red;color:#FFF;\">"
 	HTML_BLACK_ON_YELLOW = "<span style=\"background-color:yellow;color:#000;\">"
 	HTML_BOLD_GREY = "<span style=\"font-weight:bold;color:#444;\">"
-	HTML_BOLD_RED = "<span style=\"font-weight:bold;color:#F00;\">"
+	HTML_BOLD_RED = "<span style=\"font-weight:bold;color:red;\">"
 	HTML_BOLD_GREEN = "<span style=\"font-weight:bold;color:#81D330;\">"
 	HTML_BOLD_BLUE = "<span style=\"font-weight:bold;color:rgb(0,142,255);\">"
-	HTML_BOLD_YELLOW = "<span style=\"font-weight:bold;color:orange;\">"
+	HTML_BOLD_YELLOW = "<span style=\"font-weight:bold;color:yellow;\">"
 	HTML_BOLD_BLACK_ON_GREY = "<span style=\"background-color:#444;color:#000;\">"
 )
 

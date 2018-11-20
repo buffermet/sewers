@@ -2,13 +2,13 @@
 /* Set events for index.html */
 
 	// Make console resizable.
-	topbar.addEventListener("mousedown", async event => {
+	topbar.addEventListener("mousedown", async(event) => {
 		resizeConsole = true
 	})
-	topbar.addEventListener("touchstart", async event => {
+	topbar.addEventListener("touchstart", async(event) => {
 		resizeConsole = true
 	})
-	document.addEventListener("mousemove", async event => {
+	document.addEventListener("mousemove", async(event) => {
 		if (resizeConsole) {
 			const offset = self.innerHeight - event.clientY
 
@@ -19,7 +19,7 @@
 			}
 		}
 	})
-	document.addEventListener("touchmove", async event => {
+	document.addEventListener("touchmove", async(event) => {
 		if (resizeConsole) {
 			const offset = self.innerHeight - event.clientY
 
@@ -30,13 +30,13 @@
 			}
 		}
 	})
-	document.addEventListener("mouseup", async event => {
+	document.addEventListener("mouseup", async(event) => {
 		if (resizeConsole) {
 			resizeConsole = false
 			sendForm( "POST", "/config/sewers", "console_height=" + webConsole.getBoundingClientRect().height )
 		}
 	})
-	document.addEventListener("touchend", async event => {
+	document.addEventListener("touchend", async(event) => {
 		if (resizeConsole) {
 			resizeConsole = false
 			sendForm( "POST", "/config/sewers", "console_height=" + webConsole.getBoundingClientRect().height )
@@ -58,7 +58,7 @@
 
 	// Console "CLEAR" button
 	consoleClear.addEventListener("click", async()=>{
-		sendRequest("GET", "/clear_console_log", "").then(async res=>{
+		sendRequest("GET", "/clear_console_log", "").then(async(res)=>{
 			if (res.status == 200) {
 				consoleContainer.innerHTML = ""
 				fetchLog()
@@ -81,15 +81,15 @@
 		showPreferences()
 	})
 
-	document.querySelector("html body div.fade div.modalbox div.optionbox ul li").addEventListener("mousedown", async event=>{
-		document.querySelectorAll("html body div.fade div.modalbox div.optionbox ul li").forEach(async li=>{
+	document.querySelector("html body div.fade div.modalbox div.optionbox ul li").addEventListener("mousedown", async(event)=>{
+		document.querySelectorAll("html body div.fade div.modalbox div.optionbox ul li").forEach(async(li)=>{
 			li.classList.remove("selected")
 		})
 
 		event.currentTarget.classList.add("selected")
 	})
 
-	backbutton.addEventListener("click", event=>{
+	backbutton.addEventListener("click", async(event)=>{
 		event.currentTarget.classList.add("hidden")
 
 		showRelays()

@@ -373,11 +373,11 @@
 	// Append new stream to menu
 	const addStream = async (streamID, streamType) => {
 		if (streamType == "STREAMMIC") {
-			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mic&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".wav', 'width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammic\"><div class=\"icon rec blinking\"></div></div></div>")
+			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?mic&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".wav', 'width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammic\"><div class=\"icon rec blinking\"></div></div></div>")
 		} else if (streamType == "STREAMMON") {
-			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mon&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammon\"><div class=\"icon rec blinking\"></div></div></div>")
+			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?mon&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammon\"><div class=\"icon rec blinking\"></div></div></div>")
 		} else if (streamType == "STREAMCAM") {
-			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?cam&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon eye\"><div class=\"icon rec blinking\"></div></div></div>")
+			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon eye\"><div class=\"icon rec blinking\"></div></div></div>")
 		}
 	}
 
@@ -398,7 +398,7 @@
 		// 	} else {
 		// 		print("<span>Monitor stream started.</span>")
 		// 		print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
-		// 		print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mon&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mon&" + streamID + "&" + streamFile + ".mp4</a></span>")
+		// 		print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.host + "/stream?mon&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.host + "/stream?mon&" + streamID + "&" + streamFile + ".mp4</a></span>")
 
 		// 		addStream(streamID, "STREAMMON")
 		// 	}
@@ -422,7 +422,7 @@
 		// 	} else {
 		// 		print("<span>Microphone stream started.</span>")
 		// 		print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
-		// 		print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mic&" + streamID + "&" + streamFile + ".wav\", \"" + streamFile + ".wav\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?mic&" + streamID + "&" + streamFile + ".wav</a></span>")
+		// 		print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.host + "/stream?mic&" + streamID + "&" + streamFile + ".wav\", \"" + streamFile + ".wav\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.host + "/stream?mic&" + streamID + "&" + streamFile + ".wav</a></span>")
 
 		// 		addStream(streamID, "STREAMMIC")
 		// 	}
@@ -448,7 +448,7 @@
 		// 	} else {
 		// 		print("<span>Webcam stream started.</span>")
 		// 		print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
-		// 		print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?cam&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/stream?cam&" + streamID + "&" + streamFile + ".mp4</a></span>")
+		// 		print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4</a></span>")
 
 		// 		addStream(streamID, "STREAMCAM")
 		// 	}
