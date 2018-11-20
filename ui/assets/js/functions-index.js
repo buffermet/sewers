@@ -67,7 +67,8 @@
 		return new Promise(async(resolve)=>{
 			sendRequest("GET", "/config/sewers", null).then(async(res)=>{
 				if (res.status == 200) {
-					resolve(res.responseText)
+					sewersConfig = JSON.parse(res.responseText)
+					resolve()
 				} else {
 					print("Could not fetch sewers config.")
 					resolve()
@@ -77,28 +78,26 @@
 	}
 
 	const whoAmI = async () => {
-		let res = await sendRequest("GET", "/host", null)
+		const res = await sendRequest("GET", "/host", null)
 
-		return res.responseText
+		whoami = res.responseText
 	}
 
 	const showRelays = async () => {
-		let skeleton = `
-			<div class="relaylist">
-				<div class="header">
-					<h1>Relays</h1>
-					<span class="newsmessage">&nbsp;</span>
-				</div>
-				<div class="space"></div>
-			</div>
-		`
-
 		container.classList.add("hide")
 		container.classList.add("nopointerevents")
 
 		sleep(0.4)
 		.then(async()=>{
-			container.innerHTML = skeleton
+			container.innerHTML = new String( 
+				"<div class=\"relaylist\">" + 
+					"<div class=\"header\">" + 
+						"<h1>Relays</h1>" + 
+						"<span class=\"newsmessage\">&nbsp;</span>" + 
+					"</div>" + 
+					"<div class=\"space\"></div>" + 
+				"</div>" 
+			)
 
 			const relayNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage")
 			relayNewsMessage.classList.add("hide")
@@ -115,11 +114,11 @@
 
 					relay.name = await escapeHTML(relay_configs[i].RelayID)
 					relay.className = "relay"
-					relay.innerHTML = `
-						<span class="relaynumber">RELAY ` + (i + 1) + `</span>
-						<span class="name" title="` + relay_id + `">` + relay_id + `</span>
-						<span class="url" title="` + relay_address + `">` + relay_address + `</span>
-					`
+					relay.innerHTML = new String( 
+						"<span class=\"relaynumber\">RELAY " + (i + 1) + "</span>" + 
+						"<span class=\"name\" title=\"" + relay_id + "\">" + relay_id + "</span>" + 
+						"<span class=\"url\" title=\"" + relay_address + "\">" + relay_address + "</span>" 
+					)
 					relay.onclick = async () => {
 						showSessions(relay_configs[i].RelayID)
 					}
@@ -161,15 +160,15 @@
 
 		sleep(0.4)
 		.then(async()=>{
-			container.innerHTML = `
-				<div class="sessionlist">
-					<div class="header">
-						<h1>` + await escapeHTML(relay_id) + `</h1>
-						<span class="newsmessage">&nbsp;</span>
-					</div>
-					<div class="space"></div>
-				</div>
-			`
+			container.innerHTML = new String( 
+				"<div class=\"sessionlist\">" + 
+					"<div class=\"header\">" + 
+						"<h1>" + await escapeHTML(relay_id) + "</h1>" + 
+						"<span class=\"newsmessage\">&nbsp;</span>" + 
+					"</div>" + 
+					"<div class=\"space\"></div>" + 
+				"</div>" 
+			)
 
 			const SessionsNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage")
 			SessionsNewsMessage.classList.add("hide")
@@ -196,22 +195,22 @@
 
 									div.onclick = async () => { openTerminal(relay_id, session_id) }
 									div.className = "session"
-									div.innerHTML = `
-										<div class="icon ` + await escapeHTML(sessionConfig.icon) + `">
-											<div class="logo ` + await escapeHTML(sessionConfig.logo) + `"></div>
-										</div>
-										<span class="device" title="Device">` + await escapeHTML(sessionConfig.device) + `</span>
-										<span class="id" title="Session ID">` + await escapeHTML(session_id) + `</span>
-										<span class="hostname" title="Hostname">` + await escapeHTML(sessionConfig.hostname) + `</span>
-									`
+									div.innerHTML = new String( 
+										"<div class=\"icon " + await escapeHTML(sessionConfig.icon) + "\">" + 
+											"<div class=\"logo " + await escapeHTML(sessionConfig.logo) + "\"></div>" + 
+										"</div>" + 
+										"<span class=\"device\" title=\"Device: " + await escapeHTML(sessionConfig.device) + "\">" + await escapeHTML(sessionConfig.device) + "</span>" + 
+										"<span class=\"id\" title=\"Session ID: " + await escapeHTML(session_id) + "\">" + await escapeHTML(session_id) + "</span>" + 
+										"<span class=\"hostname\" title=\"Hostname: " + await escapeHTML(sessionConfig.hostname) + "\">" + await escapeHTML(sessionConfig.hostname) + "</span>" 
+									)
 								} else {
 									div.className = "session unknown"
-									div.innerHTML = `
-										<div class="icon unknown"></div>
-										<span class="device" title="Device">unknown device</span>
-										<span class="id" title="Session ID">` + await escapeHTML(session_id) + `</span>
-										<span class="hostname" title="Hostname">unknown hostname</span>
-									`
+									div.innerHTML = new String( 
+										"<div class=\"icon unknown\"></div>" + 
+										"<span class=\"device\" title=\"Device: unknown\">unknown device</span>" + 
+										"<span class=\"id\" title=\"Session ID: " + await escapeHTML(session_id) + "\">" + await escapeHTML(session_id) + "</span>" + 
+										"<span class=\"hostname\" title=\"Hostname: unknown\">unknown hostname</span>" 
+									)
 								}
 
 								document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
@@ -221,14 +220,14 @@
 					// debug
 					div = document.createElement("div")
 					div.className = "session"
-					div.innerHTML = `
-						<div class="icon router">
-							<div class="logo tplink"></div>
-						</div>
-						<span class="device">Tor Exit TP-Link TL-WR840N</span>
-						<span class="id">aX302ioJjf0mk21</span>
-						<span class="hostname">gateway</span>
-					`
+					div.innerHTML = new String( 
+						"<div class=\"icon router\">" + 
+							"<div class=\"logo tplink\"></div>" + 
+						"</div>" + 
+						"<span class=\"device\">TP-Link TL-WR840N</span>" + 
+						"<span class=\"id\">aX302</span>" + 
+						"<span class=\"hostname\">gateway</span>" 
+					)
 					document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
 				} else {
 					print( await escapeHTML(res.responseText) )
@@ -264,7 +263,7 @@
 	// Override CSS
 	const updateCSS = async () => {
 		// Console resizing
-		let newHeight = parseInt(config.console_height)
+		let newHeight = parseInt(sewersConfig.console_height)
 
 		webConsole.style.height = newHeight + "px"
 		topbar.style.bottom = (newHeight - 1) + "px"
@@ -403,7 +402,7 @@
 		// Cycle
 		newsRelays = {
 			0: relays.length + " relay" + (relays.length > 1 || relays.length < 1 ? "s" : ""),
-			1: "Host: <span style=\"font-weight:bold\">" + await escapeHTML( await whoAmI() ) + "</span>",
+			1: "Host: <span style=\"font-weight:bold\">" + await escapeHTML(whoami) + "</span>",
 		}
 		newsSessions = {
 			0: sessions.length + " session" + (sessions.length > 1 || sessions.length < 1 ? "s" : ""),

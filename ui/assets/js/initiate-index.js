@@ -2,6 +2,7 @@
 /* Initiate index.html */
 
 	self.addEventListener("load", async()=>{
+		await whoAmI()
 		await getSewersConfig()
 		await updateCSS()
 		await showRelays()

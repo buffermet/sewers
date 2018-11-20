@@ -99,17 +99,19 @@
 			<div class="consolecontainer selectable"></div>
 		</div>
 	</body>
-	<script type="text/javascript">
+	<script>
 
 		// Set variables
-		let config = {}
+		let whoami
+
+		let sewersConfig = {}
 
 		let webConsole = document.querySelector("html body div.console"),
 		    consoleContainer = document.querySelector("html body div.console div.consolecontainer"),
 		    consoleClear = document.querySelector("html body div.console div.clear"),
 		    topbar = document.querySelector("html body div.console div.topbar"),
-		    consoleLog,
-		    scrollOnOutput = true
+		    scrollOnOutput = true,
+		    events = []
 
 		let terminals = []
 
