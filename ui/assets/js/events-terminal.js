@@ -70,12 +70,15 @@
 					textarea.value = cmd_current
 				}
 				textarea.focus()
-			} else {
-				cmd_current = textarea.value
 			}
 
 		}
 	})
+
+	// Set current command value after keystroke is registered
+	self.addEventListener("keyup", async event => {
+		cmd_current = textarea.value
+	});
 
 	// // Open new window button
 	// document.querySelector("html body div.menu div.item[name=newwindow]").addEventListener("click", async()=>{
