@@ -102,8 +102,8 @@ html body div.scrollBox div.terminal hr {
 html body form {
 	position: absolute;
 	bottom: 0;
-	height: calc(100vh - 26px - 12px - 11px);
-	min-height: 40px;
+	/*height: calc(100vh - 26px - 12px - 11px);*/
+	/*min-height: 40px;*/
 	width: 100%;
 }
 html body form div.loadline {
