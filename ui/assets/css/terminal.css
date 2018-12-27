@@ -30,7 +30,7 @@ html body div.scrollBox {
 	width: 100%;
 	height: auto;
 	max-height: calc(100% - 26px - 48px);
-	margin-top: 26px;
+	padding-top: 26px;
 	overflow-x: hidden;
 	overflow-y: auto;
 }

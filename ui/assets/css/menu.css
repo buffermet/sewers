@@ -1,5 +1,5 @@
 html body div.menu {
-	position: absolute;
+	position: fixed;
 	z-index: 99;
 	top: 0px;
 	height: 26px;
