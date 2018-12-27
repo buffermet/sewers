@@ -72,14 +72,15 @@ html body div.scrollBox div.terminal a:hover {
 }
 html body div.scrollBox div.terminal img {
 	max-width: 100%;
+	vertical-align: baseline;
 }
 html body div.scrollBox div.terminal img.icon {
+	display: inline-block;
 	position: relative;
 	width: 12px;
 	height: 12px;
 	top: 1px;
 	margin: 0 3px 0 1px;
-	display: inline-block;
 }
 html body div.scrollBox div.terminal img.icon.link {
 	margin: 0;

@@ -103,19 +103,19 @@
 		    os_name
 
 		if ( session_config.os.indexOf("Android" || "android") >= 0 ) {
-			icon = "<img width=\"12px\" src=\"../../assets/images/os_android.svg\" />"
+			icon = "<img height=\"10px\" src=\"../../assets/images/os_android.svg\" />"
 			os_name = "Android"
 		} else if ( session_config.os.indexOf("iOS" || "ios") >= 0 ) {
-			icon = "<img width=\"12px\" src=\"../../assets/images/os_apple.svg\" />"
+			icon = "<img height=\"10px\" src=\"../../assets/images/os_apple.svg\" />"
 			os_name = "iOS"
 		} else if ( session_config.os.indexOf("cygwin" || "cygwin" || "mswin" || "mingw" || "bccwin" || "wince" || "emx") >= 0 ) {
-			icon = "<img width=\"12px\" src=\"../../assets/images/os_windows.svg\" />"
+			icon = "<img height=\"10px\" src=\"../../assets/images/os_windows.svg\" />"
 			os_name = "Windows"
 		} else if ( session_config.os.indexOf("Darwin" || "darwin") >= 0 ) {
-			icon = "<img width=\"12px\" src=\"../../assets/images/os_apple.svg\" />"
+			icon = "<img height=\"10px\" src=\"../../assets/images/os_apple.svg\" />"
 			os_name = "macOS"
 		} else if ( session_config.os.indexOf("Linux" || "linux") >= 0 ) {
-			icon = "<img width=\"12px\" src=\"../../assets/images/os_linux.svg\" />"
+			icon = "<img height=\"10px\" src=\"../../assets/images/os_linux.svg\" />"
 			os_name = "Linux"
 		}
 
@@ -128,7 +128,7 @@
 			"<span class=\"cyan\">User-Agent&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.user_agent + "<br><br></span>" + 
 			"<span>Interpreter is fetching packets every <span class=\"bold\">" + session_config.fetch_rate.replace("-", "</span> to <span class=\"bold\">") + "</span> seconds</span>.<br></span>" + 
 			"<hr>" + 
-			" <img src=\"/assets/images/os_linux.svg\" width=\"12px\"><span class=\"bold\"> " + navigator.os + " Sewers v1.0<br></span>" + 
+			" <img src=\"/assets/images/os_linux.svg\" width=\"10px\"><span class=\"bold\"> " + navigator.os + " Sewers v1.0<br></span>" + 
 			"<span class=\"orange\">Relay Address&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + relay_config.relay_address + "<br></span>" + 
 			"<span class=\"orange\">Relay ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + relay + "<br></span>" + 
 			"<span class=\"orange\">User-Agent&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + relay_config.user_agent + "<br><br></span>" + 
@@ -342,7 +342,7 @@
 
 	// Shrink input field as scrollbox increases in size
 	const shrinkInputField = async () => {
-		form.style.height = "calc(100vh - " + scrollBox.getBoundingClientRect().height + "px)"
+		form.style.height = ( document.querySelector("html").getBoundingClientRect().height - scrollBox.getBoundingClientRect().height ) + "px"
 	}
 
 	// Clear function
