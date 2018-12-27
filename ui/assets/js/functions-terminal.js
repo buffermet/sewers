@@ -341,7 +341,7 @@
 	}
 
 	// Shrink input field as scrollbox increases in size
-	const shrinkInputField = async () => {z
+	const shrinkInputField = async () => {
 		form.style.height = ( document.querySelector("html").getBoundingClientRect().height - scrollBox.getBoundingClientRect().height ) + "px"
 	}
 
