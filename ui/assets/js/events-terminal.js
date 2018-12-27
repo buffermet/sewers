@@ -77,8 +77,10 @@
 
 	// Set current command value after keystroke is registered
 	self.addEventListener("keyup", async event => {
-		cmd_current = textarea.value
-	});
+		if ( !(event.keyCode == 9 || event.keyCode == 13 || event.keyCode == 38 || event.keyCode == 40) ) {
+			cmd_current = textarea.value
+		}
+	})
 
 	// // Open new window button
 	// document.querySelector("html body div.menu div.item[name=newwindow]").addEventListener("click", async()=>{
