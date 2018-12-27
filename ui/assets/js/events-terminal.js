@@ -41,7 +41,9 @@
 			}
 
 			// Terminal controls
-			if (event.keyCode == 13) { // Enter
+			if (event.keyCode == 9) { // Tab
+				
+			} else if (event.keyCode == 13) { // Enter
 				if ( textarea === document.activeElement ) {
 					event.preventDefault()
 					onCommand()
