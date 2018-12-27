@@ -222,21 +222,24 @@
 		// plugin debug
 		// terminal-commands.json
 
-			commands = {
+			commands.Imported = {
 				"clear": {
 					"category": "Terminal",
 					"arguments": [],
-					"description": ""
+					"info": "",
+					"onCommand": async()=>{}
 				},
 				"exit": {
 					"category": "Terminal",
 					"arguments": [],
-					"description": ""
+					"info": "",
+					"onCommand": async()=>{}
 				},
 				"fetchrate": {
 					"category": "Interpreter",
 					"arguments": ["MIN SECONDS", "MAX SECONDS"],
-					"description": "Set automatic fetch rate of interpreter."
+					"info": "Set automatic fetch rate of interpreter.",
+					"onCommand": async()=>{}
 				}
 			}
 

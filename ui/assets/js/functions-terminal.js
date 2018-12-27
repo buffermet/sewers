@@ -120,18 +120,18 @@
 		}
 
 		print( 
-			" " + icon + " <span class=\"bold\">" + os_name + " Interpreter<br></span>" + 
-			"<span class=\"cyan\">Device&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.device + "<br></span>" + 
-			"<span class=\"cyan\">Hostname&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.hostname + "<br></span>" + 
-			"<span class=\"cyan\">OS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\" style=\"overflow:hidden\">" + session_config.os + "<br></span>" + 
-			"<span class=\"cyan\">Session&nbsp;ID&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.session_id + "<br></span>" + 
-			"<span class=\"cyan\">User-Agent&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + session_config.user_agent + "<br><br></span>" + 
-			"<span>Interpreter is fetching packets every <span class=\"bold\">" + session_config.fetch_rate.replace("-", "</span> to <span class=\"bold\">") + "</span> seconds</span>.<br></span>" + 
+			" " + icon + " <span class=\"bold\">" + os_name + " Interpreter<br><br></span>" + 
+			"<span class=\"cyan\">Device</span><span class=\"grey\">:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + session_config.device + "</span><br>" + 
+			"<span class=\"cyan\">Hostname</span><span class=\"grey\">:&nbsp;&nbsp;&nbsp;" + session_config.hostname + "</span><br>" + 
+			"<span class=\"cyan\">OS</span><span class=\"grey\">:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"overflow:hidden\">" + session_config.os + "</span></span><br>" + 
+			"<span class=\"cyan\">Session&nbsp;ID</span><span class=\"grey\">:&nbsp;" + session_config.session_id + "</span><br>" + 
+			"<span class=\"cyan\">User-Agent</span><span class=\"grey\">:&nbsp;" + session_config.user_agent + "</span><br><br>" + 
+			"<span class=\"grey\">Interpreter is fetching packets every <span class=\"bold\">" + session_config.fetch_rate.replace("-", "</span> to <span class=\"bold\">") + "</span> seconds.</span><br>" + 
 			"<hr>" + 
-			" <img src=\"/assets/images/os_linux.svg\" width=\"10px\"><span class=\"bold\"> " + navigator.os + " Sewers v1.0<br></span>" + 
-			"<span class=\"orange\">Relay Address&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + relay_config.relay_address + "<br></span>" + 
-			"<span class=\"orange\">Relay ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + relay + "<br></span>" + 
-			"<span class=\"orange\">User-Agent&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"grey\">:</span> <span class=\"bold\">" + relay_config.user_agent + "<br><br></span>" + 
+			" <img src=\"/assets/images/os_linux.svg\" width=\"10px\"><span class=\"bold\"> " + navigator.os + " Sewers v1.0<br><br></span>" + 
+			"<span class=\"orange\">Relay Address</span><span class=\"grey\">:&nbsp;" + relay_config.relay_address + "</span><br>" + 
+			"<span class=\"orange\">Relay ID</span><span class=\"grey\">:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + relay + "</span><br>" + 
+			"<span class=\"orange\">User-Agent</span><span class=\"grey\">:&nbsp;&nbsp;&nbsp;&nbsp;" + relay_config.user_agent + "</span><br><br>" + 
 			"<span>Type <span class=\"orange bold\">?</span>, <span class=\"orange bold\">h</span> or <span class=\"orange bold\">help</span> for more info.<br></span>" 
 		)
 	}
@@ -463,6 +463,13 @@
 		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
 
 		network_indicator.classList.remove("show")
+	}
+
+	// Autocomplete stdin
+	const autoComplete = async command => {
+		return new Promise(async(resolve, reject)=>{
+			
+		})
 	}
 
 	// Input handler

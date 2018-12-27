@@ -42,27 +42,31 @@
 
 			// Terminal controls
 			if (event.keyCode == 9) { // Tab
-				
+				event.preventDefault()
+
+				autoComplete(textarea.value)
 			} else if (event.keyCode == 13) { // Enter
-				if ( textarea === document.activeElement ) {
+				if (document.activeElement === textarea) {
 					event.preventDefault()
 					onCommand()
-				}
-				if ( jsfield === document.activeElement ) {
+				} else if (document.activeElement === jsfield) {
 					event.preventDefault()
 					onXSSCommand()
 				}
+
 				cmd_current = ""
-			} else if (event.keyCode == "38") { // Up arrow
+			} else if (event.keyCode == 38) { // Up arrow
 				if (cmd_history_i < cmd_history.length) {
 					textarea.value = cmd_history[cmd_history_i]
+
 					cmd_history_i += 1
-					setTimeout(async()=>{
-						textarea.selectionStart = textarea.selectionEnd = textarea.value.length; // todo: make cursor position persistent
-					}, 10)
+
+					setTimeout(async()=>{					
+						textarea.selectionStart = textarea.selectionEnd = textarea.value.length // todo: make cursor position persistent
+					}, 3)
 				}
 				textarea.focus()
-			} else if (event.keyCode == "40") { // Down arrow
+			} else if (event.keyCode == 40) { // Down arrow
 				if (cmd_history_i > 0) {
 					cmd_history_i -= 1
 					textarea.value = cmd_history[cmd_history_i]
@@ -82,21 +86,10 @@
 		}
 	})
 
-	// // Open new window button
-	// document.querySelector("html body div.menu div.item[name=newwindow]").addEventListener("click", async()=>{
-	// 	self.open("../../terminal.html?fixthis", "root@fixthis - TAB" + Math.floor( (Math.random() * 9999) + 1), "menubar=no,location=no,resizable=yes,scrollbars=no,status=yes")
-	// })
-
 	// Clear button
 	document.querySelector("html body div.menu div.item[name=clear]").addEventListener("click", async()=>{
 		clear()
 	})
-
-	// // Select all button
-	// document.querySelector("html body div.menu div.item[name=selectall]").addEventListener("click", async()=>{
-	// 	textarea.value =  terminal.text()
-	// 	textarea.select()
-	// })
 
 	// // Stream microphone button
 	// document.querySelector("html body div.menu div.item[name=streammic]").addEventListener("click", async()=>{
