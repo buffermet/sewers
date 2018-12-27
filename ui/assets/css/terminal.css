@@ -26,9 +26,10 @@ html body {
 }
 html body div.scrollBox {
 	position: absolute;
-	height: auto;
-	max-height: calc(100vh - 26px - 48px);
+	top: 0;
 	width: 100%;
+	height: auto;
+	max-height: calc(100% - 26px - 48px);
 	margin-top: 26px;
 	overflow-x: hidden;
 	overflow-y: auto;
