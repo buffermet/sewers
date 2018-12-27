@@ -2,15 +2,7 @@
 	font-family: "Consolas";
 	src: url("../fonts/Consolas.ttf");
 }
-@-webkit-font-face{
-	font-family: "Consolas";
-	src: url("../fonts/Consolas.ttf");
-}
 @font-face{
-	font-family: "OpenSans-Bold";
-	src: url("../fonts/OpenSans-Bold.ttf");
-}
-@-webkit-font-face{
 	font-family: "OpenSans-Bold";
 	src: url("../fonts/OpenSans-Bold.ttf");
 }
@@ -18,15 +10,7 @@
 	font-family: "OpenSans-BoldItalic";
 	src: url("../fonts/OpenSans-BoldItalic.ttf");
 }
-@-webkit-font-face{
-	font-family: "OpenSans-BoldItalic";
-	src: url("../fonts/OpenSans-BoldItalic.ttf");
-}
 @font-face{
-	font-family: "OpenSans-ExtraBold";
-	src: url("../fonts/OpenSans-ExtraBold.ttf");
-}
-@-webkit-font-face{
 	font-family: "OpenSans-ExtraBold";
 	src: url("../fonts/OpenSans-ExtraBold.ttf");
 }
@@ -34,15 +18,7 @@
 	font-family: "OpenSans-ExtraBoldItalic";
 	src: url("../fonts/OpenSans-ExtraBoldItalic.ttf");
 }
-@-webkit-font-face{
-	font-family: "OpenSans-ExtraBoldItalic";
-	src: url("../fonts/OpenSans-ExtraBoldItalic.ttf");
-}
 @font-face{
-	font-family: "OpenSans-Italic";
-	src: url("../fonts/OpenSans-Italic.ttf");
-}
-@-webkit-font-face{
 	font-family: "OpenSans-Italic";
 	src: url("../fonts/OpenSans-Italic.ttf");
 }
@@ -50,15 +26,7 @@
 	font-family: "OpenSans-Light";
 	src: url("../fonts/OpenSans-Light.ttf");
 }
-@-webkit-font-face{
-	font-family: "OpenSans-Light";
-	src: url("../fonts/OpenSans-Light.ttf");
-}
 @font-face{
-	font-family: "OpenSans-LightItalic";
-	src: url("../fonts/OpenSans-LightItalic.ttf");
-}
-@-webkit-font-face{
 	font-family: "OpenSans-LightItalic";
 	src: url("../fonts/OpenSans-LightItalic.ttf");
 }
@@ -66,23 +34,11 @@
 	font-family: "OpenSans-Regular";
 	src: url("../fonts/OpenSans-Regular.ttf");
 }
-@-webkit-font-face{
-	font-family: "OpenSans-Regular";
-	src: url("../fonts/OpenSans-Regular.ttf");
-}
 @font-face{
 	font-family: "OpenSans-Semibold";
 	src: url("../fonts/OpenSans-Semibold.ttf");
 }
-@-webkit-font-face{
-	font-family: "OpenSans-Semibold";
-	src: url("../fonts/OpenSans-Semibold.ttf");
-}
 @font-face{
-	font-family: "OpenSans-SemiboldItalic";
-	src: url("../fonts/OpenSans-SemiboldItalic.ttf");
-}
-@-webkit-font-face{
 	font-family: "OpenSans-SemiboldItalic";
 	src: url("../fonts/OpenSans-SemiboldItalic.ttf");
 }
