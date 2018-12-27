@@ -30,7 +30,6 @@ html body div.scrollBox {
 	width: 100%;
 	height: auto;
 	max-height: calc(100% - 26px - 48px);
-	padding-top: 26px;
 	overflow-x: hidden;
 	overflow-y: auto;
 }
@@ -50,7 +49,7 @@ html body div.scrollBox div.background {
 	pointer-events: none;
 }
 html body div.scrollBox div.terminal {
-	padding: 3px;
+	padding: 29px 3px 3px 3px;
 	color: #FFF;
 	font-family: monospace;
 	font-size: 1em;
