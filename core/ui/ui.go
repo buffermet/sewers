@@ -113,14 +113,14 @@ func serve(res http.ResponseWriter, req *http.Request) {
 	if allow_connections {
 
 		if strings.Contains(req.URL.Path, "..") {
-			log.Warn(ip_string + " tried to access a level up /..", true)
+			log.Warn(ip_string + " tried to access a level up /.. (" + req.RequestURI + ")", true)
 		}
 		if req.URL.Path == "/" {
-			log.Info(ip_string + " requested " + req.URL.Path, true)
+			log.Info(ip_string + " requested " + req.RequestURI, true)
 
 			http.ServeFile(res, req, environment.PATH_UI + "/index.html")
 		} else if strings.HasPrefix(req.URL.Path, "/terminal") {
-			log.Info(ip_string + " requested " + req.URL.Path, true)
+			log.Info(ip_string + " requested " + req.RequestURI, true)
 
 			http.ServeFile(res, req, environment.PATH_UI + "/terminal.html")
 		} else if strings.HasSuffix(req.URL.Path, ".html") || 
@@ -144,14 +144,14 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 			fmt.Fprintf(res, relays)
 		} else if strings.HasPrefix(req.URL.Path, "/relay/") {
-			log.Info(ip_string + " requested " + req.URL.Path, true)
+			log.Info(ip_string + " requested " + req.RequestURI, true)
 
 			relay_id := strings.Replace(req.URL.Path, "/relay/", "", 1)
 			body := relay.GetSessions(relay_id)
 
 			fmt.Fprintf(res, body)
 		} else if strings.HasPrefix(req.URL.Path, "/session/") {
-			log.Info(ip_string + " requested " + req.URL.Path, true)
+			log.Info(ip_string + " requested " + req.RequestURI, true)
 
 			parts := strings.Replace(req.URL.Path, "/session/", "", 1)
 			relay_id := strings.Split(parts, "/")[0]
@@ -405,13 +405,13 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 			os.Exit(1)
 		} else {
-			log.Info(ip_string + " requested " + req.URL.Path, true)
+			log.Info(ip_string + " requested " + req.RequestURI, true)
 		}
 
 	} else {
 
 		// Received unauthenticated request.
-		log.Warn(ip_string + " requested " + req.URL.Path, true)
+		log.Warn(ip_string + " requested " + req.RequestURI, true)
 
 		res.WriteHeader(http.StatusNotFound)
 

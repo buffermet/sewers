@@ -9,7 +9,7 @@
 	})
 
 	// Custom keyboard handler
-	self.addEventListener("keypress", async event=>{
+	self.addEventListener("keydown", async event=>{
 		if (!event.ctrlKey) { // unless CTRL key is pressed
 
 			// If nothing is focused, add new character to stdin field
@@ -55,6 +55,9 @@
 				if (cmd_history_i < cmd_history.length) {
 					textarea.value = cmd_history[cmd_history_i]
 					cmd_history_i += 1
+					setTimeout(async()=>{
+						textarea.selectionStart = textarea.selectionEnd = textarea.value.length; // todo: make cursor position persistent
+					}, 10)
 				}
 				textarea.focus()
 			} else if (event.keyCode == "40") { // Down arrow

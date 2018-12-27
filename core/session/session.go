@@ -46,5 +46,5 @@ func Set(relay_id, session_id, encoded_json string) {
 }
 
 func New(relay, session, encoded string) {
-
+	
 }

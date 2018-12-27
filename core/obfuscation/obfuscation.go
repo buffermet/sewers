@@ -10,6 +10,8 @@ import(
 	"time"
 	"regexp"
 	"math/rand"
+
+	"github.com/yungtravla/sewers/core/log"
 )
 
 func RandomString(length int) string {
@@ -27,13 +29,13 @@ func RandomString(length int) string {
 	return buffer
 }
 
-func ObfuscateRandom(payload []byte, min_length, max_length int) ([]byte, error) {
+func ObfuscateRandom(payload *[]byte, min_length, max_length int) ([]byte) {
 	// Count amount of obfuscatable strings
 	r := regexp.MustCompile(`obf_[a-zA-Z_]*`)
 
 	matches := r.FindAll(payload, -1)
 
-	count := 0
+	obfuscatable_count := 0
 
 	p := payload
 
@@ -43,22 +45,27 @@ func ObfuscateRandom(payload []byte, min_length, max_length int) ([]byte, error)
 		if len( r.FindAll(p, -1) ) > 0 {
 			p = r.ReplaceAll( p, []byte("") )
 
-			count += 1
+			obfuscatable_count += 1
 		}
 	}
 
-	// Make sure enough obfuscation strings are provided
-	for i := 0; i < len(matches); i++ {
-		r = regexp.MustCompile( string(matches[i]) )
+	// Warn if payload is not obfuscatable
+	if len(matches) == 0 {
+		log.Warn("payload has no strings that can be obfuscated")
+	} else {
+		// Obfuscate payload with random strings
+		for i := 0; i < len(matches); i++ {
+			r = regexp.MustCompile( string(matches[i]) )
 
-		rand.Seed( time.Now().UnixNano() )
+			rand.Seed( time.Now().UnixNano() )
 
-		obf := RandomString( min_length + rand.Intn(max_length - min_length) )
+			obf := RandomString( min_length + rand.Intn(max_length - min_length) )
 
-		payload = r.ReplaceAll( payload, []byte(obf) )
+			payload = r.ReplaceAll( payload, []byte(obf) )
+		}
 	}
 
-	return payload, nil
+	return payload
 }
 
 func ObfuscateWordlist(payload []byte, wordlist []string, shuffle bool) ([]byte, error) {
@@ -85,7 +92,7 @@ func ObfuscateWordlist(payload []byte, wordlist []string, shuffle bool) ([]byte,
 	if len(wordlist) >= count {
 		// Shuffle wordlist if shuffling is enabled
 		if shuffle == true {
-			//
+			// 
 		}
 
 		for i := 0; i < len(obf_matches); i++ {
