@@ -86,14 +86,10 @@ func stream(ws *websocket.Conn) {
 	}
 
 	if allow_connections {
-
 		log.Info(ip_string + " tried to open a websocket", true)
-
 	} else {
-
 		// Received unauthenticated request.
 		log.Warn(ip_string + " tried to open a websocket", true)
-
 	}
 }
 
@@ -420,6 +416,12 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 func Start() {
 	log.Info( "Server started on " + log.BOLD + "http://0.0.0.0:" + UI_PORT + log.RESET + " by " + log.BOLD + environment.WHOAMI + log.RESET, true )
+
+	// server := &http.Server{
+	// 	ReadTimeout: (5 * time.Second),
+	// 	WriteTimeout: (10 * time.Second),
+	// 	Addr: ":" + UI_PORT,
+	// }
 
 	http.Handle( "/stream", websocket.Handler(stream) )
 	http.HandleFunc("/", serve)

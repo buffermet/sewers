@@ -4,7 +4,7 @@
 	// Focus input field unless selecting span text
 	self.addEventListener("click", async event=>{
 		if (event.target.tagName != "SPAN" && event.target.tagName != "INPUT") {
-			textarea.focus()
+			app.environment.textarea.focus()
 		}
 	})
 
@@ -14,29 +14,29 @@
 
 			// If nothing is focused, add new character to stdin field
 			if ( 
-				allowed_characters.includes(event.key) 
+				app.environment.allowed_characters.includes(event.key) 
 				&& !(
-					textarea === document.activeElement 
-					|| jsfield === document.activeElement
+					app.environment.textarea === document.activeElement 
+					|| app.environment.jsField === document.activeElement
 				) 
 			) {
-				const oldValue = textarea.value,
+				const oldValue = app.environment.textarea.value,
 				      newValue = oldValue + event.key
 
-				textarea.value = newValue
+				app.environment.textarea.value = newValue
 
-				textarea.focus()
+				app.environment.textarea.focus()
 			}
 
 			// Scroll to bottom on StdIn if applicable
-			if (scrollOnInput) {
-				if (document.activeElement !== jsfield) {
-					scrollToBottom()
+			if (app.environment.scrollOnInput) {
+				if (document.activeElement !== app.environment.jsField) {
+					app.functions.scrollToBottom()
 				}
 			}
-			if (scrollOnJsInput) {
-				if (document.activeElement === jsfield) {
-					scrollToBottom()
+			if (app.environment.scrollOnJsInput) {
+				if (document.activeElement === app.environment.jsField) {
+					app.functions.scrollToBottom()
 				}
 			}
 
@@ -44,36 +44,48 @@
 			if (event.keyCode == 9) { // Tab
 				event.preventDefault()
 
-				autoComplete(textarea.value)
+				const command_slice = app.environment.textarea.value.replace(/^\s*/, "").slice(0, app.environment.textarea.selectionEnd)
+				const tabbed_command = command_slice.replace(/.*\s/g, "")
+
+				if (tabbed_command != "") {
+					app.functions.autoComplete(tabbed_command, command_slice)
+				}
 			} else if (event.keyCode == 13) { // Enter
-				if (document.activeElement === textarea) {
+				if (document.activeElement === app.environment.textarea) {
 					event.preventDefault()
-					onCommand()
-				} else if (document.activeElement === jsfield) {
+
+					app.functions.onCommand()
+				} else if (document.activeElement === app.environment.jsField) {
 					event.preventDefault()
-					onXSSCommand()
+
+					app.functions.onXSSCommand()
 				}
 
-				cmd_current = ""
+				app.environment.cmd_current = ""
 			} else if (event.keyCode == 38) { // Up arrow
-				if (cmd_history_i < cmd_history.length) {
-					textarea.value = cmd_history[cmd_history_i]
+				event.preventDefault()
 
-					cmd_history_i += 1
+				if (app.environment.cmd_history_i < app.environment.cmd_history.length) {
+					app.environment.textarea.value = app.environment.cmd_history[app.environment.cmd_history_i]
 
-					setTimeout(async()=>{					
-						textarea.selectionStart = textarea.selectionEnd = textarea.value.length // todo: make cursor position persistent
+					app.environment.cmd_history_i += 1
+
+					setTimeout(async()=>{
+						app.environment.textarea.selectionStart = app.environment.textarea.selectionEnd = app.environment.textarea.value.length // todo: make cursor position persistent
 					}, 3)
 				}
-				textarea.focus()
+				app.environment.textarea.focus()
 			} else if (event.keyCode == 40) { // Down arrow
-				if (cmd_history_i > 0) {
-					cmd_history_i -= 1
-					textarea.value = cmd_history[cmd_history_i]
+				event.preventDefault()
+
+				if (app.environment.cmd_history_i > 0) {
+					app.environment.cmd_history_i -= 1
+
+					app.environment.textarea.value = app.environment.cmd_history[app.environment.cmd_history_i]
 				} else {
-					textarea.value = cmd_current
+					app.environment.textarea.value = app.environment.cmd_current
 				}
-				textarea.focus()
+				app.environment.textarea.focus()
 			}
 
 		}
@@ -82,13 +94,13 @@
 	// Set current command value after keystroke is registered
 	self.addEventListener("keyup", async event => {
 		if ( !(event.keyCode == 9 || event.keyCode == 13 || event.keyCode == 38 || event.keyCode == 40) ) {
-			cmd_current = textarea.value
+			app.environment.cmd_current = app.environment.textarea.value
 		}
 	})
 
 	// Clear button
 	document.querySelector("html body div.menu div.item[name=clear]").addEventListener("click", async()=>{
-		clear()
+		app.functions.clear()
 	})
 
 	// // Stream microphone button
@@ -118,13 +130,13 @@
 
 	// Window resize handler
 	self.addEventListener("resize", async()=>{
-		shrinkInputField()
+		app.functions.shrinkInputField()
 
-		setTimeout(resetClearBreaks, 100)
+		setTimeout(app.functions.resetClearBreaks, 100)
 	})
 
 	// Warn before quit
-	if (warnBeforeClose) {
+	if (app.environment.warnBeforeClose) {
 		self.onbeforeunload = async () => {
 			return "Close?"
 		}

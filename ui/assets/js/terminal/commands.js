@@ -1,0 +1,197 @@
+
+/*
+*	
+*	Sewers UI terminal commands
+*	
+*/
+
+	app.commands.builtin = {
+		"clear": {
+			"arguments": [],
+			"button": "",
+			"category": "terminal",
+			"description": "",
+			"text": "",
+			launch: async () => {}
+		},
+		"exit": {
+			"arguments": [],
+			"button": "",
+			"category": "terminal",
+			"description": "",
+			"text": "",
+			launch: async () => {}
+		},
+		"fetchrate": {
+			"arguments": ["MIN SECONDS", "MAX SECONDS"],
+			"button": "",
+			"category": "interpreter",
+			"description": "Set automatic fetch rate of interpreter.",
+			"text": "Change fetchrate",
+			launch: async (args) => {
+				const arguments = args.split(" ");
+				if (arguments[2]) {
+					app.functions.print( "Too many arguments.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+				} else if (!arguments[1]) {
+					app.functions.print( "Not enough arguments.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+				} else if ( parseInt(arguments[0]) >= parseInt(arguments[1]) ) {
+					app.functions.print( "Minimum value must be less than maximum.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+				} else if ( parseInt(arguments[0]) < 1 ) {
+					app.functions.print( "Minimum value must be at least 1.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+				} else {
+					const min = parseInt(arguments[0]);
+					const max = parseInt(arguments[1]);
+					app.functions.changeFetchRate(min, max);
+				}
+			},
+			"os": [".*"]
+		},
+			// 	cmd.match(/^\s*[?]\s*$/) 
+			// 	|| cmd.match(/^\s*h\s*$/) 
+			// 	|| cmd.match(/^\s*help\s*$/) 
+			// 	|| cmd.match(/^\s*commands\s*$/) 
+			// 	|| cmd.match(/^\s*usage\s*$/) 
+			// ) {
+		"?": {
+			"arguments": [],
+			"button": "",
+			"category": "terminal",
+			"description": "Show help menu.",
+			"text": "Show help",
+			launch: async (args) => {
+				app.functions.printHelp()
+			},
+			"os": [".*"]
+		},
+		"h": {
+			"arguments": [],
+			"button": "",
+			"category": "terminal",
+			"description": "Show help menu.",
+			"text": "Show help",
+			launch: async (args) => {
+				app.functions.printHelp()
+			},
+			"os": [".*"]
+		},
+		"help": {
+			"arguments": [],
+			"button": "",
+			"category": "terminal",
+			"description": "Show help menu.",
+			"text": "Show help",
+			launch: async (args) => {
+				app.functions.printHelp()
+			},
+			"os": [".*"]
+		},
+		"commands": {
+			"arguments": [],
+			"button": "",
+			"category": "terminal",
+			"description": "Show help menu.",
+			"text": "Show help",
+			launch: async (args) => {
+				app.functions.printHelp()
+			},
+			"os": [".*"]
+		},
+		"usage": {
+			"arguments": [],
+			"button": "",
+			"category": "terminal",
+			"description": "Show help menu.",
+			"text": "Show help",
+			launch: async (args) => {
+				app.functions.printHelp()
+			},
+			"os": [".*"]
+		},
+		"sh": {
+			"arguments": ["COMMAND"],
+			"button": "",
+			"category": "terminal",
+			"description": "Execute shell command/start shell stream.",
+			"text": "Shell",
+			launch: async (args) => {
+				app.functions.stdIn( encodeURIComponent(args) )
+			},
+			"os": [".*"]
+		},
+		"shell": {
+			"arguments": ["COMMAND"],
+			"button": "",
+			"category": "terminal",
+			"description": "Execute shell command/start shell stream.",
+			"text": "Shell",
+			launch: async (args) => {
+				app.functions.stdIn( encodeURIComponent(args) )
+			},
+			"os": [".*"]
+		},
+		"telemetry": {
+			"arguments": [],
+			"button": "",
+			"category": "terminal",
+			"description": "Show telemetry data of current session.",
+			"text": "Telemetry",
+			launch: async (args) => {
+				app.functions.printTelemetry()
+			},
+			"os": [".*"]
+		},
+		"reset": {
+			"arguments": [],
+			"category": "terminal",
+			"description": "",
+			"text": "",
+			launch: async () => {
+				if (app.environment.warnOnReset) {
+					self.location = location.href;
+				} else {
+					document.body.innerHTML = "";
+					window.onbeforeunload = null;
+					self.location = location.href;
+				}
+			}
+		},
+		"xss": {
+			"arguments": ["JAVASCRIPT"],
+			"category": "terminal",
+			"description": "Execute JavaScript in the terminal.",
+			"text": "Execute JavaScript",
+			launch: async (args) => {
+				app.functions.parseXSSCommand(args);
+			}
+		}
+	}
+
+	app.commands.pluggedin = {
+		"snapmon": {
+			"arguments": [],
+			"button": "html body div.menu div.subitem[name=yungtravla-terminal-linux-gnome-screenshot]",
+			"category": "interpreter",
+			"description": "Take a screenshot.",
+			"text": "Capture screenshot",
+			launch: async () => {
+				const os_string = app.environment.sessionConfig.os;
+				if ( os_string.match("GNU/Linux") ) {
+					const filename = await app.functions.randomString(8, 16);
+					const command = "sh gnome-screenshot -p -f ./" + filename + ".png &> /dev/null && cat ./" + filename + ".png && rm ./" + filename + ".png";
+					app.functions.parseCommand(command);
+				}
+			},
+			"os": ["GNU[/]Linux$"]
+		},
+		// "your-command": {
+		// 	"arguments": [],
+		// 	"button": "html body div.menu div.subitem[name=name-of-your-command-button]",
+		// 	"category": "",
+		// 	"description": "Describe your command.",
+		// 	"text": "Text of your command button",
+		// 	launch: async () => {
+		// 		// your code
+		// 	},
+		// 	"os": ["RegularExpression|[wW]indows|[mM][aA][cC][oO][sS]|[aA]ndroid|..."]
+		// },
+	}

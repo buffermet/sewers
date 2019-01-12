@@ -6,11 +6,11 @@
 		<meta name="msapplication-navbutton-color" content="#030303">
 		<meta name="theme-color" content="#030303">
 		<title>Relays</title>
-		<link rel="icon" type="image/png" href="./assets/images/favicon.png">
-		<link rel="stylesheet" type="text/css" href="./assets/css/colors.css">
-		<link rel="stylesheet" type="text/css" href="./assets/css/fonts.css">
-		<link rel="stylesheet" type="text/css" href="./assets/css/menu.css">
-		<link rel="stylesheet" type="text/css" href="./assets/css/index.css">
+		<link rel="icon" type="image/png" href="/assets/images/favicon.png">
+		<link rel="stylesheet" type="text/css" href="/assets/css/colors.css">
+		<link rel="stylesheet" type="text/css" href="/assets/css/fonts.css">
+		<link rel="stylesheet" type="text/css" href="/assets/css/menu.css">
+		<link rel="stylesheet" type="text/css" href="/assets/css/index.css">
 	</head>
 	<body>
 		<div class="background"></div>
@@ -20,7 +20,7 @@
 				<div class="message"></div>
 				<div class="corner"></div>
 			</div>
-			<div class="modalbox settings down">
+			<div class="modal settings down">
 				<div class="optionbox">
 					<ul>
 						<li class="selected">Option 1</li>
@@ -99,57 +99,9 @@
 			<div class="consolecontainer selectable"></div>
 		</div>
 	</body>
-	<script>
-
-		// Set variables
-		let whoami
-
-		let sewersConfig = {}
-
-		let webConsole = document.querySelector("html body div.console"),
-		    consoleContainer = document.querySelector("html body div.console div.consolecontainer"),
-		    consoleClear = document.querySelector("html body div.console div.clear"),
-		    topbar = document.querySelector("html body div.console div.topbar"),
-		    scrollOnOutput = true,
-		    events = []
-
-		let terminals = []
-
-		let backbutton = document.querySelector("div.icon.back").parentElement
-
-		let scrollContainer = document.querySelector("html body div.scrollcontainer"),
-		    container = document.querySelector("html body div.scrollcontainer div.container"),
-		    relayList = document.querySelector("html body div.scrollcontainer div.container div.relaylist"),
-		    relays = document.querySelectorAll("html body div.scrollcontainer div.container div.relaylist div.relay"),
-		    sessions = document.querySelectorAll("html body div.scrollcontainer div.container div.sessionlist div.session"),
-		    newsMessage = document.querySelector("html body div.scrollcontainer div.container div div.header span.newsmessage"),
-		    newsMessageRelays = document.querySelectorAll("html body div.scrollcontainer div.container div.relaylist div.header span.newsmessage"),
-		    newsMessageSessions = document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage"),
-		    newsRelays,
-		    newsSessions,
-		    currentRelaysNews = 0,
-		    currentSessionsNews = 0
-
-		let currentRelay,
-		    relayUserAgent
-
-		let messageBox = document.querySelector("html body div.fade div.messagebox"),
-		    messageTitle = document.querySelector("html body div.fade div.messagebox span.title"),
-		    messageBody = document.querySelector("html body div.fade div.messagebox div.message"),
-		    fade = document.querySelector("html body div.fade")
-
-		let modalBoxes = document.querySelectorAll("html body div.fade div.modalbox"),
-		    openModalBox = document.querySelector("html body div.fade div.modalbox.open"),
-		    menuCancel = document.querySelector("html body div.fade div.modalbox div.optionbox div.bottom div.cancel")
-
-		let lastIP
-
-		let resizeConsole = false,
-		    dragStart
-
-	</script>
-	<script src="./assets/js/transport.js"></script>
-	<script src="./assets/js/functions-index.js"></script>
-	<script src="./assets/js/events-index.js"></script>
-	<script src="./assets/js/initiate-index.js"></script>
+	<script src="/assets/js/index/environment.js"></script>
+	<script src="/assets/js/http.js"></script>
+	<script src="/assets/js/index/functions.js"></script>
+	<script src="/assets/js/index/events.js"></script>
+	<script src="/assets/js/index.js"></script>
 </html>

@@ -18,7 +18,7 @@
 ::-webkit-scrollbar { display: none; }
 
 html{
-	background-color: black;
+	background-color: #090A0D;
 }
 html,
 html body {
@@ -35,7 +35,7 @@ html body div.scrollBox {
 	top: 0;
 	width: 100%;
 	height: auto;
-	max-height: calc(100% - 26px - 48px);
+	max-height: calc(100% - 26px - 12px);
 	overflow-x: hidden;
 	overflow-y: auto;
 }
@@ -45,7 +45,6 @@ html body div.scrollBox div.background {
 	height: 100%;
 	width: 100%;
 	opacity: .1;
-	background-image: url(../../assets/images/mandelbrot.svg);
 	background-size: auto 220px;
 	background-repeat: no-repeat;
 	background-position: top right;
@@ -56,7 +55,7 @@ html body div.scrollBox div.terminal {
 	color: #FFF;
 	font-family: monospace;
 	font-size: 1em;
-	text-shadow: 0 -1px 0px black;
+	text-shadow: 0 -1px 0px rgba(0,0,0,0.75);
 	word-break: break-all;
 }
 html body div.scrollBox div.terminal a {
@@ -106,8 +105,6 @@ html body div.scrollBox div.terminal hr {
 html body form {
 	position: absolute;
 	bottom: 0;
-	/*height: calc(100vh - 26px - 12px - 11px);*/
-	/*min-height: 40px;*/
 	width: 100%;
 }
 html body form div.loadline {

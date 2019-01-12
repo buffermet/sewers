@@ -43,11 +43,11 @@ html body div.fade.hide {
 	pointer-events: none;
 }
 html body div.fade div.messagebox {
-	transition: top 180ms ease-in;
-	-webkit-transition: top 180ms ease-in;
-	-moz-transition: top 180ms ease-in;
-	-ms-transition: top 180ms ease-in;
-	-o-transition: top 180ms ease-in;
+	transition: top 240ms ease-in;
+	-webkit-transition: top 240ms ease-in;
+	-moz-transition: top 240ms ease-in;
+	-ms-transition: top 240ms ease-in;
+	-o-transition: top 240ms ease-in;
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -96,11 +96,11 @@ html body div.fade div.messagebox div.corner {
 	background-position: 50% 60%;
 }
 html body div.fade div.modal {
-	transition: top 180ms ease-in;
-	-webkit-transition: top 180ms ease-in;
-	-moz-transition: top 180ms ease-in;
-	-ms-transition: top 180ms ease-in;
-	-o-transition: top 180ms ease-in;
+	transition: top 240ms ease-in;
+	-webkit-transition: top 240ms ease-in;
+	-moz-transition: top 240ms ease-in;
+	-ms-transition: top 240ms ease-in;
+	-o-transition: top 240ms ease-in;
 	position: absolute;
 	left: 50%;
 	top: 50%;
@@ -114,13 +114,12 @@ html body div.fade div.modal div.optionbox {
 	position: absolute;
 	left: 0;
 	width: 200px;
-	height: 100%;
+	height: auto;
 	background: #111;
 }
 html body div.fade div.modal div.optionbox ul {
 	padding: 0;
 	margin: 0;
-	margin-bottom: 44px;
 	list-style-type: none;
 }
 html body div.fade div.modal div.optionbox ul li {
@@ -330,7 +329,7 @@ html body div.scrollcontainer div.container div.sessionlist div.session {
 	position: relative;
 	width: 224px;
 	height: 224px;
-	background-color: rgba(0,0,0,.5);
+	background-color: rgba(255,255,255,.0333);
 	background-image: url(../images/relay.svg);
 	background-repeat: no-repeat;
 	background-size: 35%;
@@ -364,7 +363,7 @@ html body div.scrollcontainer div.container div.sessionlist div.session.unknown:
 }
 html body div.scrollcontainer div.container div.relaylist div.relay:active,
 html body div.scrollcontainer div.container div.sessionlist div.session:active {
-	background-color: rgba(0,0,0,1);
+	background-color: rgba(0,0,0,0.3);
 }
 html body div.scrollcontainer div.container div.sessionlist div.session.unknown:active {
 	background-color: rgba(25,0,0,1)
@@ -635,7 +634,7 @@ html body div.console div.consolecontainer {
 	color: #FFF;
 	font-family: monospace;
 	font-size: 1em;
-	overflow: hidden;	
+	overflow: hidden;
 	overflow-y: scroll;
 	word-break: break-all;
 }
@@ -657,10 +656,10 @@ html body div.console div.consolecontainer span::selection {
 	pointer-events: none;
 }
 .up {
-	top: -50% !important;
+	top: 50% !important;
 }
 .down {
-	top: 150% !important;
+	top: -50% !important;
 }
 
 @media(max-width: 1276px) {
