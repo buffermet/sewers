@@ -308,7 +308,7 @@
 
 			app.functions.print("<span>Auto fetcher stopped.<br></span>")
 		} else {
-			app.functions.print("<span>Auto fetcher is not running.</span>")
+			app.functions.print("<span>Auto fetcher is not running.<br></span>")
 		}
 	}
 
@@ -467,6 +467,39 @@
 		// }
 	}
 
+	// Stream shell session
+	app.functions.startStreamingShell = async () => {
+		app.environment.streamingShell = true;
+
+		const prototype_builtin = app.commands.builtin;
+		const prototype_pluggedin = app.commands.pluggedin;
+
+		app.commands.protoypes = {};
+		app.commands.protoypes.builtin = prototype_builtin;
+		app.commands.protoypes.pluggedin = prototype_pluggedin;
+
+		app.commands.builtin = app.commands.shell;
+		app.commands.pluggedin = {};
+
+		app.environment.requestTag = "&dollar; \xBB ";
+
+		app.functions.print(
+			new String(app.environment.requestTag + "session <span class=\"bold\">1</span> started.<br>")
+		);
+	}
+
+	// Stream shell session
+	app.functions.stopStreamingShell = async () => {
+		app.commands.builtin = app.commands.protoypes.builtin;
+		app.commands.pluggedin = app.commands.protoypes.pluggedin;
+
+		app.environment.requestTag = "<span class=\"orange bold\">sewers</span> \xBB ";
+
+		app.functions.print(
+			new String(app.environment.requestTag + "session <span class=\"bold\">1</span> terminated.<br>")
+		);
+	}
+
 	// Network activity indicator
 	app.functions.showNetworkIndicator = async () => {
 		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
@@ -483,102 +516,115 @@
 
 	// Autocomplete stdin
 	app.functions.autoComplete = async (tabbed_command, pre_cursor) => {
-		const commands = Object.keys(app.commands.builtin).concat( Object.keys(app.commands.pluggedin) )
+		const commands = Object.keys(app.commands.builtin).concat( Object.keys(app.commands.pluggedin) ).sort();
 
-		tabbed_command = await app.functions.escapeRegExp(tabbed_command)
+		tabbed_command = await app.functions.escapeRegExp(tabbed_command);
 
-		let regexp = new RegExp("(?:^|\\s)" + tabbed_command, "ig")
+		let regexp = new RegExp("(?:^|\\s)" + tabbed_command + "\\S*", "ig");
 
 		if ( commands.join(" ").match(regexp) ) {
-			if ( commands.join(" ").match(regexp).length > 1 ) {
-				const log_str = new String(
-					app.environment.requestTag + await app.functions.escapeHTML(pre_cursor) + "<br>" + 
-					commands.join(" ").match( new RegExp("(?:^|\\s)" + tabbed_command + "\\S*", "ig") ).join("&nbsp;&nbsp;") + "<br>" 
-				)
-				app.functions.print(log_str)
-			} else if ( commands.join(" ").match(regexp).length == 1 ) {
-				for (let i = 0; i < commands.length; i++) {
-					if ( commands[i].match(regexp) ) {
-						if ( commands[i].match(regexp).length > 0 ) {
-							regexp = new RegExp(tabbed_command + "$", "i")
+			let matches = commands.join(" ").match(regexp);
 
-							replacement = pre_cursor.replace(regexp, commands[i]) + " "
+			for (let a = 0; a < commands.length; a++) {
+				if ( commands[a].match(regexp) ) {
+					if (matches.length > 1) {
+						let longest_common_string = tabbed_command;
+						let longest_match_length = 0;
 
-							app.environment.textarea.value = app.environment.textarea.value.replace(pre_cursor, replacement)
-							app.environment.textarea.selectionEnd = replacement.length;
+						matches.forEach((match)=>{
+							match.length > longest_match_length ? longest_match_length = match.length : "";
+						});
 
-							break
+						let next_match_count = matches.length;
+						for (let b = 0; b < longest_match_length; b++) {
+							next_match_count = commands.join(" ").match( new RegExp("(?:^|\\s)" + longest_common_string + commands[a].charAt(longest_common_string.length), "ig" ) ).length;
+							if (next_match_count == matches.length) {
+								longest_common_string = longest_common_string + commands[a].charAt(longest_common_string.length);
+							} else {
+								break;
+							}
 						}
+
+						regexp = new RegExp(tabbed_command + "$", "i");
+
+						replacement = pre_cursor.replace(regexp, longest_common_string);
+
+						app.environment.textarea.value = app.environment.textarea.value.replace(pre_cursor, replacement);
+						app.environment.textarea.selectionEnd = replacement.length;
+
+						const log_str = new String(
+							app.environment.requestTag + await app.functions.escapeHTML(pre_cursor) + "<br>" + 
+							commands.join(" ").match( new RegExp("(?:^|\\s)" + longest_common_string + "\\S*", "ig") ).join("&nbsp;&nbsp;") + "<br>" 
+						);
+
+						app.functions.print(log_str);
+
+						break;
+					} else {
+						regexp = new RegExp(tabbed_command + "$", "i");
+
+						replacement = pre_cursor.replace(regexp, commands[a]) + " ";
+
+						app.environment.textarea.value = app.environment.textarea.value.replace(pre_cursor, replacement);
+						app.environment.textarea.selectionEnd = replacement.length;
+
+						break;
 					}
 				}
 			}
 		}
 	}
 
-	// Input handler
+	// Submit standard input
 	app.functions.onCommand = async () => {
-		const cmd = app.environment.textarea.value
+		const cmd = app.environment.textarea.value;
 
-		app.environment.textarea.value = ""
+		app.environment.textarea.value = "";
 
-		app.functions.parseCommand(cmd)
+		app.functions.parseCommand(cmd);
 	}
 
-	// StdIn handler
+	// Parse standard input
 	app.functions.parseCommand = async cmd => {
-		app.environment.cmdHistoryIndex = 0
+		app.environment.cmdHistoryIndex = 0;
 
-		cmd = cmd.replace(/^\s*/, "")
+		cmd = cmd.replace(/^\s*/, "");
 
-		app.functions.print( app.environment.requestTag + "<span title='" + await app.functions.timestamp() + "'>" + await app.functions.escapeHTML(cmd) + "</span><br>" )
+		app.functions.print( app.environment.requestTag + "<span title='" + await app.functions.timestamp() + "'>" + await app.functions.escapeHTML(cmd) + "</span><br>" );
 
 		if ( !cmd.match(/^\s*$/) ) {
 			if (app.environment.cmdHistory[0] != cmd) {
-				app.environment.cmdHistory.unshift(cmd)
+				app.environment.cmdHistory.unshift(cmd);
 			}
 
 			// Parse command
-			if ( !cmd.match(/^\s*#/) ) {
-				const command = cmd.split(" ")[0]
-				const args = cmd.replace(/\S+\s*/, "")
+			if ( !cmd.match(/^#/) ) {
+				const command = cmd.split(" ")[0];
+				const args = cmd.replace(/\S+\s*/, "");
 
-				const commands = Object.keys(app.commands.builtin).concat( Object.keys(app.commands.pluggedin) )
+				const commands = Object.keys(app.commands.builtin).concat( Object.keys(app.commands.pluggedin) );
 
 				for (let i = 0; i < commands.length; i++) {
-					regexp = new RegExp("^" + await app.functions.escapeRegExp(command) + "$", "i")
+					regexp = new RegExp("^" + await app.functions.escapeRegExp(command) + "$", "i");
 
 					if ( commands[i].match(regexp) ) {
 						if (app.commands.builtin[ commands[i] ]) {
-							app.commands.builtin[ commands[i] ].launch(args)
+							app.commands.builtin[ commands[i] ].launch(args);
 						} else {
-							app.commands.pluggedin[ commands[i] ].launch(args)
+							app.commands.pluggedin[ commands[i] ].launch(args);
 						}
+
+						return;
 					}
 				}
-			}
-
-			if ( cmd.match(/^\s*#/) ) {
-				return
-			} else if ( cmd.match(/^\s*clear\s*$/) ) {
-				app.functions.clear()
-			} else if ( cmd.match(/^\s*exit\s*$/) ) {
-				self.close() || alert("You can only use this in pop-up windows.")
-			} else if ( cmd.match(/^\s*checkstreams\s*$/) ) {
-				// checkStreams()
-			} else if ( cmd.match(/^\s*streammon /) ) {
-				const args = cmd.split(" ")
-
-				streamMon( args[1], args[2] )
-			} else if ( cmd.match(/^\s*streammic /) ) {
-				streamMic( cmd.split(" ")[1] )
-			} else if ( cmd.match(/^shell$/) || cmd.match(/^sh$/) ) {
-				// Start shell stream
 			} else {
-				app.functions.print( await app.functions.escapeHTML(cmd) + ": command not found. Type <span class=\"bold orange\">help</span> to see a list of commands.<br>" )
+				return;
 			}
+
+			app.functions.print( await app.functions.escapeHTML(cmd) + ": command not found. Type <span class=\"bold orange\">help</span> to see a list of commands.<br>" );
 		}
 
-		app.environment.textarea.focus()
+		app.environment.textarea.focus();
 	}
 
 	app.functions.parseXSSCommand = async cmd => {

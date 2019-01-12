@@ -7,7 +7,7 @@ html body {
 	max-height: 100%;
 	margin: 0;
 	padding: 0;
-	background: #111;
+	background: #0c0d11;
 	overflow: hidden;
 	user-select: none;
 	-webkit-user-select: none;
@@ -550,7 +550,7 @@ html body div.scrollcontainer div.container div.sessionlist div.space {
 html body div.console {
 	position: absolute;
 	bottom: 0;
-	background: black;
+	background: rgba(0,0,0,0.5);
 	height: 142px;
 	width: 100%;
 	box-shadow: 0 0 6px 0 rgba(0,0,0,.75);

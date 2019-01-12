@@ -34,6 +34,7 @@
 		request: null,
 		onResponse: async()=>{},
 		activeStreams: new Array(),
+		streamingShell: false,
 		allowedCharacters: " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz".split(""),
 		cmdHistory: new Array(),
 		cmdHistoryIndex: 0,

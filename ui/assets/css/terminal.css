@@ -14,9 +14,9 @@
 	color: #000;
 	text-shadow: none;
 }
-
-::-webkit-scrollbar { display: none; }
-
+::-webkit-scrollbar {
+	display: none;
+}
 html{
 	background-color: #090A0D;
 }
@@ -55,7 +55,7 @@ html body div.scrollBox div.terminal {
 	color: #FFF;
 	font-family: monospace;
 	font-size: 1em;
-	text-shadow: 0 -1px 0px rgba(0,0,0,0.75);
+	text-shadow: 0 -1px 0px rgba(0,0,0,0.333);
 	word-break: break-all;
 }
 html body div.scrollBox div.terminal a {

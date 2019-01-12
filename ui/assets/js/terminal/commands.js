@@ -6,21 +6,47 @@
 */
 
 	app.commands.builtin = {
+		"?": {
+			"arguments": [],
+			"button": "",
+			"category": "terminal",
+			"description": "Show help menu.",
+			"text": "Show help",
+			launch: async (args) => {
+				app.functions.printHelp()
+			},
+			"os": [".*"]
+		},
 		"clear": {
 			"arguments": [],
 			"button": "",
 			"category": "terminal",
-			"description": "",
-			"text": "",
-			launch: async () => {}
+			"description": "Clear the terminal.",
+			"text": "Clear",
+			launch: async () => {
+				app.functions.clear();
+			}
+		},
+		"commands": {
+			"arguments": [],
+			"button": "",
+			"category": "terminal",
+			"description": "Show help menu.",
+			"text": "Show help",
+			launch: async (args) => {
+				app.functions.printHelp()
+			},
+			"os": [".*"]
 		},
 		"exit": {
 			"arguments": [],
 			"button": "",
 			"category": "terminal",
-			"description": "",
-			"text": "",
-			launch: async () => {}
+			"description": "Exit the terminal.",
+			"text": "Exit",
+			launch: async () => {
+				self.close() || alert("You can only use this in pop-up windows.");
+			}
 		},
 		"fetch": {
 			"arguments": [],
@@ -41,29 +67,38 @@
 			launch: async (args) => {
 				const arguments = args.split(" ");
 				if (arguments[2]) {
-					app.functions.print( "Too many arguments.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+					app.functions.print(
+						new String( 
+							"Too many arguments.<br>" + 
+							"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+						)
+					);
 				} else if (!arguments[1]) {
-					app.functions.print( "Not enough arguments.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+					app.functions.print(
+						new String( 
+							"Not enough arguments.<br>" + 
+							"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+						)
+					);
 				} else if ( parseInt(arguments[0]) >= parseInt(arguments[1]) ) {
-					app.functions.print( "Minimum value must be less than maximum.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+					app.functions.print(
+						new String( 
+							"Minimum value must be less than maximum.<br>" + 
+							"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+						)
+					);
 				} else if ( parseInt(arguments[0]) < 1 ) {
-					app.functions.print( "Minimum value must be at least 1.<br>Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+					app.functions.print(
+						new String( 
+							"Minimum value must be at least 1.<br>" + 
+							"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+						)
+					);
 				} else {
 					const min = parseInt(arguments[0]);
 					const max = parseInt(arguments[1]);
 					app.functions.changeFetchRate(min, max);
 				}
-			},
-			"os": [".*"]
-		},
-		"?": {
-			"arguments": [],
-			"button": "",
-			"category": "terminal",
-			"description": "Show help menu.",
-			"text": "Show help",
-			launch: async (args) => {
-				app.functions.printHelp()
 			},
 			"os": [".*"]
 		},
@@ -89,27 +124,20 @@
 			},
 			"os": [".*"]
 		},
-		"commands": {
+		"reset": {
 			"arguments": [],
-			"button": "",
 			"category": "terminal",
-			"description": "Show help menu.",
-			"text": "Show help",
-			launch: async (args) => {
-				app.functions.printHelp()
-			},
-			"os": [".*"]
-		},
-		"usage": {
-			"arguments": [],
-			"button": "",
-			"category": "terminal",
-			"description": "Show help menu.",
-			"text": "Show help",
-			launch: async (args) => {
-				app.functions.printHelp()
-			},
-			"os": [".*"]
+			"description": "",
+			"text": "",
+			launch: async () => {
+				if (app.environment.warnOnReset) {
+					self.location = location.href;
+				} else {
+					document.body.innerHTML = "";
+					window.onbeforeunload = null;
+					self.location = location.href;
+				}
+			}
 		},
 		"sh": {
 			"arguments": ["COMMAND"],
@@ -118,7 +146,11 @@
 			"description": "Execute shell command/start shell stream.",
 			"text": "Shell",
 			launch: async (args) => {
-				app.functions.stdIn( encodeURIComponent(args) )
+				if (args == "") {
+					app.functions.startStreamingShell();
+				} else {
+					app.functions.stdIn( encodeURIComponent(args) );
+				}
 			},
 			"os": [".*"]
 		},
@@ -129,7 +161,11 @@
 			"description": "Execute shell command/start shell stream.",
 			"text": "Shell",
 			launch: async (args) => {
-				app.functions.stdIn( encodeURIComponent(args) )
+				if (args == "") {
+					app.functions.startStreamingShell();
+				} else {
+					app.functions.stdIn( encodeURIComponent(args) );
+				}
 			},
 			"os": [".*"]
 		},
@@ -141,13 +177,33 @@
 			"text": "Start auto fetching",
 			launch: async (args) => {
 				if (args.split(" ")[2]) {
-					app.functions.print( "Too many arguments.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+					app.functions.print(
+						new String( 
+							"Too many arguments.<br>" + 
+							"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+						)
+					);
 				} else if (!args.split(" ")[1]) {
-					app.functions.print( "Not enough arguments.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+					app.functions.print(
+						new String( 
+							"Not enough arguments.<br>" + 
+							"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+						)
+					);
 				} else if ( parseInt(args.split(" ")[0]) >= parseInt(args.split(" ")[1]) ) {
-					app.functions.print( "Minimum value must be less than maximum.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+					app.functions.print(
+						new String( 
+							"Minimum value must be less than maximum.<br>" + 
+							"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+						)
+					);
 				} else if ( parseInt(args.split(" ")[0]) < 1 ) {
-					app.functions.print( "Minimum value must be at least 1.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+					app.functions.print(
+						new String( 
+							"Minimum value must be at least 1.<br>" + 
+							"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+						)
+					);
 				} else {
 					const min = parseInt( args.split(" ")[0] );
 					const max = parseInt( args.split(" ")[1] );
@@ -178,20 +234,16 @@
 			},
 			"os": [".*"]
 		},
-		"reset": {
+		"usage": {
 			"arguments": [],
+			"button": "",
 			"category": "terminal",
-			"description": "",
-			"text": "",
-			launch: async () => {
-				if (app.environment.warnOnReset) {
-					self.location = location.href;
-				} else {
-					document.body.innerHTML = "";
-					window.onbeforeunload = null;
-					self.location = location.href;
-				}
-			}
+			"description": "Show help menu.",
+			"text": "Show help",
+			launch: async (args) => {
+				app.functions.printHelp()
+			},
+			"os": [".*"]
 		},
 		"xss": {
 			"arguments": ["JAVASCRIPT"],
@@ -201,7 +253,7 @@
 			launch: async (args) => {
 				app.functions.parseXSSCommand(args);
 			}
-		}
+		},
 	}
 
 	app.commands.pluggedin = {
@@ -233,3 +285,28 @@
 		// 	"os": ["RegularExpression|[wW]indows|[mM][aA][cC][oO][sS]|[aA]ndroid|..."]
 		// },
 	}
+
+	app.commands.shell = {
+		"exit": {
+			"arguments": [],
+			"button": "",
+			"category": "shell",
+			"description": "Exit the shell.",
+			"text": "Exit shell",
+			launch: async () => {
+				app.functions.stopStreamingShell();
+			}
+		},
+	}
+
+
+
+// to do:
+
+// } else if ( cmd.match(/^\s*checkstreams\s*$/) ) {
+	// checkStreams()
+// } else if ( cmd.match(/^\s*streammon /) ) {
+	// const args = cmd.split(" ")
+	// streamMon( args[1], args[2] )
+// } else if ( cmd.match(/^\s*streammic /) ) {
+	// streamMic( cmd.split(" ")[1] )
