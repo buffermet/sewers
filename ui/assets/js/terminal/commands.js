@@ -56,12 +56,6 @@
 			},
 			"os": [".*"]
 		},
-			// 	cmd.match(/^\s*[?]\s*$/) 
-			// 	|| cmd.match(/^\s*h\s*$/) 
-			// 	|| cmd.match(/^\s*help\s*$/) 
-			// 	|| cmd.match(/^\s*commands\s*$/) 
-			// 	|| cmd.match(/^\s*usage\s*$/) 
-			// ) {
 		"?": {
 			"arguments": [],
 			"button": "",

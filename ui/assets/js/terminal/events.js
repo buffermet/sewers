@@ -14,7 +14,7 @@
 
 			// If nothing is focused, add new character to stdin field
 			if ( 
-				app.environment.allowed_characters.includes(event.key) 
+				app.environment.allowedCharacters.includes(event.key) 
 				&& !(
 					app.environment.textarea === document.activeElement 
 					|| app.environment.jsField === document.activeElement
@@ -61,14 +61,14 @@
 					app.functions.onXSSCommand()
 				}
 
-				app.environment.cmd_current = ""
+				app.environment.cmdCurrent = ""
 			} else if (event.keyCode == 38) { // Up arrow
 				event.preventDefault()
 
-				if (app.environment.cmd_history_i < app.environment.cmd_history.length) {
-					app.environment.textarea.value = app.environment.cmd_history[app.environment.cmd_history_i]
+				if (app.environment.cmdHistoryIndex < app.environment.cmdHistory.length) {
+					app.environment.textarea.value = app.environment.cmdHistory[app.environment.cmdHistoryIndex]
 
-					app.environment.cmd_history_i += 1
+					app.environment.cmdHistoryIndex += 1
 
 					setTimeout(async()=>{
 						app.environment.textarea.selectionStart = app.environment.textarea.selectionEnd = app.environment.textarea.value.length // todo: make cursor position persistent
@@ -78,12 +78,12 @@
 			} else if (event.keyCode == 40) { // Down arrow
 				event.preventDefault()
 
-				if (app.environment.cmd_history_i > 0) {
-					app.environment.cmd_history_i -= 1
+				if (app.environment.cmdHistoryIndex > 0) {
+					app.environment.cmdHistoryIndex -= 1
 
-					app.environment.textarea.value = app.environment.cmd_history[app.environment.cmd_history_i]
+					app.environment.textarea.value = app.environment.cmdHistory[app.environment.cmdHistoryIndex]
 				} else {
-					app.environment.textarea.value = app.environment.cmd_current
+					app.environment.textarea.value = app.environment.cmdCurrent
 				}
 				app.environment.textarea.focus()
 			}
@@ -94,7 +94,7 @@
 	// Set current command value after keystroke is registered
 	self.addEventListener("keyup", async event => {
 		if ( !(event.keyCode == 9 || event.keyCode == 13 || event.keyCode == 38 || event.keyCode == 40) ) {
-			app.environment.cmd_current = app.environment.textarea.value
+			app.environment.cmdCurrent = app.environment.textarea.value
 		}
 	})
 
