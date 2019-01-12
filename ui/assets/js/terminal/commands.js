@@ -124,6 +124,17 @@
 			},
 			"os": [".*"]
 		},
+		"info": {
+			"arguments": [],
+			"button": "",
+			"category": "terminal",
+			"description": "Show help menu.",
+			"text": "Show help",
+			launch: async (args) => {
+				app.functions.printHelp()
+			},
+			"os": [".*"]
+		},
 		"reset": {
 			"arguments": [],
 			"category": "terminal",
