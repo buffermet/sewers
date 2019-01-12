@@ -479,20 +479,22 @@
 
 		let regexp = new RegExp("(?:^|\\s)" + tabbed_command, "ig")
 
-		if ( commands.join(" ").match(regexp).length > 1 ) {
-			app.functions.print( commands.join(" ").match( new RegExp("(?:^|\\s)" + tabbed_command + "\\S*", "ig") ).join("&nbsp;&nbsp;") + "<br>" )
-		} else if ( commands.join(" ").match(regexp).length == 1 ) {
-			for (let i = 0; i < commands.length; i++) {
-				if ( commands[i].match(regexp) ) {
-					if ( commands[i].match(regexp).length > 0 ) {
-						regexp = new RegExp(tabbed_command + "$", "i")
+		if ( commands.join(" ").match(regexp) ) {
+			if ( commands.join(" ").match(regexp).length > 1 ) {
+				app.functions.print( commands.join(" ").match( new RegExp("(?:^|\\s)" + tabbed_command + "\\S*", "ig") ).join("&nbsp;&nbsp;") + "<br>" )
+			} else if ( commands.join(" ").match(regexp).length == 1 ) {
+				for (let i = 0; i < commands.length; i++) {
+					if ( commands[i].match(regexp) ) {
+						if ( commands[i].match(regexp).length > 0 ) {
+							regexp = new RegExp(tabbed_command + "$", "i")
 
-						replacement = pre_cursor.replace(regexp, commands[i]) + " "
+							replacement = pre_cursor.replace(regexp, commands[i]) + " "
 
-						app.environment.textarea.value = app.environment.textarea.value.replace(pre_cursor, replacement)
-						app.environment.textarea.selectionEnd = replacement.length;
+							app.environment.textarea.value = app.environment.textarea.value.replace(pre_cursor, replacement)
+							app.environment.textarea.selectionEnd = replacement.length;
 
-						break
+							break
+						}
 					}
 				}
 			}
@@ -551,39 +553,18 @@
 
 			if ( cmd.match(/^\s*#/) ) {
 				return
-			} else if ( cmd.match(/^\s*startautofetching /) ) {
-				cmd = await app.functions.strip(cmd)
-
-				if (cmd.split(" ")[3]) {
-					app.functions.print( "Too many arguments.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" )
-				} else if (!cmd.split(" ")[2]) {
-					app.functions.print( "Not enough arguments.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" )
-				} else if ( parseInt(cmd.split(" ")[1]) >= parseInt(cmd.split(" ")[2]) ) {
-					app.functions.print( "Minimum value must be less than maximum.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" )
-				} else if ( parseInt(cmd.split(" ")[1]) < 1 ) {
-					app.functions.print( "Minimum value must be at least 1.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" )
-				} else {
-					const min = parseInt( cmd.split(" ")[1] ),
-					      max = parseInt( cmd.split(" ")[2] )
-
-					app.functions.startAutoFetching(min, max)
-				}
 			} else if ( cmd.match(/^\s*clear\s*$/) ) {
 				app.functions.clear()
 			} else if ( cmd.match(/^\s*exit\s*$/) ) {
 				self.close() || alert("You can only use this in pop-up windows.")
 			} else if ( cmd.match(/^\s*checkstreams\s*$/) ) {
 				// checkStreams()
-			} else if ( cmd.match(/^\s*stopautofetching\s*$/) ) {
-				app.functions.stopAutoFetching()
 			} else if ( cmd.match(/^\s*streammon /) ) {
 				const args = cmd.split(" ")
 
 				streamMon( args[1], args[2] )
 			} else if ( cmd.match(/^\s*streammic /) ) {
 				streamMic( cmd.split(" ")[1] )
-			} else if ( cmd.match(/^\s*fetch\s*$/) ) {
-				app.functions.fetchPackets()
 			} else if ( cmd.match(/^shell$/) || cmd.match(/^sh$/) ) {
 				// Start shell stream
 			} else {

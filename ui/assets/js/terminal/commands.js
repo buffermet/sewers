@@ -22,6 +22,16 @@
 			"text": "",
 			launch: async () => {}
 		},
+		"fetch": {
+			"arguments": [],
+			"button": "",
+			"category": "interpreter",
+			"description": "Fetch new packets from interpreter.",
+			"text": "Fetch",
+			launch: async () => {
+				app.functions.fetchPackets();
+			}
+		},
 		"fetchrate": {
 			"arguments": ["MIN SECONDS", "MAX SECONDS"],
 			"button": "",
@@ -126,6 +136,40 @@
 			"text": "Shell",
 			launch: async (args) => {
 				app.functions.stdIn( encodeURIComponent(args) )
+			},
+			"os": [".*"]
+		},
+		"startautofetching": {
+			"arguments": ["COMMAND"],
+			"button": "",
+			"category": "terminal",
+			"description": "Start auto fetching.",
+			"text": "Start auto fetching",
+			launch: async (args) => {
+				if (args.split(" ")[2]) {
+					app.functions.print( "Too many arguments.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+				} else if (!args.split(" ")[1]) {
+					app.functions.print( "Not enough arguments.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+				} else if ( parseInt(args.split(" ")[0]) >= parseInt(args.split(" ")[1]) ) {
+					app.functions.print( "Minimum value must be less than maximum.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+				} else if ( parseInt(args.split(" ")[0]) < 1 ) {
+					app.functions.print( "Minimum value must be at least 1.<br>Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">" + await app.functions.escapeHTML("<MIN SECONDS> <MAX SECONDS>") + "</span><br>" );
+				} else {
+					const min = parseInt( args.split(" ")[0] );
+					const max = parseInt( args.split(" ")[1] );
+					app.functions.startAutoFetching(min, max);
+				}
+			},
+			"os": [".*"]
+		},
+		"stopautofetching": {
+			"arguments": ["COMMAND"],
+			"button": "",
+			"category": "terminal",
+			"description": "Stop auto fetching.",
+			"text": "Stop auto fetching",
+			launch: async (args) => {
+				app.functions.stopAutoFetching();
 			},
 			"os": [".*"]
 		},
