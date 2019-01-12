@@ -5,7 +5,7 @@
 		app.functions.shrinkInputField().then(async()=>{
 			app.functions.resetClearBreaks()
 		})
-		await app.functions.getSessionConfig(app.environment.relay, app.environment.session_id)
+		await app.functions.getSessionConfig(app.environment.relay, app.environment.sessionID)
 		await app.functions.getRelayConfig(app.environment.relay)
 		await app.functions.parseUserAgent()
 		app.functions.printInstructions()
