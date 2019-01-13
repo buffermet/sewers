@@ -164,8 +164,8 @@
 		)
 	}
 
-	// Return StdIn to HTTP server
-	app.functions.stdIn = async url_encoded => {
+	// Return standard input to HTTP server
+	app.functions.toShell = async url_encoded => {
 		const form = new String(
 			"body=" + url_encoded + 
 			"&session_id=" + app.environment.sessionID + 
@@ -468,36 +468,47 @@
 	}
 
 	// Stream shell session
-	app.functions.startStreamingShell = async () => {
-		app.environment.streamingShell = true;
+	app.functions.startStreamingShell = async stream_session => {
+		return new Promise(async(resolve, reject)=>{
+			if ( app.environment.activeStreams.indexOf(stream_session) != -1) {
+				reject("<span class=\"red\">stream session " + stream_session + " already exists.</span>");
+			} else {
+				app.environment.activeStreams.push(stream_session);
+				app.environment.currentStream = stream_session;
 
-		const prototype_builtin = app.commands.builtin;
-		const prototype_pluggedin = app.commands.pluggedin;
+				app.environment.streamingShell = true;
 
-		app.commands.protoypes = {};
-		app.commands.protoypes.builtin = prototype_builtin;
-		app.commands.protoypes.pluggedin = prototype_pluggedin;
+				const prototype_builtin = app.commands.builtin;
+				const prototype_pluggedin = app.commands.pluggedin;
 
-		app.commands.builtin = app.commands.shell;
-		app.commands.pluggedin = {};
+				app.commands.protoypes = {};
+				app.commands.protoypes.builtin = prototype_builtin;
+				app.commands.protoypes.pluggedin = prototype_pluggedin;
 
-		app.environment.requestTag = "&dollar; \xBB ";
+				app.commands.builtin = app.commands.shell;
+				app.commands.pluggedin = {};
 
-		app.functions.print(
-			new String(app.environment.requestTag + "session <span class=\"bold\">1</span> started.<br>")
-		);
+				app.environment.requestTag = "&dollar; \xBB ";
+
+				app.functions.print(app.environment.requestTag + "session <span class=\"bold\">" + stream_session + "</span> started, getting current working directory ...<br>");
+				app.functions.showNetworkIndicator(); // debug
+				setTimeout(async()=>{ // debug
+					app.functions.hideNetworkIndicator(); // debug
+				}, 1000); // debug
+			}
+		});
 	}
 
 	// Stream shell session
-	app.functions.stopStreamingShell = async () => {
+	app.functions.stopStreamingShell = async stream_session => {
 		app.commands.builtin = app.commands.protoypes.builtin;
 		app.commands.pluggedin = app.commands.protoypes.pluggedin;
 
 		app.environment.requestTag = "<span class=\"orange bold\">sewers</span> \xBB ";
 
-		app.functions.print(
-			new String(app.environment.requestTag + "session <span class=\"bold\">1</span> terminated.<br>")
-		);
+		app.environment.activeStreams.splice( app.environment.activeStreams.indexOf( new String(stream_session) ) );
+
+		app.functions.print(app.environment.requestTag + "session <span class=\"bold\">" + stream_session + "</span> terminated.<br>");
 	}
 
 	// Network activity indicator
@@ -553,8 +564,10 @@
 						app.environment.textarea.selectionEnd = replacement.length;
 
 						const log_str = new String(
-							app.environment.requestTag + await app.functions.escapeHTML(pre_cursor) + "<br>" + 
-							commands.join(" ").match( new RegExp("(?:^|\\s)" + longest_common_string + "\\S*", "ig") ).join("&nbsp;&nbsp;") + "<br>" 
+							"<span style=\"display:block;word-break:keep-all;\">" + 
+								app.environment.requestTag + await app.functions.escapeHTML(pre_cursor) + "<br>" + 
+								commands.join(" ").match( new RegExp("(?:^|\\s)" + longest_common_string + "\\S*", "ig") ).join("&nbsp;&nbsp;") + "<br>" + 
+							"</span>" 
 						);
 
 						app.functions.print(log_str);
