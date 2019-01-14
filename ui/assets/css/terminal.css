@@ -177,7 +177,7 @@ html body div.menu div.item div.network-indicator {
 	-ms-transition: opacity 333ms linear;
 	-o-transition: opacity 333ms linear;
 }
-html body div.menu div.item div.network-indicator.show {
+html body div.menu div.item div.network-indicator[data-state=on] {
 	opacity: 1;
 }
 html body div.menu div.item div.network-indicator div {

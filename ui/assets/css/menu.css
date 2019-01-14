@@ -243,10 +243,10 @@ html body div.menu div.item[name=javascript] input {
 	-ms-transition: all 200ms ease;
 	-o-transition: all 200ms ease;
 }
-html body div.menu div.item[name=javascript][data-state=show] {
+html body div.menu div.item[name=javascript][data-state=on] {
 	width: 96px;
 }
-html body div.menu div.item[name=javascript][data-state=show] input {
+html body div.menu div.item[name=javascript][data-state=on] input {
 	opacity: 1;
 	width: 100px;
 	background-color: black;
@@ -276,12 +276,15 @@ html body div.menu div.item div.submenu {
 	max-height: calc(100% - 26px);
 	border-left: none;
 	border-right: none;
+	border-radius: 0px 0px 4px 4px;
+	overflow: hidden;
 }
 html body div.menu div.item.right div.submenu {
 	left: initial;
 	right: 1px;
 }
 html body div.menu div.item div.submenu div.subitem {
+	display: block;
 	border-bottom: 1px solid rgba(255,255,255,0.05);
 	text-indent: 8px;
 	height: 30px;
@@ -307,13 +310,13 @@ html body div.menu div.item div.submenu div.subitem:active {
 }
 html body div.menu div.item div.submenu div.subitem:last-of-type {
 	border-bottom: none;
-	border-radius: 0px 0px 4px 4px;
 }
 html body div.menu div.item.left:hover div.submenu {
 	display: block;
 	left: -1px;
 }
 html body div.menu div.item.right:hover div.submenu {
+	max-height: calc(100vh - 26px);
 	display: block;
 	right: -1px;
 }

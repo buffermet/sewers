@@ -517,14 +517,14 @@
 	app.functions.showNetworkIndicator = async () => {
 		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator");
 
-		network_indicator.setAttribute("data-state", "show");
+		network_indicator.setAttribute("data-state", "on");
 	}
 
 	// Network activity indicator
 	app.functions.hideNetworkIndicator = async () => {
 		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator");
 
-		network_indicator.removeAttribute("data-state");
+		network_indicator.setAttribute("data-state", "off");
 	}
 
 	// Autocomplete stdin

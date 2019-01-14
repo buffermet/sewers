@@ -10,10 +10,10 @@
 
 	// Focus input field unless selecting span text
 	app.environment.xssButton.addEventListener("click", async event=>{
-		app.environment.xssButton.classList.add("show");
+		app.environment.xssButton.setAttribute("data-state", "on");
 		self.addEventListener("click", async function f(event){
 			if (event.target.name !== "xssfield") {
-				app.environment.xssButton.classList.remove("show");
+				app.environment.xssButton.setAttribute("data-state", "off");
 				this.removeEventListener("click", f);
 			}
 		});
