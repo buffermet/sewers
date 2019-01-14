@@ -281,20 +281,6 @@
 		}
 	}
 
-	// Network activity indicator
-	app.functions.showNetworkIndicator = async () => {
-		// const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
-
-		// network_indicator.classList.add("show")
-	}
-
-	// Network activity indicator
-	app.functions.hideNetworkIndicator = async () => {
-		// const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
-
-		// network_indicator.classList.remove("show")
-	}
-
 	// Print to console
 	app.functions.print = async html => {
 		const timestamped = document.createElement("stamp")

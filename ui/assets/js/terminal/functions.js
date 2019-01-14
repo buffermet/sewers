@@ -384,11 +384,13 @@
 
 	// Append new stream to menu
 	app.functions.addStream = async (streamID, streamType) => {
-		if (streamType == "STREAMMIC") {
+		if (streamType == "cam") {
+			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon eye\"><div class=\"icon rec blinking\"></div></div></div>");
+		} else if (streamType == "mic") {
 			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?mic&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".wav', 'width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammic\"><div class=\"icon rec blinking\"></div></div></div>");
-		} else if (streamType == "STREAMMON") {
+		} else if (streamType == "mon") {
 			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?mon&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammon\"><div class=\"icon rec blinking\"></div></div></div>");
-		} else if (streamType == "STREAMCAM") {
+		} else if (streamType == "shell") {
 			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon eye\"><div class=\"icon rec blinking\"></div></div></div>");
 		}
 	}
@@ -515,14 +517,14 @@
 	app.functions.showNetworkIndicator = async () => {
 		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
 
-		network_indicator.classList.add("show")
+		network_indicator.setAttribute("data-state", "show");
 	}
 
 	// Network activity indicator
 	app.functions.hideNetworkIndicator = async () => {
 		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
 
-		network_indicator.classList.remove("show")
+		network_indicator.removeAttribute("data-state");
 	}
 
 	// Autocomplete stdin

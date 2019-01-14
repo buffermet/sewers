@@ -43,10 +43,6 @@ html body div.menu div.item.right {
 html body div.menu div.item.center:last-of-type {
 	border-right: none;
 }
-html body div.menu div.item:hover {
-	background-color: black;
-	color: rgba(255,255,255,1);
-}
 html body div.menu div.item:active {
 	background-color: rgba(255,255,255,0.03);
 }
@@ -54,7 +50,7 @@ html body div.menu div.item.no-click:active {
 	background-color: transparent !important;
 }
 html body div.menu div.item.no-hover:hover {
-	background-color: transparent;
+	cursor: default;
 }
 html body div.menu div.item.no-cursor {
 	cursor: default !important;
@@ -247,10 +243,10 @@ html body div.menu div.item[name=javascript] input {
 	-ms-transition: all 200ms ease;
 	-o-transition: all 200ms ease;
 }
-html body div.menu div.item[name=javascript].show {
-	width: 98px;
+html body div.menu div.item[name=javascript][data-state=show] {
+	width: 96px;
 }
-html body div.menu div.item[name=javascript].show input {
+html body div.menu div.item[name=javascript][data-state=show] input {
 	opacity: 1;
 	width: 100px;
 	background-color: black;
@@ -293,7 +289,7 @@ html body div.menu div.item div.submenu div.subitem {
 	line-height: 29px;
 	text-align: left;
 	background-color: rgba(0,0,0,0.8);
-	color: rgba(255,255,255,0.5);
+	color: #FFF;
 	cursor: pointer;
 }
 html body div.menu div.item div.submenu div.submodule {
@@ -306,12 +302,8 @@ html body div.menu div.item div.submenu div.submodule {
 	background-color: rgba(0,0,0,0.8);
 	border-radius: 0px 0px 4px 4px;
 }
-html body div.menu div.item div.submenu div.subitem:hover {
-	background-color: rgba(0,0,0,0.9);
-	color: rgba(255,255,255,1);
-}
 html body div.menu div.item div.submenu div.subitem:active {
-	background-color: rgb(8,8,8,0.9);
+	background-color: rgb(10,10,10,0.9);
 }
 html body div.menu div.item div.submenu div.subitem:last-of-type {
 	border-bottom: none;

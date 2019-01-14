@@ -142,13 +142,15 @@ html body form textarea {
 html body form input[type=button]:hover {
 	background: rgba(80,80,80,0.4);
 }
-img.preload {
-	position: absolute;
-	width: 0px;
-	height: 0px;
-}
 .displaynone {
 	display: none;
+}
+html body preload {
+	position: absolute;
+	display: block;
+	overflow: hidden;
+	width: 0px;
+	height: 0px;
 }
 
 /* Credit: loading.io css loader */
