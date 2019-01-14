@@ -205,6 +205,7 @@
 			"description": "Start auto fetching.",
 			"text": "Start auto fetching",
 			launch: async (args) => {
+				args = app.functions.strip(args);
 				if (args.split(" ")[2]) {
 					app.functions.print(
 						new String( 

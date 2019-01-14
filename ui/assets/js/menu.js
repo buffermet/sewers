@@ -10,7 +10,7 @@
 			item.addEventListener("mouseleave", async(event)=>{
 				event.target.setAttribute("data-state", "off");
 			});
-			item.addEventListener("touchstart", async(event)=>{
+			item.addEventListener("mouseup", async(event)=>{
 				if ( event.target.getAttribute("data-state") == "off" ) {
 					event.target.setAttribute("data-state", "on");
 				} else {
