@@ -323,6 +323,17 @@
 	}
 
 	app.commands.shell = {
+		"clear": {
+			"arguments": [],
+			"button": "",
+			"category": "terminal",
+			"description": "Clear the terminal.",
+			"text": "Clear",
+			launch: async () => {
+				app.functions.clear();
+			},
+			load: async () => {},
+		},
 		"exit": {
 			"arguments": [],
 			"button": "",
