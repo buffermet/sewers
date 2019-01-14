@@ -21,18 +21,20 @@
 
 	// Reveal submenus on desktop and mobile
 	document.querySelectorAll("html body div.menu div.item").forEach(async(item)=>{
-		item.addEventListener("mouseenter", async(event)=>{
-			event.target.setAttribute("data-state", "on");
-		});
-		item.addEventListener("mouseleave", async(event)=>{
-			event.target.setAttribute("data-state", "off");
-		});
-		item.addEventListener("touchstart", async(event)=>{
-			event.target.setAttribute("data-state", "on");
-		});
-		item.addEventListener("touchend", async(event)=>{
-			event.target.setAttribute("data-state", "off");
-		});
+		if (item.getAttribute("name") !== "xssbutton") {
+			item.addEventListener("mouseenter", async(event)=>{
+				event.target.setAttribute("data-state", "on");
+			});
+			item.addEventListener("mouseleave", async(event)=>{
+				event.target.setAttribute("data-state", "off");
+			});
+			item.addEventListener("touchstart", async(event)=>{
+				event.target.setAttribute("data-state", "on");
+			});
+			item.addEventListener("touchend", async(event)=>{
+				event.target.setAttribute("data-state", "off");
+			});
+		}
 	});
 
 	// Custom keyboard handler

@@ -229,7 +229,7 @@ html body div.menu div.item[name=statusled].online {
 	animation-direction: alternate;
 	-webkit-animation-direction: alternate;
 }
-html body div.menu div.item[name=javascript] input {
+html body div.menu div.item[name=xssbutton] input {
 	position: absolute;
 	left: 0px;
 	top: 0px;
@@ -247,10 +247,10 @@ html body div.menu div.item[name=javascript] input {
 	-ms-transition: all 200ms ease;
 	-o-transition: all 200ms ease;
 }
-html body div.menu div.item[name=javascript][data-state=on] {
+html body div.menu div.item[name=xssbutton][data-state=on] {
 	width: 96px;
 }
-html body div.menu div.item[name=javascript][data-state=on] input {
+html body div.menu div.item[name=xssbutton][data-state=on] input {
 	opacity: 1;
 	width: 100px;
 	background-color: black;

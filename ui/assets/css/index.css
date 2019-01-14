@@ -642,6 +642,13 @@ html body div.console div.consolecontainer span::selection {
 	background-color: #FFF;
 	color: #000;
 }
+html body preload {
+	position: absolute;
+	display: block;
+	overflow: hidden;
+	width: 0px;
+	height: 0px;
+}
 .selectable {
 	user-select: text;
 	-webkit-user-select: text;
