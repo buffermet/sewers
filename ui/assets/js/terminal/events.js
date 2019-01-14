@@ -21,8 +21,7 @@
 
 	// Custom keyboard handler
 	self.addEventListener("keydown", async event=>{
-		if (!event.ctrlKey) { // unless CTRL key is pressed
-
+		if (!event.ctrlKey) {
 			// If nothing is focused, add new character to stdin field
 			if ( 
 				app.environment.allowedCharacters.includes(event.key) 
@@ -98,7 +97,6 @@
 				}
 				app.environment.textarea.focus()
 			}
-
 		}
 	})
 

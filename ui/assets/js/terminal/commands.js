@@ -179,19 +179,18 @@
 			"description": "Execute shell command/start shell stream.",
 			"text": "Shell",
 			launch: async (args) => {
-				app.functions.print("use the other one <br>")
-				// if (args == "") {
-				// 	let new_stream_session = 0;
-				// 	app.environment.activeStreams.forEach(async(active_stream_session)=>{
-				// 		active_stream_session == new String(new_stream_session) ? new_stream_session++ : "";
-				// 	});
-				// 	new_stream_session = new String(new_stream_session);
-				// 	app.functions.startStreamingShell(new_stream_session).catch(async(err)=>{
-				// 		app.functions.print("ERROR: " + err + "<br>");
-				// 	});
-				// } else {
-				// 	app.functions.toShell( encodeURIComponent(args) );
-				// }
+				if (args == "") {
+					let new_stream_session = 0;
+					app.environment.activeStreams.forEach(async(active_stream_session)=>{
+						active_stream_session == new String(new_stream_session) ? new_stream_session++ : "";
+					});
+					new_stream_session = new String(new_stream_session);
+					app.functions.startStreamingShell(new_stream_session).catch(async(err)=>{
+						app.functions.print("ERROR: " + err + "<br>");
+					});
+				} else {
+					app.functions.toShell( encodeURIComponent(args) );
+				}
 			},
 			"os": [".*"]
 		},

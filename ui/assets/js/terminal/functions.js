@@ -191,7 +191,7 @@
 			if (res.status == 200) {
 				setTimeout(app.functions.hideNetworkIndicator, 320);
 
-				app.functions.print("<span>Interpreter will be fetching packets every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds as soon as it fetches packets.<br></span>");
+				app.functions.print("<span>Interpreter will be fetching new packets every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds.<br></span>");
 
 				app.environment.sessionConfig.fetch_rate = min + "-" + max;
 			}
@@ -490,7 +490,7 @@
 				app.commands.builtin = app.commands.shell;
 				app.commands.pluggedin = {};
 
-				app.environment.requestTag = "&dollar; \xBB ";
+				app.environment.requestTag = "<span class=\"bold\">&dollar;</span>&nbsp;\xBB&nbsp;";
 
 				app.functions.print(app.environment.requestTag + "session <span class=\"bold\">" + stream_session + "</span> started, getting current working directory ...<br>");
 				app.functions.showNetworkIndicator(); // debug
@@ -506,7 +506,7 @@
 		app.commands.builtin = app.commands.protoypes.builtin;
 		app.commands.pluggedin = app.commands.protoypes.pluggedin;
 
-		app.environment.requestTag = "<span class=\"orange bold\">sewers</span> \xBB ";
+		app.environment.requestTag = "<span class=\"orange bold\">sewers</span>&nbsp;\xBB&nbsp;";
 
 		app.environment.activeStreams.splice( app.environment.activeStreams.indexOf( new String(stream_session) ) );
 
@@ -515,14 +515,14 @@
 
 	// Network activity indicator
 	app.functions.showNetworkIndicator = async () => {
-		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
+		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator");
 
 		network_indicator.setAttribute("data-state", "show");
 	}
 
 	// Network activity indicator
 	app.functions.hideNetworkIndicator = async () => {
-		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator")
+		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator");
 
 		network_indicator.removeAttribute("data-state");
 	}
