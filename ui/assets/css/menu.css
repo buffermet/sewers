@@ -71,13 +71,14 @@ html body div.menu div.item.left span.ip {
 	font-family: "OpenSans-SemiBold";
 }
 html body div.menu div.item.left span.ip div.status {
+	float: left;
 	height: 12px;
 	width: 12px;
 	border-radius: 999px;
 	display: inline-block;
 	float: left;
 	margin-top: 7px;
-	margin-right: 6px;
+	margin-right: 6px;f
 }
 html body div.menu div.item.left span.ip div.status.active {
 	background-color: rgb(33, 255, 0);
@@ -273,11 +274,13 @@ html body div.menu div.item div.submenu {
 	left: 1px;
 	min-width: 180px;
 	width: auto;
+	height: auto;
 	max-height: calc(100% - 26px);
 	border-left: none;
 	border-right: none;
 	border-radius: 0px 0px 4px 4px;
-	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 html body div.menu div.item.right div.submenu {
 	left: initial;
@@ -285,7 +288,7 @@ html body div.menu div.item.right div.submenu {
 }
 html body div.menu div.item div.submenu div.subitem {
 	display: block;
-	border-bottom: 1px solid rgba(255,255,255,0.05);
+	/*border-bottom: 1px solid rgba(255,255,255,0.05);*/
 	text-indent: 8px;
 	height: 30px;
 	width: 100%;
@@ -311,13 +314,14 @@ html body div.menu div.item div.submenu div.subitem:active {
 html body div.menu div.item div.submenu div.subitem:last-of-type {
 	border-bottom: none;
 }
-html body div.menu div.item.left:hover div.submenu {
-	display: block;
-	left: -1px;
-}
-html body div.menu div.item.right:hover div.submenu {
+html body div.menu div.item:hover div.submenu {
 	max-height: calc(100vh - 26px);
 	display: block;
+}
+html body div.menu div.item.left:hover div.submenu {
+	left: -1px;
+}
+html body div.menu div.item.right.:hover div.submenu {
 	right: -1px;
 }
 html body div.menu div.item div.submenu div.icon {
