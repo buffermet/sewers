@@ -86,6 +86,9 @@ html body div.menu div.item.left span.ip div.status.active {
 html body div.menu div.item.left span.ip div.status.inactive {
 	background-color: rgba(120,120,120,1)
 }
+html body div.menu div.userlist div.item {
+	min-width: 25px;
+}
 html body div.menu div.item div.icon {
 	position: relative;
 	top: 5px;
@@ -314,14 +317,14 @@ html body div.menu div.item div.submenu div.subitem:active {
 html body div.menu div.item div.submenu div.subitem:last-of-type {
 	border-bottom: none;
 }
-html body div.menu div.item:hover div.submenu {
+html body div.menu div.item[data-state=on] div.submenu {
 	max-height: calc(100vh - 26px);
 	display: block;
 }
-html body div.menu div.item.left:hover div.submenu {
+html body div.menu div.item.lef[data-state=on] div.submenu {
 	left: -1px;
 }
-html body div.menu div.item.right.:hover div.submenu {
+html body div.menu div.item.right[data-state=on] div.submenu {
 	right: -1px;
 }
 html body div.menu div.item div.submenu div.icon {

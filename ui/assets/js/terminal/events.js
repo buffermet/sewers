@@ -6,7 +6,7 @@
 		if (event.target.tagName != "SPAN" && event.target.tagName != "INPUT") {
 			app.environment.textarea.focus()
 		}
-	})
+	});
 
 	// Focus input field unless selecting span text
 	app.environment.xssButton.addEventListener("click", async event=>{
@@ -17,7 +17,14 @@
 				this.removeEventListener("click", f);
 			}
 		});
-	})
+	});
+
+	// Reveal submenus on desktop and mobile
+	document.querySelectorAll("html body div.menu div.item").forEach(async(item)=>{
+		item.addEventListener("mouseenter", async(event)=>{
+			
+		});
+	});
 
 	// Custom keyboard handler
 	self.addEventListener("keydown", async event=>{
