@@ -541,56 +541,54 @@
 
 		if ( commands.join(" ").match(regexp) ) {
 			let matches = commands.join(" ").match(regexp);
+			let replacement;
 
 			for (let a = 0; a < commands.length; a++) {
 				if ( commands[a].match(regexp) ) {
 					if (matches.length > 1) {
-						let longest_common_string = tabbed_command;
-						let longest_match_length = 0;
+						let longest_substring = tabbed_command;
+						let longest_substring_length = 0;
 
 						matches.forEach((match)=>{
-							match.length > longest_match_length ? longest_match_length = match.length : "";
+							match.length > longest_substring_length ? longest_substring_length = match.length : "";
 						});
 
-						let next_match_count = matches.length;
-						for (let b = 0; b < longest_match_length; b++) {
-							next_match_count = commands.join(" ").match( new RegExp("(?:^|\\s)" + longest_common_string + commands[a].charAt(longest_common_string.length), "ig" ) ).length;
-							if (next_match_count == matches.length) {
-								longest_common_string = longest_common_string + commands[a].charAt(longest_common_string.length);
+						let substring_count = matches.length;
+
+						for (let b = 0; b < longest_substring_length; b++) {
+							substring_count = commands.join(" ").match( new RegExp("(?:^|\\s)" + longest_substring + commands[a].charAt(longest_substring.length), "ig" ) ).length;
+
+							if (substring_count == matches.length) {
+								longest_substring = longest_substring + commands[a].charAt(longest_substring.length);
 							} else {
 								break;
 							}
 						}
 
 						regexp = new RegExp(tabbed_command + "$", "i");
+						replacement = pre_cursor.replace(regexp, longest_substring);
 
-						replacement = pre_cursor.replace(regexp, longest_common_string);
-
-						app.environment.textarea.value = app.environment.textarea.value.replace(pre_cursor, replacement);
-						app.environment.textarea.selectionEnd = replacement.length;
-
-						const log_str = new String(
-							"<span style=\"display:block;word-break:keep-all;\">" + 
-								app.environment.requestTag + await app.functions.escapeHTML(pre_cursor) + "<br>" + 
-								commands.join(" ").match( new RegExp("(?:^|\\s)" + longest_common_string + "\\S*", "ig") ).join("&nbsp;&nbsp;") + "<br>" + 
-							"</span>" 
-						);
-
-						app.functions.print(log_str);
+						if (tabbed_command.length == longest_substring.length) {
+							app.functions.print( 
+								"<span style=\"display:block;word-break:keep-all;\">" + 
+									app.environment.requestTag + await app.functions.escapeHTML(pre_cursor) + "<br>" + 
+									commands.join(" ").match( new RegExp("(?:^|\\s)" + longest_substring + "\\S*", "ig") ).join("&nbsp;&nbsp;") + "<br>" + 
+								"</span>" 
+							);
+						}
 
 						break;
 					} else {
 						regexp = new RegExp(tabbed_command + "$", "i");
-
 						replacement = pre_cursor.replace(regexp, commands[a]) + " ";
-
-						app.environment.textarea.value = app.environment.textarea.value.replace(pre_cursor, replacement);
-						app.environment.textarea.selectionEnd = replacement.length;
 
 						break;
 					}
 				}
 			}
+
+			app.environment.textarea.value = app.environment.textarea.value.replace(pre_cursor, replacement);
+			app.environment.textarea.selectionEnd = replacement.length;
 		}
 	}
 
