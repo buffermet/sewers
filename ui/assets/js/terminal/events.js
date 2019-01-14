@@ -9,7 +9,7 @@
 	});
 
 	// Focus input field unless selecting span text
-	app.environment.xssButton.addEventListener("click", async event=>{
+	app.environment.xssButton.addEventListener("click", async(event)=>{
 		app.environment.xssButton.setAttribute("data-state", "on");
 		self.addEventListener("click", async function f(event){
 			if (event.target.name !== "xssfield") {
@@ -22,7 +22,16 @@
 	// Reveal submenus on desktop and mobile
 	document.querySelectorAll("html body div.menu div.item").forEach(async(item)=>{
 		item.addEventListener("mouseenter", async(event)=>{
-			
+			event.target.setAttribute("data-state", "on");
+		});
+		item.addEventListener("mouseleave", async(event)=>{
+			event.target.setAttribute("data-state", "off");
+		});
+		item.addEventListener("touchstart", async(event)=>{
+			event.target.setAttribute("data-state", "on");
+		});
+		item.addEventListener("touchend", async(event)=>{
+			event.target.setAttribute("data-state", "off");
 		});
 	});
 
