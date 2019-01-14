@@ -2,10 +2,21 @@
 /* Set events for terminal.html */
 
 	// Focus input field unless selecting span text
-	self.addEventListener("click", async event=>{
+	self.addEventListener("click", async(event)=>{
 		if (event.target.tagName != "SPAN" && event.target.tagName != "INPUT") {
 			app.environment.textarea.focus()
 		}
+	})
+
+	// Focus input field unless selecting span text
+	app.environment.xssButton.addEventListener("click", async event=>{
+		app.environment.xssButton.classList.add("show");
+		self.addEventListener("click", async function f(event){
+			if (event.target.name !== "xssfield") {
+				app.environment.xssButton.classList.remove("show");
+				this.removeEventListener("click", f);
+			}
+		});
 	})
 
 	// Custom keyboard handler
@@ -17,7 +28,7 @@
 				app.environment.allowedCharacters.includes(event.key) 
 				&& !(
 					app.environment.textarea === document.activeElement 
-					|| app.environment.jsField === document.activeElement
+					|| app.environment.xssField === document.activeElement
 				) 
 			) {
 				const oldValue = app.environment.textarea.value,
@@ -30,12 +41,12 @@
 
 			// Scroll to bottom on StdIn if applicable
 			if (app.environment.scrollOnInput) {
-				if (document.activeElement !== app.environment.jsField) {
+				if (document.activeElement !== app.environment.xssField) {
 					app.functions.scrollToBottom()
 				}
 			}
 			if (app.environment.scrollOnJsInput) {
-				if (document.activeElement === app.environment.jsField) {
+				if (document.activeElement === app.environment.xssField) {
 					app.functions.scrollToBottom()
 				}
 			}
@@ -55,7 +66,7 @@
 					event.preventDefault()
 
 					app.functions.onCommand()
-				} else if (document.activeElement === app.environment.jsField) {
+				} else if (document.activeElement === app.environment.xssField) {
 					event.preventDefault()
 
 					app.functions.onXSSCommand()

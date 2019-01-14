@@ -200,19 +200,18 @@ html body div.menu div.item div.icon.chip {
 html body div.menu div.item div.icon div.icon.rec,
 html body div.submenu div.subitem div.icon div.icon.rec {
 	position: absolute;
-	top: 0px;
-	left: -1px;
-	width: 6px;
-	height: 6px;
+	top: -1px;
+	left: -2px;
+	width: 8px;
+	height: 8px;
 	border-radius: 100px;
 	background-color: red;
-	box-shadow: 0px 0 0 1px white;
 }
 html body div.submenu div.subitem div.icon div.icon.rec {
-	top: 0px;
-	left: -6px;
-	width: 4px;
-	height: 4px;
+	top: -1px;
+	left: -5px;
+	width: 6px;
+	height: 6px;
 }
 html body div.menu div.item div.icon div.icon.rec.off,
 html body div.submenu div.subitem div.icon div.icon.rec.off {
@@ -248,7 +247,10 @@ html body div.menu div.item[name=javascript] input {
 	-ms-transition: all 200ms ease;
 	-o-transition: all 200ms ease;
 }
-html body div.menu div.item[name=javascript] input:focus {
+html body div.menu div.item[name=javascript].show {
+	width: 98px;
+}
+html body div.menu div.item[name=javascript].show input {
 	opacity: 1;
 	width: 100px;
 	background-color: black;
@@ -285,7 +287,7 @@ html body div.menu div.item.right div.submenu {
 }
 html body div.menu div.item div.submenu div.subitem {
 	border-bottom: 1px solid rgba(255,255,255,0.05);
-	text-indent: 6px;
+	text-indent: 8px;
 	height: 30px;
 	width: 100%;
 	line-height: 29px;
@@ -295,7 +297,7 @@ html body div.menu div.item div.submenu div.subitem {
 	cursor: pointer;
 }
 html body div.menu div.item div.submenu div.submodule {
-	text-indent: 6px;
+	text-indent: 8px;
 	min-height: 60px;
 	width: 420px;
 	line-height: 29px;
@@ -327,6 +329,6 @@ html body div.menu div.item div.submenu div.icon {
 	width: 12px;
 	height: 12px;
 	top: 1.5px;
-	margin: 0px 2px 0 4px;
+	margin: 0px 3px 0px 3px;
 	display: inline-block;
 }

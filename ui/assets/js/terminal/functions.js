@@ -174,7 +174,7 @@
 
 		app.functions.showNetworkIndicator()
 		app.http.Request("POST", "/post", [["Content-Type", "application/x-www-form-urlencoded"]], form).then(async(res)=>{
-			setTimeout(app.functions.hideNetworkIndicator, 400)
+			setTimeout(app.functions.hideNetworkIndicator, 320);
 		})
 	}
 
@@ -184,16 +184,16 @@
 			"body=" + app.environment.sessionConfig.fetch_rate_tag + " " + min + " " + max + 
 			"&session_id=" + app.environment.sessionID + 
 			"&relay_id=" + app.environment.relay
-		)
+		);
 
 		app.functions.showNetworkIndicator()
 		app.http.Request("POST", "/fetchrate", [["Content-Type", "application/x-www-form-urlencoded"]], form).then(async(res)=>{
 			if (res.status == 200) {
-				setTimeout(app.functions.hideNetworkIndicator, 400)
+				setTimeout(app.functions.hideNetworkIndicator, 320);
 
-				app.functions.print("<span>Interpreter will be fetching packets every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds as soon as it fetches packets.<br></span>")
+				app.functions.print("<span>Interpreter will be fetching packets every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds as soon as it fetches packets.<br></span>");
 
-				app.environment.sessionConfig.fetch_rate = min + "-" + max
+				app.environment.sessionConfig.fetch_rate = min + "-" + max;
 			}
 		})
 	}
@@ -204,60 +204,60 @@
 			"packet_id=" + 
 			"&session_id=" + app.environment.sessionID + 
 			"&relay_id=" + app.environment.relay
-		)
+		);
 
-		app.functions.showNetworkIndicator()
-		let res = await app.http.Request("POST", "/get", [["Content-Type", "application/x-www-form-urlencoded"]], form)
-		setTimeout(app.functions.hideNetworkIndicator, 400)
+		app.functions.showNetworkIndicator();
+		let res = await app.http.Request("POST", "/get", [["Content-Type", "application/x-www-form-urlencoded"]], form);
+		setTimeout(app.functions.hideNetworkIndicator, 320);
 
 		if (res.status == 200) {
-			let response = res.responseText
+			let response = res.responseText;
 
 			if (response.length > 0) {
-				let packets = response.split(",")
+				let packets = response.split(",");
 
 				for (i = 0; i < packets.length; i++) {
-					let packetID = packets[i]
+					let packetID = packets[i];
 
 					const form = new String(
 						"packet_id=" + packetID + 
 						"&session_id=" + app.environment.sessionID + 
 						"&relay_id=" + app.environment.relay
-					)
+					);
 
-					app.functions.showNetworkIndicator()
-					res = await app.http.Request("POST", "/get", [["Content-Type", "application/x-www-form-urlencoded"]], form)
-					setTimeout(app.functions.hideNetworkIndicator, 400)
+					app.functions.showNetworkIndicator();
+					res = await app.http.Request("POST", "/get", [["Content-Type", "application/x-www-form-urlencoded"]], form);
+					setTimeout(app.functions.hideNetworkIndicator, 320);
 
-					response = res.responseText
+					response = res.responseText;
 
 					if (response.length > 0) {
-						new Audio("../../assets/audio/bell.mp3").play()
+						new Audio("../../assets/audio/bell.mp3").play();
 
-						const plaintext = atob(response)
+						const plaintext = atob(response);
 
-						await app.functions.print(app.environment.responseTag + " <span class=\"bold lightgreen\">OK</span> <span>" + await app.functions.timestamp() + "</span><br>")
+						await app.functions.print(app.environment.responseTag + " <span class=\"bold lightgreen\">OK</span> <span>" + await app.functions.timestamp() + "</span><br>");
 
 						if ( plaintext.startsWith("\xff\xd8\xff") || plaintext.startsWith("\xFF\xD8\xFF") ) {
-							const type = "image/jpg"
-							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>")
-							app.functions.sleep(0.1).then(async()=>{ app.functions.print("<hr>") })
+							const type = "image/jpg";
+							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
+							app.functions.sleep(0.1).then(async()=>{ app.functions.print("<hr>") });
 						} else if ( plaintext.startsWith("\x89PNG\r\n\x1a\n") || plaintext.startsWith("\x89PNG\r\n\x1A\n") ) {
-							const type = "image/png"
-							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>")
-							app.functions.sleep(0.1).then(async()=>{ app.functions.print("<hr>") })
+							const type = "image/png";
+							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
+							app.functions.sleep(0.1).then(async()=>{ app.functions.print("<hr>") });
 						} else if ( plaintext.startsWith("GIF87a") || plaintext.startsWith("GIF89a") ) {
-							const type = "image/gif"
-							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>")
-							app.functions.sleep(0.1).then(async()=>{ app.functions.print("<hr>") })
+							const type = "image/gif";
+							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
+							app.functions.sleep(0.1).then(async()=>{ app.functions.print("<hr>") });
 						} else if ( plaintext.startsWith("<?xml") && plaintext.indexOf("<svg") >= 0 || plaintext.startsWith("<svg") ) {
-							const type = "image/svg+xml"
-							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>")
-							app.functions.sleep(0.1).then(async()=>{ app.functions.print("<hr>") })
+							const type = "image/svg+xml";
+							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
+							app.functions.sleep(0.1).then(async()=>{ app.functions.print("<hr>") });
 						} else {
-							let stdout = await app.functions.escapeHTML(plaintext)
-							stdout = stdout + (stdout.endsWith("<br>") ? "" : "\n")
-							app.functions.print(stdout)
+							let stdout = await app.functions.escapeHTML(plaintext);
+							stdout = stdout + (stdout.endsWith("<br>") ? "" : "\n");
+							app.functions.print(stdout);
 						}
 					}
 				}
@@ -268,128 +268,128 @@
 	// Start auto fetcher
 	app.functions.startAutoFetching = async (min, max) => {
 		if (app.environment.autoFetching) {
-			await app.functions.stopAutoFetching()
+			await app.functions.stopAutoFetching();
 
-			app.functions.startAutoFetching(min, max)
+			app.functions.startAutoFetching(min, max);
 		} else {
-			app.environment.autoFetching = true
+			app.environment.autoFetching = true;
 
-			app.environment.fetchDelay = app.functions.randTime(min, max) * 1000
+			app.environment.fetchDelay = app.functions.randTime(min, max) * 1000;
 
-			app.functions.fetchPackets()
+			app.functions.fetchPackets();
 
 			app.environment.autoFetch = async () => {
 				if (app.environment.autoFetching) {
-					app.environment.fetchDelay = await app.functions.randTime(min, max) * 1000
+					app.environment.fetchDelay = await app.functions.randTime(min, max) * 1000;
 
-					app.functions.startLoadLine()
-					app.functions.fetchPackets()
+					app.functions.startLoadLine();
+					app.functions.fetchPackets();
 
-					app.environment.autoFetchSession = setTimeout(app.environment.autoFetch, app.environment.fetchDelay)
+					app.environment.autoFetchSession = setTimeout(app.environment.autoFetch, app.environment.fetchDelay);
 				}
 			}
 
 			if (app.environment.fetchOnAutoFetchStart) {
-				app.environment.autoFetchSession = setTimeout(app.environment.autoFetch, 0)
+				app.environment.autoFetchSession = setTimeout(app.environment.autoFetch, 0);
 			}
 
-			app.functions.print("<span>Fetching new packets from relay every <span class=\"bold\">" + parseInt(min) + "</span> to <span class=\"bold\">" + parseInt(max) + "</span> seconds.<br></span>")
+			app.functions.print("<span>Fetching new packets from relay every <span class=\"bold\">" + parseInt(min) + "</span> to <span class=\"bold\">" + parseInt(max) + "</span> seconds.<br></span>");
 		}
 	}
 
 	// Stop auto fetcher
 	app.functions.stopAutoFetching = async (min, max) => {
 		if (app.environment.autoFetching) {
-			app.environment.autoFetching = false
+			app.environment.autoFetching = false;
 
-			clearTimeout(app.environment.autoFetchSession)
+			clearTimeout(app.environment.autoFetchSession);
 
-			app.environment.loadLine.classList.add("stop")
+			app.environment.loadLine.classList.add("stop");
 
-			app.functions.print("<span>Auto fetcher stopped.<br></span>")
+			app.functions.print("<span>Auto fetcher stopped.<br></span>");
 		} else {
-			app.functions.print("<span>Auto fetcher is not running.<br></span>")
+			app.functions.print("<span>Auto fetcher is not running.<br></span>");
 		}
 	}
 
 	// Get session config
 	app.functions.getSessionConfig = async (relay, session) => {
-		const res = await app.http.Request("GET", "/session/" + relay + "/" + session, [[]], "")
+		const res = await app.http.Request("GET", "/session/" + relay + "/" + session, [[]], "");
 
 		if (res.status == 200) {
-			app.environment.sessionConfig = JSON.parse(res.responseText)
+			app.environment.sessionConfig = JSON.parse(res.responseText);
 		}
 	}
 
 	// Get relay config
 	app.functions.getRelayConfig = async relay => {
-		const res = await app.http.Request("GET", "/config/" + relay, [[]], "")
+		const res = await app.http.Request("GET", "/config/" + relay, [[]], "");
 
 		if (res.status == 200) {
-			app.environment.relayConfig = JSON.parse(res.responseText)
+			app.environment.relayConfig = JSON.parse(res.responseText);
 		}
 	}
 
 	// Move loadline
 	app.functions.startLoadLine = async () => {
-		app.environment.loadLine.classList.add("stop")
+		app.environment.loadLine.classList.add("stop");
 
 		setTimeout(async()=>{
-			const delay = (app.environment.fetchDelay - 600)
+			const delay = (app.environment.fetchDelay - 600);
 
-			app.environment.loadLine.style.transition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
-			app.environment.loadLine.style.webkitTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
-			app.environment.loadLine.style.mozTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
-			app.environment.loadLine.style.msTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
-			app.environment.loadLine.style.oTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms"
+			app.environment.loadLine.style.transition = "opacity 360ms linear, width " + delay + "ms linear 360ms";
+			app.environment.loadLine.style.webkitTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms";
+			app.environment.loadLine.style.mozTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms";
+			app.environment.loadLine.style.msTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms";
+			app.environment.loadLine.style.oTransition = "opacity 360ms linear, width " + delay + "ms linear 360ms";
 
-			app.environment.loadLine.classList.remove("stop")
+			app.environment.loadLine.classList.remove("stop");
 		}, 100)
 	}
 
 	// Scroll to bottom
 	app.functions.scrollToBottom = async () => {
-		app.environment.scrollBox.scrollTop = app.environment.terminal.getBoundingClientRect().height
+		app.environment.scrollBox.scrollTop = app.environment.terminal.getBoundingClientRect().height;
 	}
 
 	// Set clear breaks for clear function
 	app.functions.resetClearBreaks = async () => {
-		app.environment.clearBreaks = parseInt( ( self.innerHeight - 84 ) / 12 )
+		app.environment.clearBreaks = parseInt( ( self.innerHeight - 84 ) / 12 );
 	}
 
 	// Shrink input field as scrollbox increases in size
 	app.functions.shrinkInputField = async () => {
-		app.environment.form.style.height = ( self.innerHeight - app.environment.scrollBox.getBoundingClientRect().height ) + "px"
+		app.environment.form.style.height = ( self.innerHeight - app.environment.scrollBox.getBoundingClientRect().height ) + "px";
 	}
 
 	// Clear function
 	app.functions.clear = async () => {
-		app.environment.terminal.innerHTML = ""
-		app.functions.shrinkInputField()
+		app.environment.terminal.innerHTML = "";
+		app.functions.shrinkInputField();
 	}
 
 	app.functions.parseUserAgent = async () => {
 		if ( navigator.userAgent.match(/android/i) ) {
-			navigator.os = "Android"
+			navigator.os = "Android";
 		} else if ( navigator.userAgent.match(/ios/i) ) {
-			navigator.os = "iOS"
+			navigator.os = "iOS";
 		} else if ( navigator.userAgent.match(/windows/i) ) {
-			navigator.os = "Windows"
+			navigator.os = "Windows";
 		} else if ( navigator.userAgent.match(/mac os/i) ) {
-			navigator.os = "macOS"
+			navigator.os = "macOS";
 		} else if ( navigator.userAgent.match(/linux/i) ) {
-			navigator.os = "Linux"
+			navigator.os = "Linux";
 		}
 	}
 
 	// Append new stream to menu
 	app.functions.addStream = async (streamID, streamType) => {
 		if (streamType == "STREAMMIC") {
-			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?mic&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".wav', 'width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammic\"><div class=\"icon rec blinking\"></div></div></div>")
+			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?mic&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".wav', 'width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammic\"><div class=\"icon rec blinking\"></div></div></div>");
 		} else if (streamType == "STREAMMON") {
-			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?mon&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammon\"><div class=\"icon rec blinking\"></div></div></div>")
+			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?mon&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammon\"><div class=\"icon rec blinking\"></div></div></div>");
 		} else if (streamType == "STREAMCAM") {
-			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon eye\"><div class=\"icon rec blinking\"></div></div></div>")
+			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon eye\"><div class=\"icon rec blinking\"></div></div></div>");
 		}
 	}
 
@@ -641,17 +641,25 @@
 	}
 
 	app.functions.parseXSSCommand = async cmd => {
-		app.functions.print( 
-			app.environment.requestTag + " <span class=\"bold red\">XSS</span>" + " <span>" + await app.functions.timestamp() + "</span><br>" + 
-			"<span class=\"red\">" + await app.functions.escapeHTML(cmd) + "</span><br>" + 
-			"<span>" + eval(cmd) + "</span><br>" 
-		)
+		try {
+			app.functions.print( 
+				app.environment.requestTag + " <span class=\"bold red\">XSS</span>" + " <span>" + await app.functions.timestamp() + "</span><br>" + 
+				"<span class=\"red\">" + await app.functions.escapeHTML(cmd) + "</span><br>" + 
+				"<span>" + await app.functions.escapeHTML( eval(cmd) ) + "</span><br>" 
+			);
+		} catch(err) {
+			app.functions.print( 
+				app.environment.requestTag + " <span class=\"bold red\">XSS</span>" + " <span>" + await app.functions.timestamp() + "</span><br>" + 
+				"<span class=\"red\">" + await app.functions.escapeHTML(cmd) + "</span><br>" + 
+				"<span class=\"red\">" + await app.functions.escapeHTML(err) + "</span><br>" 
+			);
+		}
 	}
 
 	app.functions.onXSSCommand = async () => {
-		const command = app.environment.jsField.value
+		const command = app.environment.xssField.value
 
-		app.environment.jsField.value = ""
+		app.environment.xssField.value = ""
 
 		app.functions.parseXSSCommand(command)
 

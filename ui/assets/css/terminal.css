@@ -151,7 +151,8 @@ img.preload {
 	display: none;
 }
 
-/* loading.io css loader */
+/* Credit: loading.io css loader */
+/* (Network Activity Indicator) */
 .lds-ellipsis {
 	display: inline-block;
 	position: relative;
@@ -188,23 +189,23 @@ img.preload {
 }
 .lds-ellipsis div:nth-child(1) {
 	left: 6px;
-	animation: lds-ellipsis1 0.6s infinite;
-	-webkit-animation: lds-ellipsis1 0.6s infinite;
+	animation: lds-ellipsis1 0.48s infinite;
+	-webkit-animation: lds-ellipsis1 0.48s infinite;
 }
 .lds-ellipsis div:nth-child(2) {
 	left: 6px;
-	animation: lds-ellipsis2 0.6s infinite;
-	-webkit-animation: lds-ellipsis2 0.6s infinite;
+	animation: lds-ellipsis2 0.48s infinite;
+	-webkit-animation: lds-ellipsis2 0.48s infinite;
 }
 .lds-ellipsis div:nth-child(3) {
 	left: 26px;
-	animation: lds-ellipsis2 0.6s infinite;
-	-webkit-animation: lds-ellipsis2 0.6s infinite;
+	animation: lds-ellipsis2 0.48s infinite;
+	-webkit-animation: lds-ellipsis2 0.48s infinite;
 }
 .lds-ellipsis div:nth-child(4) {
 	left: 45px;
-	animation: lds-ellipsis3 0.6s infinite;
-	-webkit-animation: lds-ellipsis3 0.6s infinite;
+	animation: lds-ellipsis3 0.48s infinite;
+	-webkit-animation: lds-ellipsis3 0.48s infinite;
 }
 @keyframes lds-ellipsis1 {
 	0% {
