@@ -1,7 +1,7 @@
 
 /*
 *	
-*	Sewers UI index environment
+*	Sewers UI index environment package
 *	
 */
 

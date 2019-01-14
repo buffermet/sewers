@@ -94,6 +94,7 @@ html body div.menu div.item div.icon {
 	top: 5px;
 	width: 16px;
 	height: 16px;
+	pointer-events: none;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -322,10 +323,10 @@ html body div.menu div.item[data-state=on] div.submenu {
 	display: block;
 }
 html body div.menu div.item.lef[data-state=on] div.submenu {
-	left: -1px;
+	left: 0px;
 }
 html body div.menu div.item.right[data-state=on] div.submenu {
-	right: -1px;
+	right: 0px;
 }
 html body div.menu div.item div.submenu div.icon {
 	width: 12px;

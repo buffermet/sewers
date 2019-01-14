@@ -1,5 +1,9 @@
 
-/* Set events for terminal.html */
+/*
+*	
+*	Sewers UI terminal events package
+*	
+*/
 
 	// Focus input field unless selecting span text
 	self.addEventListener("click", async(event)=>{

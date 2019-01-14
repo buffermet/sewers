@@ -1,21 +1,9 @@
 
-/* Set events for index.html */
-
-	// Reveal submenus on desktop and mobile
-	document.querySelectorAll("html body div.menu div.item").forEach(async(item)=>{
-		item.addEventListener("mouseenter", async(event)=>{
-			event.target.setAttribute("data-state", "on");
-		});
-		item.addEventListener("mouseleave", async(event)=>{
-			event.target.setAttribute("data-state", "off");
-		});
-		item.addEventListener("touchstart", async(event)=>{
-			event.target.setAttribute("data-state", "on");
-		});
-		item.addEventListener("touchend", async(event)=>{
-			event.target.setAttribute("data-state", "off");
-		});
-	});
+/*
+*	
+*	Sewers UI index events package
+*	
+*/
 
 	// Quit button
 	document.querySelector("html body div.menu div[name=quit]").addEventListener("click", async()=>{

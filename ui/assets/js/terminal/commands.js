@@ -1,7 +1,7 @@
 
 /*
 *	
-*	Sewers UI terminal commands
+*	Sewers UI terminal commands package
 *	
 */
 
@@ -15,7 +15,8 @@
 			launch: async (args) => {
 				app.functions.printHelp();
 			},
-			"os": [".*"]
+			load: async () => {},
+			"os": [".*"],
 		},
 		"clear": {
 			"arguments": [],
@@ -25,7 +26,8 @@
 			"text": "Clear",
 			launch: async () => {
 				app.functions.clear();
-			}
+			},
+			load: async () => {},
 		},
 		"commands": {
 			"arguments": [],
@@ -36,7 +38,8 @@
 			launch: async (args) => {
 				app.functions.printHelp();
 			},
-			"os": [".*"]
+			load: async () => {},
+			"os": [".*"],
 		},
 		"exit": {
 			"arguments": [],
@@ -46,7 +49,8 @@
 			"text": "Exit",
 			launch: async () => {
 				self.close() || alert("You can only use this in pop-up windows.");
-			}
+			},
+			load: async () => {},
 		},
 		"fetch": {
 			"arguments": [],
@@ -56,7 +60,8 @@
 			"text": "Fetch",
 			launch: async () => {
 				app.functions.fetchPackets();
-			}
+			},
+			load: async () => {},
 		},
 		"fetchrate": {
 			"arguments": ["MIN SECONDS", "MAX SECONDS"],
@@ -68,31 +73,23 @@
 				const arguments = args.split(" ");
 				if (arguments[2]) {
 					app.functions.print(
-						new String( 
-							"Too many arguments.<br>" + 
-							"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
-						)
+						"Too many arguments.<br>" + 
+						"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
 					);
 				} else if (!arguments[1]) {
 					app.functions.print(
-						new String( 
-							"Not enough arguments.<br>" + 
-							"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
-						)
+						"Not enough arguments.<br>" + 
+						"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
 					);
 				} else if ( parseInt(arguments[0]) >= parseInt(arguments[1]) ) {
 					app.functions.print(
-						new String( 
-							"Minimum value must be less than maximum.<br>" + 
-							"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
-						)
+						"Minimum value must be less than maximum.<br>" + 
+						"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
 					);
 				} else if ( parseInt(arguments[0]) < 1 ) {
 					app.functions.print(
-						new String( 
-							"Minimum value must be at least 1.<br>" + 
-							"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
-						)
+						"Minimum value must be at least 1.<br>" + 
+						"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
 					);
 				} else {
 					const min = parseInt(arguments[0]);
@@ -100,7 +97,8 @@
 					app.functions.changeFetchRate(min, max);
 				}
 			},
-			"os": [".*"]
+			load: async () => {},
+			"os": [".*"],
 		},
 		"h": {
 			"arguments": [],
@@ -111,7 +109,8 @@
 			launch: async (args) => {
 				app.functions.printHelp();
 			},
-			"os": [".*"]
+			load: async () => {},
+			"os": [".*"],
 		},
 		"help": {
 			"arguments": [],
@@ -122,7 +121,8 @@
 			launch: async (args) => {
 				app.functions.printHelp();
 			},
-			"os": [".*"]
+			load: async () => {},
+			"os": [".*"],
 		},
 		"info": {
 			"arguments": [],
@@ -133,7 +133,8 @@
 			launch: async (args) => {
 				app.functions.printHelp();
 			},
-			"os": [".*"]
+			load: async () => {},
+			"os": [".*"],
 		},
 		"reset": {
 			"arguments": [],
@@ -148,7 +149,8 @@
 					window.onbeforeunload = null;
 					self.location = location.href;
 				}
-			}
+			},
+			load: async () => {},
 		},
 		"sh": {
 			"arguments": ["COMMAND"],
@@ -170,7 +172,8 @@
 					app.functions.toShell( encodeURIComponent(args) );
 				}
 			},
-			"os": [".*"]
+			load: async () => {},
+			"os": [".*"],
 		},
 		"shell": {
 			"arguments": ["COMMAND"],
@@ -192,7 +195,8 @@
 					app.functions.toShell( encodeURIComponent(args) );
 				}
 			},
-			"os": [".*"]
+			load: async () => {},
+			"os": [".*"],
 		},
 		"startautofetching": {
 			"arguments": ["COMMAND"],
@@ -235,7 +239,8 @@
 					app.functions.startAutoFetching(min, max);
 				}
 			},
-			"os": [".*"]
+			load: async () => {},
+			"os": [".*"],
 		},
 		"stopautofetching": {
 			"arguments": ["COMMAND"],
@@ -246,7 +251,8 @@
 			launch: async (args) => {
 				app.functions.stopAutoFetching();
 			},
-			"os": [".*"]
+			load: async () => {},
+			"os": [".*"],
 		},
 		"telemetry": {
 			"arguments": [],
@@ -257,7 +263,8 @@
 			launch: async (args) => {
 				app.functions.printTelemetry()
 			},
-			"os": [".*"]
+			load: async () => {},
+			"os": [".*"],
 		},
 		"usage": {
 			"arguments": [],
@@ -268,7 +275,8 @@
 			launch: async (args) => {
 				app.functions.printHelp();
 			},
-			"os": [".*"]
+			load: async () => {},
+			"os": [".*"],
 		},
 		"xss": {
 			"arguments": ["JAVASCRIPT"],
@@ -277,7 +285,8 @@
 			"text": "Execute JavaScript",
 			launch: async (args) => {
 				app.functions.parseXSSCommand(args);
-			}
+			},
+			load: async () => {},
 		},
 	}
 
@@ -296,7 +305,8 @@
 					app.functions.parseCommand(command);
 				}
 			},
-			"os": ["GNU[/]Linux$"]
+			load: async () => {},
+			"os": ["GNU[/]Linux$"],
 		},
 		// "your-command": {
 		// 	"arguments": [],
@@ -307,7 +317,7 @@
 		// 	launch: async () => {
 		// 		// your code
 		// 	},
-		// 	"os": ["RegularExpression|[wW]indows|[mM][aA][cC][oO][sS]|[aA]ndroid|..."]
+		// 	"os": ["RegularExpression|[wW]indows|[mM][aA][cC][oO][sS]|[aA]ndroid|..."],
 		// },
 	}
 
@@ -320,7 +330,10 @@
 			"text": "Exit shell",
 			launch: async () => {
 				app.functions.stopStreamingShell(app.environment.currentStream);
-			}
+			},
+			load: async () => {
+
+			},
 		},
 	}
 

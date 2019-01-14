@@ -1,7 +1,7 @@
 
 /*
 *	
-*	Sewers UI terminal environment
+*	Sewers UI terminal environment package
 *	
 */
 

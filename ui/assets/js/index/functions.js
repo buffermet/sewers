@@ -1,5 +1,9 @@
 
-/* Set functions for index.html */
+/*
+*	
+*	Sewers UI index fuctions package
+*	
+*/
 
 	// Sleep
 	app.functions.sleep = async seconds => {

@@ -1,11 +1,15 @@
 
-/* Set functions for terminal.html */
+/*
+*	
+*	Sewers UI terminal functions package
+*	
+*/
 
 	// Sleep
 	app.functions.sleep = async seconds => {
 		return new Promise(async resolve=>{
-			setTimeout(resolve, seconds * 1000)
-		})
+			setTimeout(resolve, seconds * 1000);
+		});
 	}
 
 	// Escape HTML
@@ -23,8 +27,8 @@
 					.replace(/ /g, "&nbsp;")
 					.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;")
 					.replace(/\n/g, "<br>")
-			)
-		})
+			);
+		});
 	}
 
 	// Escape HTML
@@ -41,111 +45,111 @@
 					.replace(/\(/g, "[(]")
 					.replace(/\)/g, "[)]")
 					.replace(/\-/g, "[-]")
-			)
-		})
+			);
+		});
 	}
 
 	// Strip strings
 	app.functions.strip = async data => {
-		return data.replace(/^\s*/, "").replace(/\s*$/, "")
+		return data.replace(/^\s*/, "").replace(/\s*$/, "");
 	}
 
 	// Generate random string
 	app.functions.randomString = async (min, max) => {
-		const length = ( min + ( Math.random() * (max - min) ) )
-		const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		const length = ( min + ( Math.random() * (max - min) ) );
+		const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-		let buffer = ""
+		let buffer = "";
 
 		while (buffer.length < length) {
-			let index = parseInt( Math.random() * chars.length )
-			buffer = buffer + chars.charAt(index)
+			let index = parseInt( Math.random() * chars.length );
+			buffer = buffer + chars.charAt(index);
 		}
 
-		return buffer
+		return buffer;
 	}
 
 	// Randomize seconds
 	app.functions.randTime = async (min, max) => {
-		return ( min + ( Math.random() * (max - min) ) )
+		return ( min + ( Math.random() * (max - min) ) );
 	}
 
 	// app.functions.Print to terminal
 	app.functions.print = async html => {
-		const timestamped = document.createElement("stamp")
+		const timestamped = document.createElement("stamp");
 
-		timestamped.setAttribute( "time", new Date() )
-		timestamped.innerHTML = html
+		timestamped.setAttribute( "time", new Date() );
+		timestamped.innerHTML = html;
 
-		app.environment.terminal.append(timestamped)
+		app.environment.terminal.append(timestamped);
 
-		await app.functions.shrinkInputField()
-		await app.functions.resetClearBreaks()
+		await app.functions.shrinkInputField();
+		await app.functions.resetClearBreaks();
 
 		if (app.environment.scrollOnOutput) {
-			app.functions.scrollToBottom()
+			app.functions.scrollToBottom();
 		}
 	}
 
 	// Return readable timestamp
 	app.functions.timestamp = async () => {
-		const now = new Date()
+		const now = new Date();
 
-		let D = now.getDate()
-		D < 10 ? D = "0" + D : ""
+		let D = now.getDate();
+		D < 10 ? D = "0" + D : "";
 
-		let M = now.getMonth() + 1
-		M < 10 ? M = "0" + M : ""
+		let M = now.getMonth() + 1;
+		M < 10 ? M = "0" + M : "";
 
-		let Y = now.getFullYear()
-		Y < 10 ? Y = "0" + Y : ""
+		let Y = now.getFullYear();
+		Y < 10 ? Y = "0" + Y : "";
 
-		let h = now.getHours()
-		h < 10 ? h = "0" + h : ""
+		let h = now.getHours();
+		h < 10 ? h = "0" + h : "";
 
-		let m = now.getMinutes()
-		m < 10 ? m = "0" + m : ""
+		let m = now.getMinutes();
+		m < 10 ? m = "0" + m : "";
 
-		let s = now.getSeconds()
-		s < 10 ? s = "0" + s : ""
+		let s = now.getSeconds();
+		s < 10 ? s = "0" + s : "";
 
-		return D + "-" + M + "-" + Y + " " + h + ":" + m + ":" + s
+		return D + "-" + M + "-" + Y + " " + h + ":" + m + ":" + s;
 	}
 
 	app.functions.printInstructions = async () => {
 		app.functions.print(
 			" <img src=\"/assets/images/os_linux.svg\" width=\"10px\"><span class=\"bold\"> " + navigator.os + " Sewers v1.0<br><br></span>" + 
 			"Type <span class=\"orange bold\">?</span>, <span class=\"orange bold\">h</span> or <span class=\"orange bold\">help</span> for more info.<br>"
-		)
+		);
 	}
 
 	app.functions.printHelp = async () => {
-		const res = await app.http.Request("GET", "/help.html", [[]], "")
+		const res = await app.http.Request("GET", "/help.html", [[]], "");
 
 		if (res.status == 200) {
-			app.functions.print(res.responseText)
+			app.functions.print(res.responseText);
 		}
 	}
 
 	app.functions.printTelemetry = async () => {
 		let icon = "",
-		    os_name
+		    os_name;
 
 		if ( app.environment.sessionConfig.os.indexOf("Android" || "android") >= 0 ) {
-			icon = "<img height=\"10px\" src=\"../../assets/images/os_android.svg\" />"
-			os_name = "Android"
+			icon = "<img height=\"10px\" src=\"../../assets/images/os_android.svg\" />";
+			os_name = "Android";
 		} else if ( app.environment.sessionConfig.os.indexOf("iOS" || "ios") >= 0 ) {
-			icon = "<img height=\"10px\" src=\"../../assets/images/os_apple.svg\" />"
-			os_name = "iOS"
+			icon = "<img height=\"10px\" src=\"../../assets/images/os_apple.svg\" />";
+			os_name = "iOS";
 		} else if ( app.environment.sessionConfig.os.indexOf("cygwin" || "cygwin" || "mswin" || "mingw" || "bccwin" || "wince" || "emx") >= 0 ) {
-			icon = "<img height=\"10px\" src=\"../../assets/images/os_windows.svg\" />"
-			os_name = "Windows"
+			icon = "<img height=\"10px\" src=\"../../assets/images/os_windows.svg\" />";
+			os_name = "Windows";
 		} else if ( app.environment.sessionConfig.os.indexOf("Darwin" || "darwin") >= 0 ) {
-			icon = "<img height=\"10px\" src=\"../../assets/images/os_apple.svg\" />"
-			os_name = "macOS"
+			icon = "<img height=\"10px\" src=\"../../assets/images/os_apple.svg\" />";
+			os_name = "macOS";
 		} else if ( app.environment.sessionConfig.os.indexOf("Linux" || "linux") >= 0 ) {
-			icon = "<img height=\"10px\" src=\"../../assets/images/os_linux.svg\" />"
-			os_name = "Linux"
+			icon = "<img height=\"10px\" src=\"../../assets/images/os_linux.svg\" />";
+			os_name = "Linux";
 		}
 
 		app.functions.print( 
@@ -161,7 +165,7 @@
 			"<span class=\"orange\">Relay Address</span>:&nbsp;<span class=\"grey\">" + app.environment.relayConfig.relay_address + "</span><br>" + 
 			"<span class=\"orange\">Relay ID</span>:&nbsp;<span class=\"grey\">" + app.environment.relay + "</span><br>" + 
 			"<span class=\"orange\">User-Agent</span>:&nbsp;<span class=\"grey\">" + app.environment.relayConfig.user_agent + "</span><br><br>"
-		)
+		);
 	}
 
 	// Return standard input to HTTP server
@@ -170,12 +174,12 @@
 			"body=" + url_encoded + 
 			"&session_id=" + app.environment.sessionID + 
 			"&relay_id=" + app.environment.relay
-		)
+		);
 
-		app.functions.showNetworkIndicator()
+		app.functions.showNetworkIndicator();
 		app.http.Request("POST", "/post", [["Content-Type", "application/x-www-form-urlencoded"]], form).then(async(res)=>{
 			setTimeout(app.functions.hideNetworkIndicator, 320);
-		})
+		});
 	}
 
 	// Change fetch rate
@@ -186,7 +190,7 @@
 			"&relay_id=" + app.environment.relay
 		);
 
-		app.functions.showNetworkIndicator()
+		app.functions.showNetworkIndicator();
 		app.http.Request("POST", "/fetchrate", [["Content-Type", "application/x-www-form-urlencoded"]], form).then(async(res)=>{
 			if (res.status == 200) {
 				setTimeout(app.functions.hideNetworkIndicator, 320);
@@ -195,7 +199,7 @@
 
 				app.environment.sessionConfig.fetch_rate = min + "-" + max;
 			}
-		})
+		});
 	}
 
 	// Fetch new packets from interpreter
@@ -643,18 +647,26 @@
 	}
 
 	app.functions.parseXSSCommand = async cmd => {
-		try {
+		if ( cmd.match(/^\s*$/) ) {
 			app.functions.print( 
-				app.environment.requestTag + " <span class=\"bold red\">XSS</span>" + " <span>" + await app.functions.timestamp() + "</span><br>" + 
-				"<span class=\"red\">" + await app.functions.escapeHTML(cmd) + "</span><br>" + 
+				app.environment.requestTag + "<span class=\"bold red\">XSS</span>" + " <span>" + await app.functions.timestamp() + "</span><br>" + 
+				"<span class=\"grey\">&lt;empty&gt;</span><br>" + 
 				"<span>" + await app.functions.escapeHTML( eval(cmd) ) + "</span><br>" 
 			);
-		} catch(err) {
-			app.functions.print( 
-				app.environment.requestTag + " <span class=\"bold red\">XSS</span>" + " <span>" + await app.functions.timestamp() + "</span><br>" + 
-				"<span class=\"red\">" + await app.functions.escapeHTML(cmd) + "</span><br>" + 
-				"<span class=\"red\">" + await app.functions.escapeHTML(err) + "</span><br>" 
-			);
+		} else {
+			try {
+				app.functions.print( 
+					app.environment.requestTag + "<span class=\"bold red\">XSS</span>" + " <span>" + await app.functions.timestamp() + "</span><br>" + 
+					"<span class=\"red\">" + await app.functions.escapeHTML(cmd) + "</span><br>" + 
+					"<span>" + await app.functions.escapeHTML( eval(cmd) ) + "</span><br>" 
+				);
+			} catch(err) {
+				app.functions.print( 
+					app.environment.requestTag + "<span class=\"bold red\">XSS</span>" + " <span>" + await app.functions.timestamp() + "</span><br>" + 
+					"<span class=\"red\">" + await app.functions.escapeHTML(cmd) + "</span><br>" + 
+					"<span class=\"red\">" + await app.functions.escapeHTML(err) + "</span><br>" 
+				);
+			}
 		}
 	}
 

@@ -206,64 +206,6 @@ html body div.scrollcontainer {
 html body div.scrollcontainer.hide {
 	opacity: 0;
 }
-/*html body div.scrollcontainer div.backbutton {
-	position: absolute;
-	left: 7px;
-	top: calc(15px + 26px);
-	background-color: rgba(0,0,0,.75);
-	padding: 8px;
-	cursor: pointer;
-	transition: all 200ms linear, left 400ms ease-in;
-	-webkit-transition: all 200ms linear, left 400ms ease-in;
-	-moz-transition: all 200ms linear, left 400ms ease-in;
-	-ms-transition: all 200ms linear, left 400ms ease-in;
-	-o-transition: all 200ms linear, left 400ms ease-in;
-}
-html body div.scrollcontainer div.backbutton.hide {
-	left: -170px;
-}
-html body div.scrollcontainer div.backbutton:hover {
-	background-color: rgba(255,255,255,.05);
-	transition: all 0s linear;
-	-webkit-transition: all 0s linear;
-	-moz-transition: all 0s linear;
-	-ms-transition: all 0s linear;
-	-o-transition: all 0s linear;
-}
-html body div.scrollcontainer div.backbutton:active {
-	background-color: rgba(0,0,0,1);
-}
-html body div.scrollcontainer div.backbutton div.logo {
-	opacity: .5;
-	float: left;
-	width: 20px;
-	height: 20px;
-	background-image: url(../images/relay.svg);
-	background-size: 100%;
-	background-repeat: no-repeat;
-	margin-right: 8px;
-	transition: opacity 200ms linear;
-	-webkit-transition: opacity 200ms linear;
-	-moz-transition: opacity 200ms linear;
-	-ms-transition: opacity 200ms linear;
-	-o-transition: opacity 200ms linear;
-}
-html body div.scrollcontainer div.backbutton:hover div.logo {
-	opacity: 1;
-	transition: opacity 0s linear;
-	-webkit-transition: opacity 0s linear;
-	-moz-transition: opacity 0s linear;
-	-ms-transition: opacity 0s linear;
-	-o-transition: opacity 0s linear;
-}
-html body div.scrollcontainer div.backbutton span {
-	color: rgba(255,255,255,.25);
-	font-family: "OpenSans-Regular";
-	font-size: 14px;
-}
-html body div.scrollcontainer div.backbutton:hover span {
-	color: rgba(255,255,255,.5);
-}*/
 html body div.scrollcontainer div.container {
 	position: absolute;
 	left: 50%;

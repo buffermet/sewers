@@ -174,11 +174,11 @@ html body div.menu div.item div.network-indicator {
 	-ms-transform: scale(0.33);
 	-o-transform: scale(0.33);
 	opacity: 0;
-	transition: opacity 333ms linear;
-	-webkit-transition: opacity 333ms linear;
-	-moz-transition: opacity 333ms linear;
-	-ms-transition: opacity 333ms linear;
-	-o-transition: opacity 333ms linear;
+	transition: opacity 240ms linear;
+	-webkit-transition: opacity 240ms linear;
+	-moz-transition: opacity 240ms linear;
+	-ms-transition: opacity 240ms linear;
+	-o-transition: opacity 240ms linear;
 }
 html body div.menu div.item div.network-indicator[data-state=on] {
 	opacity: 1;
