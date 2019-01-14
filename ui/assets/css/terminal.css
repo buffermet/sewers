@@ -17,6 +17,9 @@
 ::-webkit-scrollbar {
 	display: none;
 }
+input {
+	outline: none;
+}
 html{
 	background-color: #090A0D;
 }
