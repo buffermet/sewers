@@ -15,30 +15,12 @@
 	// Focus input field unless selecting span text
 	app.environment.xssButton.addEventListener("click", async(event)=>{
 		app.environment.xssButton.setAttribute("data-state", "on");
-		self.addEventListener("click", async function f(event){
+		self.addEventListener("click", async function a(event){
 			if (event.target.name !== "xssfield") {
 				app.environment.xssButton.setAttribute("data-state", "off");
-				this.removeEventListener("click", f);
+				this.removeEventListener("click", a);
 			}
 		});
-	});
-
-	// Reveal submenus on desktop and mobile
-	document.querySelectorAll("html body div.menu div.item").forEach(async(item)=>{
-		if (item.getAttribute("name") !== "xssbutton") {
-			item.addEventListener("mouseenter", async(event)=>{
-				event.target.setAttribute("data-state", "on");
-			});
-			item.addEventListener("mouseleave", async(event)=>{
-				event.target.setAttribute("data-state", "off");
-			});
-			item.addEventListener("touchstart", async(event)=>{
-				event.target.setAttribute("data-state", "on");
-			});
-			item.addEventListener("touchend", async(event)=>{
-				event.target.setAttribute("data-state", "off");
-			});
-		}
 	});
 
 	// Custom keyboard handler

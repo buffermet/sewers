@@ -7,18 +7,21 @@
 			item.addEventListener("mouseenter", async(event)=>{
 				event.target.setAttribute("data-state", "on");
 
-				event.target.addEventListener("click", async function f(event){
+				item.addEventListener("mouseleave", async function a(event){
+					event.target.setAttribute("data-state", "off");
+					this.removeEventListener("mouseleave", a);
+				});
+
+				event.target.addEventListener("click", async function b(event){
 					if ( event.target.getAttribute("data-state") == "off" ) {
 						event.target.setAttribute("data-state", "on");
-						this.removeEventListener("click", f);
+						this.removeEventListener("click", b);
+						this.removeEventListener("click", b);
 					} else {
 						event.target.setAttribute("data-state", "off");
-						this.removeEventListener("click", f);
+						this.removeEventListener("click", b);
 					}
 				});
-			});
-			item.addEventListener("mouseleave", async(event)=>{
-				event.target.setAttribute("data-state", "off");
 			});
 		}
 	});
