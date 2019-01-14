@@ -17,5 +17,12 @@
 					event.target.setAttribute("data-state", "off");
 				}
 			});
+			item.addEventListener("touchstart", async(event)=>{
+				if ( event.target.getAttribute("data-state") == "off" ) {
+					event.target.setAttribute("data-state", "on");
+				} else {
+					event.target.setAttribute("data-state", "off");
+				}
+			});
 		}
 	});
