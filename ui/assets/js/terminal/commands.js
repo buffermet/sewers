@@ -323,7 +323,7 @@
 	}
 
 	app.commands.shell = {
-		"shell.clear": {
+		"stream.clear": {
 			"arguments": [],
 			"button": "",
 			"category": "terminal",
@@ -334,7 +334,18 @@
 			},
 			load: async () => {},
 		},
-		"shell.exit": {
+		"stream.detach": {
+			"arguments": [],
+			"button": "",
+			"category": "terminal",
+			"description": "Clear the terminal.",
+			"text": "Clear",
+			launch: async args => {
+				app.functions.detachStream(app.environment.currentStream);
+			},
+			load: async () => {},
+		},
+		"stream.exit": {
 			"arguments": [],
 			"button": "",
 			"category": "shell",
@@ -345,7 +356,7 @@
 			},
 			load: async () => {},
 		},
-		"shell.syncrate": {
+		"stream.syncrate": {
 			"arguments": ["MIN SECONDS", "MAX SECONDS"],
 			"button": "",
 			"category": "shell",

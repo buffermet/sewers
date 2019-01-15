@@ -259,41 +259,43 @@
 
 					response = res.responseText;
 
-					if (response.length > 0) {
-						new Audio("../../assets/audio/bell.mp3").play();
+					new Audio("../../assets/audio/bell.mp3").play();
 
-						const plaintext = atob(response);
+					const plaintext = atob(response);
 
-						await app.functions.print(app.environment.responseTag + "<span class=\"bold lightgreen\">OK</span> <span>" + await app.functions.timestamp() + "</span><br>");
+					await app.functions.print(app.environment.responseTag + "<span class=\"bold lightgreen\">OK</span> <span>" + await app.functions.timestamp() + "</span><br>");
 
-						if ( plaintext.startsWith("\xff\xd8\xff") || plaintext.startsWith("\xFF\xD8\xFF") ) {
-							const type = "image/jpg";
-							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
-							app.functions.sleep(0.1).then(async()=>{
-								app.functions.print("<hr>")
-							});
-						} else if ( plaintext.startsWith("\x89PNG\r\n\x1a\n") || plaintext.startsWith("\x89PNG\r\n\x1A\n") ) {
-							const type = "image/png";
-							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
-							app.functions.sleep(0.1).then(async()=>{
-								app.functions.print("<hr>")
-							});
-						} else if ( plaintext.startsWith("GIF87a") || plaintext.startsWith("GIF89a") ) {
-							const type = "image/gif";
-							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
-							app.functions.sleep(0.1).then(async()=>{
-								app.functions.print("<hr>")
-							});
-						} else if ( plaintext.startsWith("<?xml") && plaintext.indexOf("<svg") >= 0 || plaintext.startsWith("<svg") ) {
-							const type = "image/svg+xml";
-							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
-							app.functions.sleep(0.1).then(async()=>{
-								app.functions.print("<hr>")
-							});
-						} else {
+					if ( plaintext.startsWith("\xff\xd8\xff") || plaintext.startsWith("\xFF\xD8\xFF") ) {
+						const type = "image/jpg";
+						app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
+						app.functions.sleep(0.1).then(async()=>{
+							app.functions.print("<hr>")
+						});
+					} else if ( plaintext.startsWith("\x89PNG\r\n\x1a\n") || plaintext.startsWith("\x89PNG\r\n\x1A\n") ) {
+						const type = "image/png";
+						app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
+						app.functions.sleep(0.1).then(async()=>{
+							app.functions.print("<hr>")
+						});
+					} else if ( plaintext.startsWith("GIF87a") || plaintext.startsWith("GIF89a") ) {
+						const type = "image/gif";
+						app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
+						app.functions.sleep(0.1).then(async()=>{
+							app.functions.print("<hr>")
+						});
+					} else if ( plaintext.startsWith("<?xml") && plaintext.indexOf("<svg") >= 0 || plaintext.startsWith("<svg") ) {
+						const type = "image/svg+xml";
+						app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
+						app.functions.sleep(0.1).then(async()=>{
+							app.functions.print("<hr>")
+						});
+					} else {
+						if (plaintext != "") {
 							let stdout = await app.functions.escapeHTML(plaintext);
 							stdout = stdout + (plaintext.match(/\n$/) ? "" : "<br>");
 							app.functions.print(stdout);
+						} else {
+							app.functions.print("");
 						}
 					}
 				}
