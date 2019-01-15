@@ -63,7 +63,6 @@
 	// Resizing of console with touchscreen
 	self.addEventListener("touchmove", async function resize(event){
 		if (app.environment.resizingConsole) {
-			alert("touchmove")
 			app.functions.resizeConsole(event.clientY);
 		}
 	});
