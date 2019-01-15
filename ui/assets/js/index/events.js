@@ -56,6 +56,7 @@
 	// Resize console
 	self.addEventListener("touchmove", async function resize(event){
 		if (app.environment.resizingConsole) {
+			alert(event.clientY)
 			app.functions.resizeConsole(event.clientY);
 		}
 	});
