@@ -43,42 +43,26 @@
 		});
 	});
 
-	// Start resizing console with cursor
-	app.environment.consoleResizeBar.addEventListener("mousedown", async(event)=>{
-		app.environment.resizingConsole = true;
-	});
-
-	// Start resizing console with touchscreen
+	// Start resizing console
 	app.environment.consoleResizeBar.addEventListener("touchstart", async(event)=>{
 		app.environment.resizingConsole = true;
 	});
 
-	// Resizing of console with cursor
-	self.addEventListener("mousemove", async function startResizing(event){
-		if (app.environment.resizingConsole) {
-			app.functions.resizeConsole(event.clientY);
-		}
+	// Start resizing console
+	app.environment.consoleResizeBar.addEventListener("touchstart", async(event)=>{
+		app.environment.resizingConsole = true;
 	});
 
-	// Resizing of console with touchscreen
+	// Resize console
 	self.addEventListener("touchmove", async function resize(event){
 		if (app.environment.resizingConsole) {
 			app.functions.resizeConsole(event.clientY);
 		}
 	});
 
-	// Stop resizing console with cursor
-	self.addEventListener("mouseup", async function stopResizing(event){
-		if (app.environment.resizingConsole) {
-			app.environment.resizingConsole = false;
-			app.http.Request( "POST", "/config/sewers", [["Content-Type", "application/x-www-form-urlencoded"]], "console_height=" + app.environment.webConsole.getBoundingClientRect().height );
-		}
-	});
-
-	// Stop resizing console with touchscreen
+	// Stop resizing console
 	self.addEventListener("touchend", async function stopResizing(event){
 		if (app.environment.resizingConsole) {
-			alert("touchend")
 			app.environment.resizingConsole = false;
 			app.http.Request( "POST", "/config/sewers", [["Content-Type", "application/x-www-form-urlencoded"]], "console_height=" + app.environment.webConsole.getBoundingClientRect().height );
 		}
