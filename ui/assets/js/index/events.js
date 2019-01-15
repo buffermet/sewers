@@ -50,6 +50,7 @@
 
 	// Start resizing console with touchscreen
 	app.environment.consoleResizeBar.addEventListener("touchstart", async(event)=>{
+		alert("touchstart")
 		app.environment.resizingConsole = true;
 	});
 
@@ -62,6 +63,7 @@
 
 	// Resizing of console with touchscreen
 	self.addEventListener("touchmove", async function resize(event){
+		alert("touchmove")
 		if (app.environment.resizingConsole) {
 			app.functions.resizeConsole(event.clientY);
 		}
@@ -77,6 +79,7 @@
 
 	// Stop resizing console with touchscreen
 	self.addEventListener("touchend", async function stopResizing(event){
+		alert("touchend")
 		if (app.environment.resizingConsole) {
 			app.environment.resizingConsole = false;
 			app.http.Request( "POST", "/config/sewers", [["Content-Type", "application/x-www-form-urlencoded"]], "console_height=" + app.environment.webConsole.getBoundingClientRect().height );
