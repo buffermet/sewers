@@ -78,7 +78,6 @@
 	// Stop resizing console with touchscreen
 	self.addEventListener("touchend", async function stopResizing(event){
 		if (app.environment.resizingConsole) {
-			alert("touchend")
 			app.environment.resizingConsole = false;
 			app.http.Request( "POST", "/config/sewers", [["Content-Type", "application/x-www-form-urlencoded"]], "console_height=" + app.environment.webConsole.getBoundingClientRect().height );
 		}
