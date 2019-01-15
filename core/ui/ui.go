@@ -155,6 +155,8 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 			body := session.Get(relay_id, session_id)
 
+			res.Header().Set("Content-Type", "text/plain")
+
 			fmt.Fprintf(res, body)
 		} else if req.URL.Path == "/console_log" {
 			res.Header().Set("Content-Type", "text/plain")
@@ -190,6 +192,10 @@ func serve(res http.ResponseWriter, req *http.Request) {
 
 			if len(req.Form) > 0 {
 				config.Configure(json_path, req.Form)
+
+				res.Header().Set("Content-Type", "text/plain")
+
+				fmt.Fprintf(res, "")
 			} else {
 				body, e := ioutil.ReadFile(json_path)
 				if e != nil {

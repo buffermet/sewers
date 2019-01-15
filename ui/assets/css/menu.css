@@ -275,7 +275,6 @@ html body div.menu div.item div.submenu {
 	z-index: 9;
 	position: absolute;
 	top: 26px;
-	left: 1px;
 	min-width: 180px;
 	width: auto;
 	height: auto;
@@ -286,9 +285,11 @@ html body div.menu div.item div.submenu {
 	overflow-x: hidden;
 	overflow-y: auto;
 }
+html body div.menu div.item.left div.submenu {
+	left: 0px;
+}
 html body div.menu div.item.right div.submenu {
-	left: initial;
-	right: 1px;
+	right: 0px;
 }
 html body div.menu div.item div.submenu div.subitem {
 	display: block;
@@ -321,12 +322,6 @@ html body div.menu div.item div.submenu div.subitem:last-of-type {
 html body div.menu div.item[data-state=on] div.submenu {
 	max-height: calc(100vh - 26px);
 	display: block;
-}
-html body div.menu div.item.lef[data-state=on] div.submenu {
-	left: 0px;
-}
-html body div.menu div.item.right[data-state=on] div.submenu {
-	right: 0px;
 }
 html body div.menu div.item div.submenu div.icon {
 	width: 12px;

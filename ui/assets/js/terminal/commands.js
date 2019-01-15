@@ -12,7 +12,7 @@
 			"category": "terminal",
 			"description": "Show help menu.",
 			"text": "Show help",
-			launch: async (args) => {
+			launch: async args => {
 				app.functions.printHelp();
 			},
 			load: async () => {},
@@ -24,7 +24,7 @@
 			"category": "terminal",
 			"description": "Clear the terminal.",
 			"text": "Clear",
-			launch: async () => {
+			launch: async args => {
 				app.functions.clear();
 			},
 			load: async () => {},
@@ -35,7 +35,7 @@
 			"category": "terminal",
 			"description": "Show help menu.",
 			"text": "Show help",
-			launch: async (args) => {
+			launch: async args => {
 				app.functions.printHelp();
 			},
 			load: async () => {},
@@ -47,7 +47,7 @@
 			"category": "terminal",
 			"description": "Exit the terminal.",
 			"text": "Exit",
-			launch: async () => {
+			launch: async args => {
 				self.close() || alert("You can only use this in pop-up windows.");
 			},
 			load: async () => {},
@@ -58,7 +58,7 @@
 			"category": "interpreter",
 			"description": "Fetch new packets from interpreter.",
 			"text": "Fetch",
-			launch: async () => {
+			launch: async args => {
 				app.functions.fetchPackets();
 			},
 			load: async () => {},
@@ -69,8 +69,8 @@
 			"category": "interpreter",
 			"description": "Set automatic fetch rate of interpreter.",
 			"text": "Change fetchrate",
-			launch: async (args) => {
-				const arguments = args.split(" ");
+			launch: async args => {
+				const arguments = args.replace(/^\s*/, "").replace(/\s*$/, "").replace(/\s{2,}/g, " ").split(" ");
 				if (arguments[2]) {
 					app.functions.print(
 						"Too many arguments.<br>" + 
@@ -106,7 +106,7 @@
 			"category": "terminal",
 			"description": "Show help menu.",
 			"text": "Show help",
-			launch: async (args) => {
+			launch: async args => {
 				app.functions.printHelp();
 			},
 			load: async () => {},
@@ -118,7 +118,7 @@
 			"category": "terminal",
 			"description": "Show help menu.",
 			"text": "Show help",
-			launch: async (args) => {
+			launch: async args => {
 				app.functions.printHelp();
 			},
 			load: async () => {},
@@ -130,7 +130,7 @@
 			"category": "terminal",
 			"description": "Show help menu.",
 			"text": "Show help",
-			launch: async (args) => {
+			launch: async args => {
 				app.functions.printHelp();
 			},
 			load: async () => {},
@@ -141,7 +141,7 @@
 			"category": "terminal",
 			"description": "",
 			"text": "",
-			launch: async () => {
+			launch: async args => {
 				if (app.environment.warnOnReset) {
 					self.location = location.href;
 				} else {
@@ -158,7 +158,7 @@
 			"category": "terminal",
 			"description": "Execute shell command/start shell stream.",
 			"text": "Shell",
-			launch: async (args) => {
+			launch: async args => {
 				if (args == "") {
 					let new_stream_session = 0;
 					app.environment.activeStreams.forEach(async(active_stream_session)=>{
@@ -181,7 +181,7 @@
 			"category": "terminal",
 			"description": "Execute shell command/start shell stream.",
 			"text": "Shell",
-			launch: async (args) => {
+			launch: async args => {
 				if (args == "") {
 					let new_stream_session = 0;
 					app.environment.activeStreams.forEach(async(active_stream_session)=>{
@@ -204,30 +204,30 @@
 			"category": "terminal",
 			"description": "Start auto fetching.",
 			"text": "Start auto fetching",
-			launch: async (args) => {
-				args = args.replace(/\s{2,}/g, " ");
-				if (args.split(" ")[2]) {
+			launch: async args => {
+				const arguments = args.replace(/^\s*/, "").replace(/\s*$/, "").replace(/\s{2,}/g, " ").split(" ");
+				if (arguments[2]) {
 					app.functions.print(
 						new String( 
 							"Too many arguments.<br>" + 
 							"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
 						)
 					);
-				} else if (!args.split(" ")[1]) {
+				} else if (!arguments[1]) {
 					app.functions.print(
 						new String( 
 							"Not enough arguments.<br>" + 
 							"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
 						)
 					);
-				} else if ( parseInt(args.split(" ")[0]) >= parseInt(args.split(" ")[1]) ) {
+				} else if ( parseInt(arguments[0]) >= parseInt(arguments[1]) ) {
 					app.functions.print(
 						new String( 
 							"Minimum value must be less than maximum.<br>" + 
 							"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
 						)
 					);
-				} else if ( parseInt(args.split(" ")[0]) < 1 ) {
+				} else if ( parseInt(arguments[0]) < 1 ) {
 					app.functions.print(
 						new String( 
 							"Minimum value must be at least 1.<br>" + 
@@ -235,8 +235,8 @@
 						)
 					);
 				} else {
-					const min = parseInt( args.split(" ")[0] );
-					const max = parseInt( args.split(" ")[1] );
+					const min = parseInt(arguments[0]);
+					const max = parseInt(arguments[1]);
 					app.functions.startAutoFetching(min, max);
 				}
 			},
@@ -249,7 +249,7 @@
 			"category": "terminal",
 			"description": "Stop auto fetching.",
 			"text": "Stop auto fetching",
-			launch: async (args) => {
+			launch: async args => {
 				app.functions.stopAutoFetching();
 			},
 			load: async () => {},
@@ -261,7 +261,7 @@
 			"category": "terminal",
 			"description": "Show telemetry data of current session.",
 			"text": "Telemetry",
-			launch: async (args) => {
+			launch: async args => {
 				app.functions.printTelemetry()
 			},
 			load: async () => {},
@@ -273,7 +273,7 @@
 			"category": "terminal",
 			"description": "Show help menu.",
 			"text": "Show help",
-			launch: async (args) => {
+			launch: async args => {
 				app.functions.printHelp();
 			},
 			load: async () => {},
@@ -284,7 +284,7 @@
 			"category": "terminal",
 			"description": "Execute JavaScript in the terminal.",
 			"text": "Execute JavaScript",
-			launch: async (args) => {
+			launch: async args => {
 				app.functions.parseXSSCommand(args);
 			},
 			load: async () => {},
@@ -298,7 +298,7 @@
 			"category": "interpreter",
 			"description": "Take a screenshot.",
 			"text": "Capture screenshot",
-			launch: async () => {
+			launch: async args => {
 				const os_string = app.environment.sessionConfig.os;
 				if ( os_string.match("GNU/Linux") ) {
 					const filename = await app.functions.randomString(8, 16);
@@ -315,7 +315,7 @@
 		// 	"category": "",
 		// 	"description": "Describe your command.",
 		// 	"text": "Text of your command button",
-		// 	launch: async () => {
+		// 	launch: async args => {
 		// 		// your code
 		// 	},
 		// 	"os": ["RegularExpression|[wW]indows|[mM][aA][cC][oO][sS]|[aA]ndroid|..."],
@@ -323,29 +323,63 @@
 	}
 
 	app.commands.shell = {
-		"clear": {
+		"shell.clear": {
 			"arguments": [],
 			"button": "",
 			"category": "terminal",
 			"description": "Clear the terminal.",
 			"text": "Clear",
-			launch: async () => {
+			launch: async args => {
 				app.functions.clear();
 			},
 			load: async () => {},
 		},
-		"exit": {
+		"shell.exit": {
 			"arguments": [],
 			"button": "",
 			"category": "shell",
 			"description": "Exit the shell.",
 			"text": "Exit shell",
-			launch: async () => {
+			launch: async args => {
 				app.functions.stopStreamingShell(app.environment.currentStream);
 			},
-			load: async () => {
-
+			load: async () => {},
+		},
+		"shell.syncrate": {
+			"arguments": ["MIN SECONDS", "MAX SECONDS"],
+			"button": "",
+			"category": "shell",
+			"description": "Set sync rate of current shell stream.",
+			"text": "Change sync rate",
+			launch: async args => {
+				const arguments = args.replace(/^\s*/, "").replace(/\s*$/, "").replace(/\s{2,}/g, "").split(" ");
+				if (arguments[2]) {
+					app.functions.print(
+						"Too many arguments.<br>" + 
+						"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+					);
+				} else if (!arguments[1]) {
+					app.functions.print(
+						"Not enough arguments.<br>" + 
+						"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+					);
+				} else if ( parseInt(arguments[0]) >= parseInt(arguments[1]) ) {
+					app.functions.print(
+						"Minimum value must be less than maximum.<br>" + 
+						"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+					);
+				} else if ( parseInt(arguments[0]) < 1 ) {
+					app.functions.print(
+						"Minimum value must be at least 1.<br>" + 
+						"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+					);
+				} else {
+					const min = parseInt(arguments[0]);
+					const max = parseInt(arguments[1]);
+					app.functions.print(app.environment.requestTag + "changed syncrate to fill buffer every " + min + " to " + max + " seconds."); // debug
+				}
 			},
+			load: async () => {},
 		},
 	}
 

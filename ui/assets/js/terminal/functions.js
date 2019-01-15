@@ -31,7 +31,7 @@
 		});
 	}
 
-	// Escape HTML
+	// Escape RegExp matches
 	app.functions.escapeRegExp = async data => {
 		return new Promise(async(resolve)=>{
 			resolve(
@@ -45,13 +45,37 @@
 					.replace(/\(/g, "[(]")
 					.replace(/\)/g, "[)]")
 					.replace(/\-/g, "[-]")
+					.replace(/\./g, "[.]")
+			);
+		});
+	}
+
+	// Unescape RegExp matches
+	app.functions.unescapeRegExp = async data => {
+		return new Promise(async(resolve)=>{
+			resolve(
+				new String(data)
+					.replace(/\\\\/g, "\\")
+					.replace(/\\\[/g, "[")
+					.replace(/\\\]/g, "]")
+					.replace(/\[\?\]/g, "?")
+					.replace(/\[\!\]/g, "!")
+					.replace(/\[\*\]/g, "*")
+					.replace(/\[\(\]/g, "(")
+					.replace(/\[\)\]/g, ")")
+					.replace(/\[\-\]/g, "-")
+					.replace(/\[\.\]/g, ".")
 			);
 		});
 	}
 
 	// Strip strings
 	app.functions.strip = async data => {
-		return data.replace(/^\s*/, "").replace(/\s*$/, "");
+		return new Promise(async(resolve)=>{
+			const stripped = data.replace(/^\s*/, "").replace(/\s*$/, "");
+
+			resolve(stripped);
+		});
 	}
 
 	// Generate random string
@@ -240,27 +264,35 @@
 
 						const plaintext = atob(response);
 
-						await app.functions.print(app.environment.responseTag + " <span class=\"bold lightgreen\">OK</span> <span>" + await app.functions.timestamp() + "</span><br>");
+						await app.functions.print(app.environment.responseTag + "<span class=\"bold lightgreen\">OK</span> <span>" + await app.functions.timestamp() + "</span><br>");
 
 						if ( plaintext.startsWith("\xff\xd8\xff") || plaintext.startsWith("\xFF\xD8\xFF") ) {
 							const type = "image/jpg";
 							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
-							app.functions.sleep(0.1).then(async()=>{ app.functions.print("<hr>") });
+							app.functions.sleep(0.1).then(async()=>{
+								app.functions.print("<hr>")
+							});
 						} else if ( plaintext.startsWith("\x89PNG\r\n\x1a\n") || plaintext.startsWith("\x89PNG\r\n\x1A\n") ) {
 							const type = "image/png";
 							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
-							app.functions.sleep(0.1).then(async()=>{ app.functions.print("<hr>") });
+							app.functions.sleep(0.1).then(async()=>{
+								app.functions.print("<hr>")
+							});
 						} else if ( plaintext.startsWith("GIF87a") || plaintext.startsWith("GIF89a") ) {
 							const type = "image/gif";
 							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
-							app.functions.sleep(0.1).then(async()=>{ app.functions.print("<hr>") });
+							app.functions.sleep(0.1).then(async()=>{
+								app.functions.print("<hr>")
+							});
 						} else if ( plaintext.startsWith("<?xml") && plaintext.indexOf("<svg") >= 0 || plaintext.startsWith("<svg") ) {
 							const type = "image/svg+xml";
 							app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
-							app.functions.sleep(0.1).then(async()=>{ app.functions.print("<hr>") });
+							app.functions.sleep(0.1).then(async()=>{
+								app.functions.print("<hr>")
+							});
 						} else {
 							let stdout = await app.functions.escapeHTML(plaintext);
-							stdout = stdout + (stdout.endsWith("<br>") ? "" : "\n");
+							stdout = stdout + (plaintext.match(/\n$/) ? "" : "<br>");
 							app.functions.print(stdout);
 						}
 					}
@@ -533,53 +565,62 @@
 
 	// Autocomplete stdin
 	app.functions.autoComplete = async (tabbed_command, pre_cursor) => {
+		const tabbed_command_regexp = await app.functions.escapeRegExp(tabbed_command);
 		const commands = Object.keys(app.commands.builtin).concat( Object.keys(app.commands.pluggedin) ).sort();
 
-		tabbed_command = await app.functions.escapeRegExp(tabbed_command);
-
-		let regexp = new RegExp("(?:^|\\s)" + tabbed_command + "\\S*", "ig");
+		let regexp = new RegExp("(?:^|\\s)" + tabbed_command_regexp + "\\S*", "ig");
 
 		if ( commands.join(" ").match(regexp) ) {
 			let matches = commands.join(" ").match(regexp);
+
+			for (let i = 0; i < matches.length; i++) {
+				matches[i] = await app.functions.strip(matches[i]);
+			}
+
 			let replacement;
 
 			for (let a = 0; a < commands.length; a++) {
 				if ( commands[a].match(regexp) ) {
 					if (matches.length > 1) {
-						let longest_substring = tabbed_command;
-						let longest_substring_length = 0;
+						let longest_matching_substring = await app.functions.unescapeRegExp(tabbed_command_regexp);
+						let longest_matching_substring_length = 0;
 
-						matches.forEach((match)=>{
-							match.length > longest_substring_length ? longest_substring_length = match.length : "";
+						matches.forEach(async(match)=>{
+							match.length > longest_matching_substring_length ? longest_matching_substring_length = match.length : "";
 						});
 
-						let substring_count = matches.length;
+						let matching_substring_count = matches.length;
 
-						for (let b = 0; b < longest_substring_length; b++) {
-							substring_count = commands.join(" ").match( new RegExp("(?:^|\\s)" + longest_substring + commands[a].charAt(longest_substring.length), "ig" ) ).length;
+						for (let b = 0; b < longest_matching_substring_length; b++) {
+							const r = new RegExp("^" + await app.functions.escapeRegExp( longest_matching_substring + commands[a].charAt(longest_matching_substring.length) ), "ig" );
 
-							if (substring_count == matches.length) {
-								longest_substring = longest_substring + commands[a].charAt(longest_substring.length);
+							matching_substring_count = 0;
+							matches.forEach(async(match)=>{
+								match.match(r) ? matching_substring_count++ : "";
+							});
+
+							if (matching_substring_count == matches.length) {
+								longest_matching_substring = longest_matching_substring + commands[a].charAt(longest_matching_substring.length);
 							} else {
 								break;
 							}
 						}
 
-						regexp = new RegExp(tabbed_command + "$", "i");
-						replacement = pre_cursor.replace(regexp, longest_substring);
+						regexp = new RegExp(tabbed_command_regexp + "$", "i");
+						replacement = pre_cursor.replace(regexp, longest_matching_substring);
 
-						if (tabbed_command.length == longest_substring.length) {
+						if (tabbed_command.length == longest_matching_substring.length) {
 							app.functions.print( 
 								"<span style=\"display:block;word-break:keep-all;\">" + 
 									app.environment.requestTag + await app.functions.escapeHTML(pre_cursor) + "<br>" + 
-									commands.join(" ").match( new RegExp("(?:^|\\s)" + longest_substring + "\\S*", "ig") ).join("&nbsp;&nbsp;") + "<br>" + 
+									matches.join("&nbsp;&nbsp;") + "<br>" + 
 								"</span>" 
 							);
 						}
 
 						break;
 					} else {
-						regexp = new RegExp(tabbed_command + "$", "i");
+						regexp = new RegExp(tabbed_command_regexp + "$", "i");
 						replacement = pre_cursor.replace(regexp, commands[a]) + " ";
 
 						break;
@@ -617,7 +658,7 @@
 			// Parse command
 			if ( !cmd.match(/^#/) ) {
 				const command = cmd.split(" ")[0];
-				const args = cmd.replace(/\S+\s*/, "");
+				const args = await app.functions.strip( cmd.replace(/^\S+/, "") );
 
 				const commands = Object.keys(app.commands.builtin).concat( Object.keys(app.commands.pluggedin) );
 
