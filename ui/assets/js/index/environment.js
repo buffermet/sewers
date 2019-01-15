@@ -15,11 +15,12 @@
 	app.http = {}
 	app.environment = {
 		whoami: "",
+		relayConfig: {},
 		sewersConfig: {},
 		webConsole: document.querySelector("html body div.console"),
 		consoleContainer: document.querySelector("html body div.console div.consolecontainer"),
 		consoleClear: document.querySelector("html body div.console div.clear"),
-		topbar: document.querySelector("html body div.console div.topbar"),
+		consoleResizeBar: document.querySelector("html body div.console div.resizebar"),
 		scrollOnOutput: true,
 		events: [],
 		terminals: [],
@@ -47,5 +48,5 @@
 		openOption: document.querySelector("html body div.fade div.modal.open div.optionbox ul"),
 		menuCancel: document.querySelector("html body div.fade div.modal div.optionbox div.bottom div.cancel"),
 		lastIP: "",
-		resizeConsole: false
+		resizingConsole: false
 	}

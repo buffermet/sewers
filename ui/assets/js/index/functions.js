@@ -49,7 +49,7 @@
 					app.environment.scrollOnOutput ? app.environment.consoleContainer.scrollTop += 999999 : ""
 				}
 			} else {
-				print("<span class=\"bold grey\">&nbsp;" + await app.functions.timestamp() + "&nbsp;</span><span>Could not connect to sewers.</span><br>")
+				app.functions.print("<span class=\"bold grey\">&nbsp;" + await app.functions.timestamp() + "&nbsp;</span><span>Could not connect to sewers.</span><br>")
 			}
 		})
 	}
@@ -58,27 +58,28 @@
 		return new Promise(async(resolve)=>{
 			app.http.Request("GET", "/config/" + relay_id, [[]], null).then(async(res)=>{
 				if (res.status == 200) {
-					resolve(res.responseText)
+					app.environment.relayConfig = JSON.parse(res.responseText);
+					resolve();
 				} else {
-					print("Could not fetch sewers config.")
-					resolve()
+					app.functions.print("Could not fetch relay config.");
+					resolve();
 				}
-			})
-		})
+			});
+		});
 	}
 
 	app.functions.getSewersConfig = async () => {
 		return new Promise(async(resolve)=>{
 			app.http.Request("GET", "/config/sewers", [[]], null).then(async(res)=>{
 				if (res.status == 200) {
-					sewersConfig = JSON.parse(res.responseText)
-					resolve()
+					app.environment.sewersConfig = JSON.parse(res.responseText);
+					resolve();
 				} else {
-					print("Could not fetch sewers config.")
-					resolve()
+					app.functions.print("Could not fetch sewers config.");
+					resolve();
 				}
-			})
-		})
+			});
+		});
 	}
 
 	app.functions.whoAmI = async () => {
@@ -231,7 +232,7 @@
 					)
 					document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.space").before(div)
 				} else {
-					print( await app.functions.escapeHTML(res.responseText) )
+					app.functions.print( await app.functions.escapeHTML(res.responseText) )
 
 					let span = document.createElement("span")
 					let div = document.createElement("div")
@@ -261,13 +262,22 @@
 		sessions = document.querySelectorAll("html body div.scrollcontainer div.container div.sessionlist div.session")
 	}
 
+	// Resize console
+	app.functions.resizeConsole = async new_height => {
+		if ( new_height > 75 && new_height < (self.innerHeight - 50) ) {
+			app.environment.webConsole.style.height = (self.innerHeight - new_height) + "px";
+			app.environment.consoleResizeBar.style.bottom = (self.innerHeight - new_height - 1) + "px";
+			app.environment.scrollContainer.style.height = "calc(100% - " + (self.innerHeight - new_height) + "px)";
+		}
+	}
+
 	// Override CSS
 	app.functions.updateCSS = async () => {
 		// Console resizing
-		let newHeight = parseInt(sewersConfig.console_height)
+		let newHeight = parseInt(app.environment.sewersConfig.console_height)
 
 		app.environment.webConsole.style.height = newHeight + "px"
-		app.environment.topbar.style.bottom = (newHeight - 1) + "px"
+		app.environment.consoleResizeBar.style.bottom = (newHeight - 1) + "px"
 		app.environment.scrollContainer.style.height = "calc(100% - " + newHeight + "px)"
 
 		// Center message box
@@ -285,7 +295,7 @@
 		}
 	}
 
-	// Print to console
+	// app.functions.Print to console
 	app.functions.print = async html => {
 		const timestamped = document.createElement("stamp")
 

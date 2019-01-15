@@ -526,7 +526,7 @@ html body div.console div.clear:hover {
 html body div.console div.clear:active {
 	background-color: rgba(0,0,0,1);
 }
-html body div.console div.topbar {
+html body div.console div.resizebar {
 	position: absolute;
 	top: 0;
 	height: 1px;
@@ -534,18 +534,18 @@ html body div.console div.topbar {
 	background: rgb(60,60,60);
 	cursor: ns-resize;
 }
-html body div.console div.topbar div.padding {
+html body div.console div.resizebar div.padding {
 	position: absolute;
 	height: 10px;
 	width: 100%;
 }
-html body div.console div.topbar div.padding:nth-of-type(1) {
+html body div.console div.resizebar div.padding:nth-of-type(1) {
 	top: -10px;
 }
-html body div.console div.topbar div.padding:nth-of-type(2) {
+html body div.console div.resizebar div.padding:nth-of-type(2) {
 	top: 0;
 }
-html body div.console div.topbar div.handle {
+html body div.console div.resizebar div.handle {
 	position: absolute;
 	top: -2px;
 	left: 50%;
@@ -553,17 +553,17 @@ html body div.console div.topbar div.handle {
 	width: 24px;
 	height: 5px;
 }
-html body div.console div.topbar div.handle div {
+html body div.console div.resizebar div.handle div {
 	position: absolute;
 	height: 1px;
 	width: 100%;
 	background: rgb(60,60,60);
 }
-html body div.console div.topbar div.handle div.top {
+html body div.console div.resizebar div.handle div.top {
 	top: 0;
 	border-bottom: 1px solid black;
 }
-html body div.console div.topbar div.handle div.bottom {
+html body div.console div.resizebar div.handle div.bottom {
 	bottom: 0;
 	width: 70%;
 	left: 15%;

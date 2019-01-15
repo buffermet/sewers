@@ -33,66 +33,6 @@
 		app.functions.hideMenu();
 	});
 
-	// Console resizing.
-	app.environment.topbar.addEventListener("mousedown", async(event) => {
-		app.environment.resizeConsole = true;
-	});
-
-	app.environment.topbar.addEventListener("touchstart", async(event) => {
-		app.environment.resizeConsole = true;
-	});
-
-	document.addEventListener("mousemove", async(event) => {
-		if (app.environment.resizeConsole) {
-			const offset = self.innerHeight - event.clientY;
-
-			if ( event.clientY > 75 && event.clientY < ( self.innerHeight - 50 ) ) {
-				app.environment.webConsole.style.height = offset + "px";
-				app.environment.topbar.style.bottom = (offset - 1) + "px";
-				app.environment.scrollContainer.style.height = "calc(100% - " + offset + "px)";
-			}
-		}
-	})
-
-	document.addEventListener("touchmove", async(event) => {
-		if (app.environment.resizeConsole) {
-			const offset = self.innerHeight - event.clientY;
-
-			if ( event.clientY > 75 && event.clientY < ( self.innerHeight - 50 ) ) {
-				app.environment.webConsole.style.height = offset + "px";
-				app.environment.topbar.style.bottom = (offset - 1) + "px";
-				app.environment.scrollContainer.style.height = "calc(100% - " + offset + "px)";
-			}
-		}
-	})
-
-	document.addEventListener("mouseup", async(event) => {
-		if (app.environment.resizeConsole) {
-			app.environment.resizeConsole = false;
-			app.http.Request( "POST", "/config/sewers", [["Content-Type", "application/x-www-form-urlencoded"]], "console_height=" + app.environment.webConsole.getBoundingClientRect().height );
-		}
-	})
-
-	document.addEventListener("touchend", async(event) => {
-		if (app.environment.resizeConsole) {
-			app.environment.resizeConsole = false;
-			app.http.Request( "POST", "/config/sewers", [["Content-Type", "application/x-www-form-urlencoded"]], "console_height=" + app.environment.webConsole.getBoundingClientRect().height );
-		}
-	})
-
-	// Prevent console from being hidden when resizing window.
-	self.addEventListener("resize", async()=>{
-		if ( app.environment.webConsole.getBoundingClientRect().height >= ( self.innerHeight - 75 ) && app.environment.webConsole.getBoundingClientRect().height > 51 ) {
-			app.environment.webConsole.style.height = ( self.innerHeight - 75 ) + "px";
-			app.environment.topbar.style.bottom = ( self.innerHeight - 75 - 1 ) + "px";
-			app.environment.scrollContainer.style.height = "calc(100% - " + ( self.innerHeight - 75 ) + "px)";
-
-			let console_height = app.environment.webConsole.getBoundingClientRect().height;
-
-			app.http.Request("POST", "/config/sewers", [["Content-Type", "application/x-www-form-urlencoded"]], "console_height=" + console_height);
-		}
-	});
-
 	// Console "CLEAR" button
 	app.environment.consoleClear.addEventListener("click", async()=>{
 		app.http.Request("GET", "/clear_console_log", [[]], "").then(async(res)=>{
@@ -101,4 +41,57 @@
 				app.functions.fetchLog();
 			}
 		});
+	});
+
+	// Start resizing console with cursor
+	app.environment.consoleResizeBar.addEventListener("mousedown", async(event)=>{
+		app.environment.resizingConsole = true;
+	});
+
+	// Start resizing console with touchscreen
+	app.environment.consoleResizeBar.addEventListener("touchstart", async(event)=>{
+		app.environment.resizingConsole = true;
+	});
+
+	// Resizing of console with cursor
+	self.addEventListener("mousemove", async function startResizing(event){
+		if (app.environment.resizingConsole) {
+			app.functions.resizeConsole(event.clientY);
+		}
+	});
+
+	// Resizing of console with touchscreen
+	self.addEventListener("touchmove", async function resize(event){
+		if (app.environment.resizingConsole) {
+			app.functions.resizeConsole(event.clientY);
+		}
+	});
+
+	// Stop resizing console with cursor
+	self.addEventListener("mouseup", async function stopResizing(event){
+		if (app.environment.resizingConsole) {
+			app.environment.resizingConsole = false;
+			app.http.Request( "POST", "/config/sewers", [["Content-Type", "application/x-www-form-urlencoded"]], "console_height=" + app.environment.webConsole.getBoundingClientRect().height );
+		}
+	});
+
+	// Stop resizing console with touchscreen
+	self.addEventListener("touchend", async function stopResizing(event){
+		if (app.environment.resizingConsole) {
+			app.environment.resizingConsole = false;
+			app.http.Request( "POST", "/config/sewers", [["Content-Type", "application/x-www-form-urlencoded"]], "console_height=" + app.environment.webConsole.getBoundingClientRect().height );
+		}
+	});
+
+	// Prevent console from being hidden when resizing window.
+	self.addEventListener("resize", async()=>{
+		if ( app.environment.webConsole.getBoundingClientRect().height >= ( self.innerHeight - 75 ) && app.environment.webConsole.getBoundingClientRect().height > 51 ) {
+			app.environment.webConsole.style.height = ( self.innerHeight - 75 ) + "px";
+			app.environment.consoleResizeBar.style.bottom = ( self.innerHeight - 75 - 1 ) + "px";
+			app.environment.scrollContainer.style.height = "calc(100% - " + ( self.innerHeight - 75 ) + "px)";
+
+			let console_height = app.environment.webConsole.getBoundingClientRect().height;
+
+			app.http.Request("POST", "/config/sewers", [["Content-Type", "application/x-www-form-urlencoded"]], "console_height=" + console_height);
+		}
 	});
