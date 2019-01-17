@@ -112,15 +112,15 @@
 			scrollOnOutput = true;
 		}
 
+alert(app.environment.scrollBox.scrollTop+" === ("+app.environment.scrollBox.scrollHeight+" - "+app.environment.scrollBox.offsetHeight+")")
+
 		app.environment.terminal.append(timestamped);
+
+alert(app.environment.scrollBox.scrollTop+" === ("+app.environment.scrollBox.scrollHeight+" - "+app.environment.scrollBox.offsetHeight+")")
 
 		await app.functions.shrinkInputField();
 		await app.functions.resetClearBreaks();
-		if (scrollOnOutput) {
-			setTimeout(async()=>{			
-				 app.functions.scrollToBottom();
-			}, 1);
-		}
+		scrollOnOutput ? app.functions.scrollToBottom() : "";
 	}
 
 	// Return readable timestamp
