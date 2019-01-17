@@ -105,14 +105,18 @@
 		timestamped.setAttribute( "time", new Date() );
 		timestamped.innerHTML = html;
 
+		let scrollOnOutput = false;
+		if ( app.environment.scrollBox.scrollTop === (app.environment.scrollBox.scrollHeight - app.environment.scrollBox.offsetHeight) ) {
+			scrollOnOutput = true;
+		} else if (app.environment.scrollOnOutput) {
+			scrollOnOutput = true;
+		}
+
 		app.environment.terminal.append(timestamped);
 
 		await app.functions.shrinkInputField();
 		await app.functions.resetClearBreaks();
-
-		if (app.environment.scrollOnOutput) {
-			app.functions.scrollToBottom();
-		}
+		scrollOnOutput ? app.functions.scrollToBottom() : "";
 	}
 
 	// Return readable timestamp
@@ -196,7 +200,7 @@
 	app.functions.toShell = async url_encoded => {
 		const form = new String(
 			"body=" + url_encoded + 
-			"&session_id=" + app.environment.sessionID + 
+			"&session_id=" + app.environment.sessionConfig.session_id + 
 			"&relay_id=" + app.environment.relay
 		);
 
@@ -210,7 +214,7 @@
 	app.functions.changeFetchRate = async (min, max) => {
 		const form = new String(
 			"body=" + app.environment.sessionConfig.fetch_rate_tag + " " + min + " " + max + 
-			"&session_id=" + app.environment.sessionID + 
+			"&session_id=" + app.environment.sessionConfig.session_id + 
 			"&relay_id=" + app.environment.relay
 		);
 
@@ -226,11 +230,16 @@
 		});
 	}
 
+	// Stream new data chunk
+	app.functions.stream = async session_id => {
+
+	}
+
 	// Fetch new packets from interpreter
 	app.functions.fetchPackets = async () => {
 		const form = new String(
 			"packet_id=" + 
-			"&session_id=" + app.environment.sessionID + 
+			"&session_id=" + app.environment.sessionConfig.session_id + 
 			"&relay_id=" + app.environment.relay
 		);
 
@@ -249,7 +258,7 @@
 
 					const form = new String(
 						"packet_id=" + packetID + 
-						"&session_id=" + app.environment.sessionID + 
+						"&session_id=" + app.environment.sessionConfig.session_id + 
 						"&relay_id=" + app.environment.relay
 					);
 
@@ -323,12 +332,12 @@
 					app.functions.startLoadLine();
 					app.functions.fetchPackets();
 
-					app.environment.autoFetchSession = setTimeout(app.environment.autoFetch, app.environment.fetchDelay);
+					app.environment.autoFetchTimeout = setTimeout(app.environment.autoFetch, app.environment.fetchDelay);
 				}
 			}
 
 			if (app.environment.fetchOnAutoFetchStart) {
-				app.environment.autoFetchSession = setTimeout(app.environment.autoFetch, 0);
+				app.environment.autoFetchTimeout = setTimeout(app.environment.autoFetch, 0);
 			}
 
 			app.functions.print("<span>Fetching new packets from relay every <span class=\"bold\">" + parseInt(min) + "</span> to <span class=\"bold\">" + parseInt(max) + "</span> seconds.<br></span>");
@@ -340,7 +349,7 @@
 		if (app.environment.autoFetching) {
 			app.environment.autoFetching = false;
 
-			clearTimeout(app.environment.autoFetchSession);
+			clearTimeout(app.environment.autoFetchTimeout);
 
 			app.environment.loadLine.classList.add("stop");
 
@@ -435,7 +444,7 @@
 
 	// Start new monitor stream
 	app.functions.streamMon = async (bitrate, resolution) => {
-		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMMON " + bitrate + " " + resolution + "&session_id=" + app.environment.sessionID)
+		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMMON " + bitrate + " " + resolution + "&session_id=" + app.environment.sessionConfig.session_id)
 
 		// if (res.status == 200) {
 		// 	let response = res.responseText.split(" ")
@@ -459,7 +468,7 @@
 
 	// Start new microphone stream
 	app.functions.streamMic = async bitrate => {
-		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMMIC " + bitrate + "&session_id=" + app.environment.sessionID)
+		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMMIC " + bitrate + "&session_id=" + app.environment.sessionConfig.session_id)
 
 		// if (res.status == 200) {
 		// 	let response = res.responseText.split(" ")
@@ -485,7 +494,7 @@
 	app.functions.streamCam = async (bitrate, resolution) => {
 		// app.functions.print(app.environment.requestTag + "<span title='" + await app.functions.timestamp() + "'>Streaming webcam...</span>")
 
-		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMCAM&session_id=" + app.environment.sessionID)
+		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMCAM&session_id=" + app.environment.sessionConfig.session_id)
 
 		// if (res.status == 200) {
 		// 	let response = res.responseText.split(" ")
@@ -569,11 +578,12 @@
 	app.functions.autoComplete = async (tabbed_command, pre_cursor) => {
 		const tabbed_command_regexp = await app.functions.escapeRegExp(tabbed_command);
 		const commands = Object.keys(app.commands.builtin).concat( Object.keys(app.commands.pluggedin) ).sort();
+		const commands_string = commands.join(" ");
 
 		let regexp = new RegExp("(?:^|\\s)" + tabbed_command_regexp + "\\S*", "ig");
 
-		if ( commands.join(" ").match(regexp) ) {
-			let matches = commands.join(" ").match(regexp);
+		if ( commands_string.match(regexp) ) {
+			let matches = commands_string.match(regexp);
 
 			for (let i = 0; i < matches.length; i++) {
 				matches[i] = await app.functions.strip(matches[i]);
@@ -615,7 +625,7 @@
 							app.functions.print( 
 								"<span style=\"display:block;word-break:keep-all;\">" + 
 									app.environment.requestTag + await app.functions.escapeHTML(pre_cursor) + "<br>" + 
-									matches.join("&nbsp;&nbsp;") + "<br>" + 
+									matches.join("&nbsp;&nbsp;&nbsp; ") + "<br>" + 
 								"</span>" 
 							);
 						}
@@ -712,11 +722,11 @@
 	}
 
 	app.functions.onXSSCommand = async () => {
-		const command = app.environment.xssField.value
+		const command = app.environment.xssField.value;
 
-		app.environment.xssField.value = ""
+		app.environment.xssField.value = "";
 
-		app.functions.parseXSSCommand(command)
+		app.functions.parseXSSCommand(command);
 
-		app.environment.textarea.focus()
+		app.environment.textarea.focus();
 	}

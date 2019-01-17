@@ -6,7 +6,7 @@
 			app.functions.resetClearBreaks();
 		});
 
-		await app.functions.getSessionConfig(app.environment.relay, app.environment.sessionID);
+		await app.functions.getSessionConfig( app.environment.relay, location.pathname.replace(/.*\//, "") );
 		await app.functions.getRelayConfig(app.environment.relay);
 		await app.functions.parseUserAgent();
 

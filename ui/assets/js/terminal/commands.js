@@ -160,8 +160,11 @@
 			"text": "Shell",
 			launch: async args => {
 				if (args == "") {
-					let new_stream_session = 0;
-					app.environment.activeStreams.forEach(async(active_stream_session)=>{
+					let new_stream_session = {
+						"session_id": await app.functions.randomString(4, 8),
+						"syncrate": "1-2",
+					};
+					Object.keys(app.streams.active).forEach(async(active_stream)=>{
 						active_stream_session == new String(new_stream_session) ? new_stream_session++ : "";
 					});
 					new_stream_session = new String(new_stream_session);
@@ -387,7 +390,7 @@
 				} else {
 					const min = parseInt(arguments[0]);
 					const max = parseInt(arguments[1]);
-					app.functions.print(app.environment.requestTag + "changed syncrate to fill buffer every " + min + " to " + max + " seconds."); // debug
+					app.functions.print(app.environment.requestTag + "changed syncrate to fill buffer every " + min + " to " + max + " seconds.<br>"); // debug
 				}
 			},
 			load: async () => {},

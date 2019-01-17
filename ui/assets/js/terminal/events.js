@@ -101,6 +101,16 @@
 				}
 				app.environment.textarea.focus()
 			}
+		} else { // CTRL key is pressed
+			if (event.key == "s") {
+				event.preventDefault();
+				app.environment.textarea.selectionStart = 0;
+				app.environment.textarea.selectionEnd = 0;
+			} else if (event.key == "e") {
+				event.preventDefault();
+				app.environment.textarea.selectionStart = app.environment.textarea.value.length;
+				app.environment.textarea.selectionEnd = app.environment.textarea.value.length;
+			}
 		}
 	})
 
@@ -143,14 +153,14 @@
 
 	// Window resize handler
 	self.addEventListener("resize", async()=>{
-		app.functions.shrinkInputField()
+		app.functions.shrinkInputField();
 
-		setTimeout(app.functions.resetClearBreaks, 100)
+		setTimeout(app.functions.resetClearBreaks, 100);
 	})
 
 	// Warn before quit
-	if (app.environment.warnBeforeClose) {
+	if (app.environment.warnOnClose) {
 		self.onbeforeunload = async () => {
-			return "Close?"
+			return "Close?";
 		}
 	}

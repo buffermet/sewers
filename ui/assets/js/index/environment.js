@@ -15,13 +15,16 @@
 	app.http = {}
 	app.environment = {
 		whoami: "",
+		lastIP: "",
 		relayConfig: {},
 		sewersConfig: {},
 		webConsole: document.querySelector("html body div.console"),
 		consoleContainer: document.querySelector("html body div.console div.consolecontainer"),
 		consoleClear: document.querySelector("html body div.console div.clear"),
 		consoleResizeBar: document.querySelector("html body div.console div.resizebar"),
-		scrollOnOutput: true,
+		resizingConsole: false,
+		scrollOnOutput: false,
+		warnOnRequest: true,
 		events: [],
 		terminals: [],
 		backbutton: document.querySelector("div.icon.back").parentElement,
@@ -47,6 +50,4 @@
 		openModal: document.querySelector("html body div.fade div.modal.open"),
 		openOption: document.querySelector("html body div.fade div.modal.open div.optionbox ul"),
 		menuCancel: document.querySelector("html body div.fade div.modal div.optionbox div.bottom div.cancel"),
-		lastIP: "",
-		resizingConsole: false
 	}

@@ -32,6 +32,10 @@
 				reject(err);
 			}
 
+			if (app.environment.warnOnRequest) {
+				
+			}
+
 			req.send(body);
 		});
 	}
