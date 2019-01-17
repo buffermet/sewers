@@ -112,15 +112,7 @@
 			scrollOnOutput = true;
 		}
 
-debug=document.createElement("span")
-debug.innerHTML = "<br>"+parseInt(app.environment.scrollBox.scrollTop)+" === ("+app.environment.scrollBox.scrollHeight+" - "+app.environment.scrollBox.offsetHeight+")<br>"
-app.environment.terminal.append(debug)
-
 		app.environment.terminal.append(timestamped);
-
-debug=document.createElement("span")
-debug.innerHTML = parseInt(app.environment.scrollBox.scrollTop)+" === ("+app.environment.scrollBox.scrollHeight+" - "+app.environment.scrollBox.offsetHeight+")<br>"
-app.environment.terminal.append(debug)
 
 		await app.functions.shrinkInputField();
 		await app.functions.resetClearBreaks();
