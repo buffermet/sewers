@@ -35,71 +35,72 @@
 				) 
 			) {
 				const oldValue = app.environment.textarea.value,
-				      newValue = oldValue + event.key
+				      newValue = oldValue + event.key;
 
-				app.environment.textarea.value = newValue
+				app.environment.textarea.value = newValue;
 
-				app.environment.textarea.focus()
+				app.environment.textarea.focus();
 			}
 
 			// Scroll to bottom on StdIn if applicable
 			if (app.environment.scrollOnInput) {
 				if (document.activeElement !== app.environment.xssField) {
-					app.functions.scrollToBottom()
+					app.functions.scrollToBottom();
 				}
 			}
 			if (app.environment.scrollOnJsInput) {
 				if (document.activeElement === app.environment.xssField) {
-					app.functions.scrollToBottom()
+					app.functions.scrollToBottom();
 				}
 			}
 
 			// Terminal controls
 			if (event.keyCode == 9) { // Tab
-				event.preventDefault()
+				event.preventDefault();
 
-				const command_slice = app.environment.textarea.value.replace(/^\s*/, "").slice(0, app.environment.textarea.selectionEnd)
-				const tabbed_command = command_slice.replace(/.*\s/g, "")
+				const command_slice = app.environment.textarea.value.replace(/^\s*/, "").slice(0, app.environment.textarea.selectionEnd);
+				const tabbed_command = command_slice.replace(/.*\s/g, "");
 
 				if (tabbed_command != "") {
-					app.functions.autoComplete(tabbed_command, command_slice)
+					app.functions.autoComplete(tabbed_command, command_slice);
 				}
 			} else if (event.keyCode == 13) { // Enter
 				if (document.activeElement === app.environment.textarea) {
-					event.preventDefault()
+					event.preventDefault();
 
-					app.functions.onCommand()
+					app.functions.onCommand();
 				} else if (document.activeElement === app.environment.xssField) {
-					event.preventDefault()
+					event.preventDefault();
 
-					app.functions.onXSSCommand()
+					app.functions.onXSSCommand();
 				}
 
 				app.environment.cmdCurrent = ""
 			} else if (event.keyCode == 38) { // Up arrow
-				event.preventDefault()
+				event.preventDefault();
 
 				if (app.environment.cmdHistoryIndex < app.environment.cmdHistory.length) {
-					app.environment.textarea.value = app.environment.cmdHistory[app.environment.cmdHistoryIndex]
+					app.environment.textarea.value = app.environment.cmdHistory[app.environment.cmdHistoryIndex];
 
-					app.environment.cmdHistoryIndex += 1
+					app.environment.cmdHistoryIndex++;
 
 					setTimeout(async()=>{
-						app.environment.textarea.selectionStart = app.environment.textarea.selectionEnd = app.environment.textarea.value.length // todo: make cursor position persistent
+						// todo: make cursor position persistent
+						app.environment.textarea.selectionStart = app.environment.textarea.selectionEnd = app.environment.textarea.value.length;
 					}, 3)
 				}
 				app.environment.textarea.focus()
 			} else if (event.keyCode == 40) { // Down arrow
-				event.preventDefault()
+				event.preventDefault();
 
 				if (app.environment.cmdHistoryIndex > 0) {
-					app.environment.cmdHistoryIndex -= 1
+					app.environment.cmdHistoryIndex--;
 
-					app.environment.textarea.value = app.environment.cmdHistory[app.environment.cmdHistoryIndex]
+					app.environment.textarea.value = app.environment.cmdHistory[app.environment.cmdHistoryIndex];
 				} else {
-					app.environment.textarea.value = app.environment.cmdCurrent
+					app.environment.textarea.value = app.environment.cmdCurrent;
 				}
-				app.environment.textarea.focus()
+				app.environment.textarea.focus();
 			}
 		} else { // CTRL key is pressed
 			if (event.key == "s") {
@@ -112,19 +113,19 @@
 				app.environment.textarea.selectionEnd = app.environment.textarea.value.length;
 			}
 		}
-	})
+	});
 
 	// Set current command value after keystroke is registered
 	self.addEventListener("keyup", async event => {
 		if ( !(event.keyCode == 9 || event.keyCode == 13 || event.keyCode == 38 || event.keyCode == 40) ) {
 			app.environment.cmdCurrent = app.environment.textarea.value
-		}
-	})
+		};
+	});
 
 	// Clear button
 	document.querySelector("html body div.menu div.item[name=clear]").addEventListener("click", async()=>{
-		app.functions.clear()
-	})
+		app.functions.clear();
+	});
 
 	// // Stream microphone button
 	// document.querySelector("html body div.menu div.item[name=streammic]").addEventListener("click", async()=>{

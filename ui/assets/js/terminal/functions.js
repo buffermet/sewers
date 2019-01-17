@@ -116,7 +116,11 @@
 
 		await app.functions.shrinkInputField();
 		await app.functions.resetClearBreaks();
-		scrollOnOutput ? app.functions.scrollToBottom() : "";
+		if (scrollOnOutput) {
+			setTimeout(async()=>{			
+				 app.functions.scrollToBottom();
+			}, 1);
+		}
 	}
 
 	// Return readable timestamp
