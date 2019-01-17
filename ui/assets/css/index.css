@@ -26,169 +26,18 @@ html body div.background {
 	/*background-size: contain;*/
 	/*background-repeat: no-repeat;*/
 }
-html body div.fade {
-	transition: opacity 360ms ease-in;
-	-webkit-transition: opacity 360ms ease-in;
-	-moz-transition: opacity 360ms ease-in;
-	-ms-transition: opacity 360ms ease-in;
-	-o-transition: opacity 360ms ease-in;
+html body div.popup {
+	opacity: 0;
 	z-index: 999;
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	background: rgba(0,0,0,.9);
-}
-html body div.fade.hide {
-	opacity: 0;
+	background: rgba(0,0,0,0);
 	pointer-events: none;
 }
-html body div.fade div.messagebox {
-	transition: top 240ms ease-in;
-	-webkit-transition: top 240ms ease-in;
-	-moz-transition: top 240ms ease-in;
-	-ms-transition: top 240ms ease-in;
-	-o-transition: top 240ms ease-in;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin-left: -210px;
-	height: auto;
-	width: 420px;
-	padding: 20px;
-	background: rgb(24,24,24);
-	color: #FFF;
-	font-family: "OpenSans-Regular";
-	box-shadow: 0 0 6px 0 rgba(0,0,0,.75);
-}
-html body div.fade div.messagebox span.title {
-	font-family: "OpenSans-ExtraBold";
-	font-size: 20px;
-}
-html body div.fade div.messagebox div.message {
-	margin-top: 12px;
-	font-size: 14px;
-}
-html body div.fade div.messagebox div.button {
-	float: left;
-	height: 30px;
-	line-height: 30px;
-	background: rgb(42,42,42);
-	padding: 0 12px 0 12px;
-	margin-right: 12px;
-	margin-top: 20px;
-	cursor: pointer;
-	-webkit-tap-highlight-color: transparent;
-}
-html body div.fade div.messagebox div.button:hover {
-	background: rgb(62,62,62);
-}
-html body div.fade div.messagebox div.button:active {
-	background: rgb(32,32,32);
-}
-html body div.fade div.messagebox div.corner {
-	position: absolute;
-	top: 0;
-	right: 0;
-	height: 100%;
-	width: 5%;
-	background-image: url(../images/message-corner.svg);
-	background-size: 100% 150%;
-	background-position: 50% 60%;
-}
-html body div.fade div.modal {
-	transition: top 240ms ease-in;
-	-webkit-transition: top 240ms ease-in;
-	-moz-transition: top 240ms ease-in;
-	-ms-transition: top 240ms ease-in;
-	-o-transition: top 240ms ease-in;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	margin-left: -375px;
-	width: 750px;
-	height: auto;
-	background: #0d0d0d;
-	box-shadow: 0 0 6px 0 rgba(0,0,0,.75);
-}
-html body div.fade div.modal div.optionbox {
-	position: absolute;
-	left: 0;
-	width: 200px;
-	height: auto;
-	background: #111;
-}
-html body div.fade div.modal div.optionbox ul {
-	padding: 0;
-	margin: 0;
-	list-style-type: none;
-}
-html body div.fade div.modal div.optionbox ul li {
-	padding: 10px;
-	border-bottom: 1px solid #0b0b0b;
-	font-family: "OpenSans-Regular";
-	font-size: 16px;
-	color: #FFF;
-	cursor: pointer;
-	-webkit-tap-highlight-color: transparent;
-}
-html body div.fade div.modal div.optionbox ul li:hover {
-	background: #161616;
-}
-html body div.fade div.modal div.optionbox ul li:active {
-	background: #0d0d0d;
-}
-html body div.fade div.modal div.optionbox ul li.selected {
-	background: #0d0d0d;
-}
-html body div.fade div.modal div.optionbox ul li:last-of-type {
-	border-bottom: none;
-}
-html body div.fade div.modal div.optionbox div.bottom {
-	position: absolute;
-	bottom: 0;
-	width: 200px;
-	font-family: "OpenSans-Regular";
-	font-size: 16px;
-	color: #FFF;
-	border-top: 1px solid #0b0b0b;
-	cursor: pointer;
-	-webkit-tap-highlight-color: transparent;
-}
-html body div.fade div.modal div.optionbox div.bottom div {
-	float: left;
-	height: 100%;
-	width: 50%;
-	padding: 10px 0;
-	text-align: center;
-	background: #111;
-	border-right: 1px solid #0d0d0d;
-}
-html body div.fade div.modal div.optionbox div.bottom div:first-of-type {
-	width: calc(50% - 1px);
-}
-html body div.fade div.modal div.optionbox div.bottom div:last-of-type {
-	border-right: none;
-}
-html body div.fade div.modal div.optionbox div.bottom div:hover {
-	background: #141414;
-}
-html body div.fade div.modal div.optionbox div.bottom div:active {
-	background: #0f0f0f;
-}
-html body div.fade div.modal div.optionbox div.bottom div.selected {
-	background: #0d0d0d;
-}
-html body div.fade div.modal div.optionbox div.bottom div:hover {
-	color: #999;
-}
-html body div.fade div.modal div.menupage {
-	float: right;
-	padding: 24px;
-	width: calc(550px - 24px - 24px);
-	height: auto;
-	background: #0d0d0d;
-	color: #FFF;
-	font-family: "OpenSans-Regular";
+html body div.popup[data-state=on] {
+	background: rgba(0,0,0,0.9);
+	pointer-events: initial;
 }
 html body div.scrollcontainer {
 	position: relative;

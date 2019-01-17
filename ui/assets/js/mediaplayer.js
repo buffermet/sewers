@@ -1,5 +1,9 @@
 
-/* Dependency of mediaplayer.js */
+/*
+*
+*	Sewers UI mediaplayer package
+*
+*/
 
 	// Parse URL
 	const queryLine = window.location.href.replace(/.*\?/g, "");

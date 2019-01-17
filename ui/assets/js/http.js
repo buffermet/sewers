@@ -1,7 +1,7 @@
 
 /* 
 *	
-*	Sewers UI HTTP module
+*	Sewers UI HTTP package
 *	
 */
 
@@ -30,10 +30,6 @@
 				}
 			} catch(err) {
 				reject(err);
-			}
-
-			if (app.environment.warnOnRequest) {
-				
 			}
 
 			req.send(body);

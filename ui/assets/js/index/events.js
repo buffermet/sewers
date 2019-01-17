@@ -7,7 +7,7 @@
 
 	// Quit button
 	document.querySelector("html body div.menu div[name=quit]").addEventListener("click", async()=>{
-		app.functions.showMessage("Quit?", "Do you want to close sewers?<br><div class=\"button\" onclick=\"app.functions.quit()\">Yes</div><div class=\"button\" onclick=\"app.functions.hideMessage()\">No</div>");
+		// 
 	});
 
 	// Preferences button
@@ -15,25 +15,14 @@
 		app.functions.showPreferences();
 	});
 
-	document.querySelector("html body div.fade div.modal div.optionbox ul li").addEventListener("mousedown", async(event)=>{
-		document.querySelectorAll("html body div.fade div.modal div.optionbox ul li").forEach(async(li)=>{
-			li.classList.remove("selected");
-		});
-
-		event.currentTarget.classList.add("selected");
-	});
-
+	// Back button
 	app.environment.backbutton.addEventListener("click", async(event)=>{
-		event.currentTarget.classList.add("hidden");
+		app.environment.backbutton.setAttribute("data-state", "off");
 
 		app.functions.showRelays();
 	});
 
-	app.environment.menuCancel.addEventListener("click", async()=>{
-		app.functions.hideMenu();
-	});
-
-	// Console "CLEAR" button
+	// Console clear button
 	app.environment.consoleClear.addEventListener("click", async()=>{
 		app.http.Request("GET", "/clear_console_log", [[]], "").then(async(res)=>{
 			if (res.status == 200) {

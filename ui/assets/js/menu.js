@@ -1,9 +1,16 @@
 
-/* Sewers UI menu package */
+/*
+*
+*	Sewers UI menu package
+*
+*/
 
 	// Reveal submenus on desktop and mobile
 	document.querySelectorAll("html body div.menu div.item").forEach(async(item)=>{
-		if (item.getAttribute("name") !== "xssbutton") {
+		if ( 
+			item.getAttribute("name") !== "xssbutton" 
+			&& item.getAttribute("name") !== "backbutton" 
+		) {
 			item.addEventListener("mouseenter", async(event)=>{
 				event.target.setAttribute("data-state", "on");
 			});

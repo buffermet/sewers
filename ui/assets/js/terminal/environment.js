@@ -16,6 +16,7 @@
 		terminal: document.querySelector("html body div.scrollBox div.terminal"),
 		xssButton: document.querySelector("html body div.menu div.item[name=xssbutton]"),
 		xssField: document.querySelector("html body div.menu div.item[name=xssbutton] input"),
+		upstreamIndicator: document.querySelector("html body div.menu div.item div.upstream-indicator"),
 		ctrlKey: false,
 		sessionConfig: {},
 		relayConfig: {},

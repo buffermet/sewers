@@ -1,5 +1,9 @@
 
-/* Initiate terminal.html */
+/*
+*
+*	Sewers UI terminal package
+*
+*/
 
 	self.addEventListener("load", async()=>{
 		app.functions.shrinkInputField().then(async()=>{

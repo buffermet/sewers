@@ -106,9 +106,10 @@
 		timestamped.innerHTML = html;
 
 		let scrollOnOutput = false;
-		if ( parseInt(app.environment.scrollBox.scrollTop) === (app.environment.scrollBox.scrollHeight - app.environment.scrollBox.offsetHeight) ) {
-			scrollOnOutput = true;
-		} else if (app.environment.scrollOnOutput) {
+		if (
+			app.environment.scrollOnOutput 
+			|| parseInt(app.environment.scrollBox.scrollTop) === (app.environment.scrollBox.scrollHeight - app.environment.scrollBox.offsetHeight)
+		) {
 			scrollOnOutput = true;
 		}
 
@@ -206,9 +207,9 @@
 			"&relay_id=" + app.environment.relay
 		);
 
-		app.functions.showNetworkIndicator();
+		app.functions.showUpstreamIndicator();
 		app.http.Request("POST", "/post", [["Content-Type", "application/x-www-form-urlencoded"]], form).then(async(res)=>{
-			setTimeout(app.functions.hideNetworkIndicator, 320);
+			setTimeout(app.functions.hideUpstreamIndicator, 320);
 		});
 	}
 
@@ -220,10 +221,10 @@
 			"&relay_id=" + app.environment.relay
 		);
 
-		app.functions.showNetworkIndicator();
+		app.functions.showUpstreamIndicator();
 		app.http.Request("POST", "/fetchrate", [["Content-Type", "application/x-www-form-urlencoded"]], form).then(async(res)=>{
 			if (res.status == 200) {
-				setTimeout(app.functions.hideNetworkIndicator, 320);
+				setTimeout(app.functions.hideUpstreamIndicator, 320);
 
 				app.functions.print("<span>Interpreter will be fetching new packets every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds.<br></span>");
 
@@ -245,9 +246,9 @@
 			"&relay_id=" + app.environment.relay
 		);
 
-		app.functions.showNetworkIndicator();
+		app.functions.showUpstreamIndicator();
 		let res = await app.http.Request("POST", "/get", [["Content-Type", "application/x-www-form-urlencoded"]], form);
-		setTimeout(app.functions.hideNetworkIndicator, 320);
+		setTimeout(app.functions.hideUpstreamIndicator, 320);
 
 		if (res.status == 200) {
 			let response = res.responseText;
@@ -264,9 +265,9 @@
 						"&relay_id=" + app.environment.relay
 					);
 
-					app.functions.showNetworkIndicator();
+					app.functions.showUpstreamIndicator();
 					res = await app.http.Request("POST", "/get", [["Content-Type", "application/x-www-form-urlencoded"]], form);
-					setTimeout(app.functions.hideNetworkIndicator, 320);
+					setTimeout(app.functions.hideUpstreamIndicator, 320);
 
 					response = res.responseText;
 
@@ -542,9 +543,9 @@
 				app.environment.requestTag = "<span class=\"bold\">&dollar;</span>&nbsp;\xBB&nbsp;";
 
 				app.functions.print(app.environment.requestTag + "session <span class=\"bold\">" + stream_session + "</span> started, getting current working directory ...<br>");
-				app.functions.showNetworkIndicator(); // debug
+				app.functions.showUpstreamIndicator(); // debug
 				setTimeout(async()=>{ // debug
-					app.functions.hideNetworkIndicator(); // debug
+					app.functions.hideUpstreamIndicator(); // debug
 				}, 1000); // debug
 			}
 		});
@@ -562,18 +563,14 @@
 		app.functions.print(app.environment.requestTag + "session <span class=\"bold\">" + stream_session + "</span> terminated.<br>");
 	}
 
-	// Network activity indicator
-	app.functions.showNetworkIndicator = async () => {
-		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator");
-
-		network_indicator.setAttribute("data-state", "on");
+	// Upstreams activity indicator
+	app.functions.showUpstreamIndicator = async () => {
+		app.environment.upstreamIndicator.setAttribute("data-state", "on");
 	}
 
-	// Network activity indicator
-	app.functions.hideNetworkIndicator = async () => {
-		const network_indicator = document.querySelector("html body div.menu div.item div.network-indicator");
-
-		network_indicator.setAttribute("data-state", "off");
+	// Upstreams activity indicator
+	app.functions.hideUpstreamIndicator = async () => {
+		app.environment.upstreamIndicator.setAttribute("data-state", "off");
 	}
 
 	// Autocomplete stdin

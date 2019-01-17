@@ -152,7 +152,9 @@
 	app.functions.showSessions = async relay_id => {
 		currentRelay = relay_id
 
+		app.functions.showUpstreamIndicator();
 		const res = await app.http.Request("GET", "/config/" + relay_id, [[]], null)
+		setTimeout(app.functions.hideUpstreamIndicator, 320);
 		// catch stuff
 		const currentRelayConfig = JSON.parse(res.responseText)
 
@@ -175,7 +177,7 @@
 			const SessionsNewsMessage = document.querySelector("html body div.scrollcontainer div.container div.sessionlist div.header span.newsmessage")
 			SessionsNewsMessage.classList.add("hide")
 
-			app.environment.backbutton.classList.remove("hidden")
+			app.environment.backbutton.setAttribute("data-state", "on");
 
 			const res = await app.http.Request("GET", "/relay/" + relay_id , [[]], null)
 
@@ -256,7 +258,7 @@
 			app.functions.cycleNews().then(async()=>{
 				app.environment.container.classList.remove("hide")
 				app.environment.container.classList.remove("nopointerevents")
-			})
+			});
 		})
 
 		sessions = document.querySelectorAll("html body div.scrollcontainer div.container div.sessionlist div.session")
@@ -279,20 +281,6 @@
 		app.environment.webConsole.style.height = newHeight + "px"
 		app.environment.consoleResizeBar.style.bottom = (newHeight - 1) + "px"
 		app.environment.scrollContainer.style.height = "calc(100% - " + newHeight + "px)"
-
-		// Center message box
-		let messageboxHeight = app.environment.messageBox.getBoundingClientRect().height
-		app.environment.messageBox.style.marginTop = "-" + ( (messageboxHeight / 2) + 20 ) + "px"
-
-		// Refresh & center modal
-		app.environment.openModal = document.querySelector("html body div.fade div.modal.open")
-		app.environment.openOption = document.querySelector("html body div.fade div.modal.open div.optionbox ul")
-		if (app.environment.openModal) {
-			app.environment.openOption.parentElement.style = "min-height: calc(" + (app.environment.openOption.parentElement.children.length * 43) + "px + 44px);"
-			app.environment.openModal.style = "min-height: calc(" + app.environment.openOption.getBoundingClientRect().height + "px + 44px);"
-			modalHeight = app.environment.openModal.getBoundingClientRect().height
-			app.environment.openModal.style = "margin-top: -" + ( (modalHeight / 2) + 20 ) + "px;"
-		}
 	}
 
 	// app.functions.Print to console
@@ -326,18 +314,14 @@
 		return D + "-" + M + "-" + Y + " " + h + ":" + m + ":" + s
 	}
 
-	// Show message box
-	app.functions.showMessage = async (title, message) => {
-		app.environment.messageTitle.innerText = title
-		app.environment.messageBody.innerHTML = message
+	// Network activity indicator
+	app.functions.showUpstreamIndicator = async () => {
+		app.environment.upstreamIndicator.setAttribute("data-state", "on");
+	}
 
-		app.environment.fade.classList.remove("hide")
-
-		app.functions.sleep(0.2).then(async()=>{
-			app.environment.messageBox.classList.remove("down")
-
-			app.functions.updateCSS()
-		})
+	// Network activity indicator
+	app.functions.hideUpstreamIndicator = async () => {
+		app.environment.upstreamIndicator.setAttribute("data-state", "off");
 	}
 
 	// Close message box

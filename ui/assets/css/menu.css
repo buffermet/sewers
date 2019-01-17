@@ -23,14 +23,6 @@ html body div.menu div.item {
 	font-size: 12px;
 	cursor: pointer;
 	-webkit-tap-highlight-color: transparent;
-	transition: margin-left 200ms linear;
-	-webkit-transition: margin-left 200ms linear;
-	-moz-transition: margin-left 200ms linear;
-	-ms-transition: margin-left 200ms linear;
-	-o-transition: margin-left 200ms linear;
-}
-html body div.menu div.item.hidden {
-	margin-left: -33px;
 }
 html body div.menu div.item.left {
 	float: left;
@@ -39,6 +31,17 @@ html body div.menu div.item.left {
 html body div.menu div.item.right {
 	float: right;
 	border-left: 1px solid rgba(255,255,255,0.05);
+}
+html body div.menu div.item[name=backbutton] {
+	margin-left: -33px;
+	transition: margin-left 200ms linear;
+	-webkit-transition: margin-left 200ms linear;
+	-moz-transition: margin-left 200ms linear;
+	-ms-transition: margin-left 200ms linear;
+	-o-transition: margin-left 200ms linear;
+}
+html body div.menu div.item[name=backbutton][data-state=on] {
+	margin-left: 0px;
 }
 html body div.menu div.item.center:last-of-type {
 	border-right: none;
@@ -237,7 +240,7 @@ html body div.menu div.item[name=xssbutton] input {
 	width: 100%;
 	height: 100%;
 	border: none;
-	background-color: none;
+	background-color: transparent;
 	color: #888;
 	padding: 0px;
 	opacity: 0;
@@ -293,7 +296,6 @@ html body div.menu div.item.right div.submenu {
 }
 html body div.menu div.item div.submenu div.subitem {
 	display: block;
-	/*border-bottom: 1px solid rgba(255,255,255,0.05);*/
 	text-indent: 8px;
 	height: 30px;
 	width: 100%;
@@ -329,4 +331,85 @@ html body div.menu div.item div.submenu div.icon {
 	top: 1.5px;
 	margin: 0px 3px 0px 3px;
 	display: inline-block;
+}
+
+/* Credit: loading.io css loader */
+/* (Upstream Activity Indicator) */
+html body div.menu div.item div.upstream-indicator {
+	display: inline-block;
+	position: relative;
+	width: 16px;
+	height: 16px;
+	transform-origin: top left;
+	-webkit-transform-origin: top left;
+	-moz-transform-origin: top left;
+	-ms-transform-origin: top left;
+	-o-transform-origin: top left;
+	transform: scale(0.33);
+	-webkit-transform: scale(0.33);
+	-moz-transform: scale(0.33);
+	-ms-transform: scale(0.33);
+	-o-transform: scale(0.33);
+	opacity: 0;
+	transition: opacity 240ms linear;
+	-webkit-transition: opacity 240ms linear;
+	-moz-transition: opacity 240ms linear;
+	-ms-transition: opacity 240ms linear;
+	-o-transition: opacity 240ms linear;
+}
+html body div.menu div.item div.upstream-indicator[data-state=on] {
+	opacity: 1;
+}
+html body div.menu div.item div.upstream-indicator div {
+	position: absolute;
+	top: 27px;
+	width: 11px;
+	height: 11px;
+	border-radius: 50%;
+	background: #fff;
+	animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+html body div.menu div.item div.upstream-indicator div:nth-child(1) {
+	left: 6px;
+	animation: upstream-indicator1 0.48s infinite;
+	-webkit-animation: upstream-indicator1 0.48s infinite;
+}
+html body div.menu div.item div.upstream-indicator div:nth-child(2) {
+	left: 6px;
+	animation: upstream-indicator2 0.48s infinite;
+	-webkit-animation: upstream-indicator2 0.48s infinite;
+}
+html body div.menu div.item div.upstream-indicator div:nth-child(3) {
+	left: 26px;
+	animation: upstream-indicator2 0.48s infinite;
+	-webkit-animation: upstream-indicator2 0.48s infinite;
+}
+html body div.menu div.item div.upstream-indicator div:nth-child(4) {
+	left: 45px;
+	animation: upstream-indicator3 0.48s infinite;
+	-webkit-animation: upstream-indicator3 0.48s infinite;
+}
+@keyframes upstream-indicator1 {
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+@keyframes upstream-indicator3 {
+	0% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(0);
+	}
+}
+@keyframes upstream-indicator2 {
+	0% {
+		transform: translate(0, 0);
+	}
+	100% {
+		transform: translate(19px, 0);
+	}
 }

