@@ -106,25 +106,27 @@
 		timestamped.innerHTML = html;
 
 		let scrollOnOutput = false;
-		if ( app.environment.scrollBox.scrollTop === (app.environment.scrollBox.scrollHeight - app.environment.scrollBox.offsetHeight) ) {
+		if ( parseInt(app.environment.scrollBox.scrollTop) === (app.environment.scrollBox.scrollHeight - app.environment.scrollBox.offsetHeight) ) {
 			scrollOnOutput = true;
 		} else if (app.environment.scrollOnOutput) {
 			scrollOnOutput = true;
 		}
 
 debug=document.createElement("span")
-debug.innerHTML = "<br>"+app.environment.scrollBox.scrollTop+" === ("+app.environment.scrollBox.scrollHeight+" - "+app.environment.scrollBox.offsetHeight+")<br>"
+debug.innerHTML = "<br>"+parseInt(app.environment.scrollBox.scrollTop)+" === ("+app.environment.scrollBox.scrollHeight+" - "+app.environment.scrollBox.offsetHeight+")<br>"
 app.environment.terminal.append(debug)
 
 		app.environment.terminal.append(timestamped);
 
 debug=document.createElement("span")
-debug.innerHTML = app.environment.scrollBox.scrollTop+" === ("+app.environment.scrollBox.scrollHeight+" - "+app.environment.scrollBox.offsetHeight+")<br>"
+debug.innerHTML = parseInt(app.environment.scrollBox.scrollTop)+" === ("+app.environment.scrollBox.scrollHeight+" - "+app.environment.scrollBox.offsetHeight+")<br>"
 app.environment.terminal.append(debug)
 
 		await app.functions.shrinkInputField();
 		await app.functions.resetClearBreaks();
-		scrollOnOutput ? app.functions.scrollToBottom() : "";
+		setTimeout(async()=>{
+			scrollOnOutput ? app.functions.scrollToBottom() : "";
+		}, 1);
 	}
 
 	// Return readable timestamp
