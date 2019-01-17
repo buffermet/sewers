@@ -112,11 +112,15 @@
 			scrollOnOutput = true;
 		}
 
-alert(app.environment.scrollBox.scrollTop+" === ("+app.environment.scrollBox.scrollHeight+" - "+app.environment.scrollBox.offsetHeight+")")
+debug=document.createElement("span")
+debug.innerHTML = "<br>"+app.environment.scrollBox.scrollTop+" === ("+app.environment.scrollBox.scrollHeight+" - "+app.environment.scrollBox.offsetHeight+")<br>"
+app.environment.terminal.append(debug)
 
 		app.environment.terminal.append(timestamped);
 
-alert(app.environment.scrollBox.scrollTop+" === ("+app.environment.scrollBox.scrollHeight+" - "+app.environment.scrollBox.offsetHeight+")")
+debug=document.createElement("span")
+debug.innerHTML = app.environment.scrollBox.scrollTop+" === ("+app.environment.scrollBox.scrollHeight+" - "+app.environment.scrollBox.offsetHeight+")<br>"
+app.environment.terminal.append(debug)
 
 		await app.functions.shrinkInputField();
 		await app.functions.resetClearBreaks();
