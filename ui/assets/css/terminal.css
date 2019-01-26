@@ -60,6 +60,11 @@ html body div.scrollBox div.terminal {
 	font-size: 1em;
 	text-shadow: 0 -1px 0px rgba(0,0,0,0.333);
 	word-break: break-all;
+	user-select: initial;
+	-webkit-user-select: initial;
+	-moz-user-select: initial;
+	-ms-user-select: initial;
+	-o-user-select: initial;
 }
 html body div.scrollBox div.terminal a {
 	color: white;
@@ -88,13 +93,6 @@ html body div.scrollBox div.terminal img.icon {
 }
 html body div.scrollBox div.terminal img.icon.link {
 	margin: 0;
-}
-html body div.scrollBox div.terminal span {
-	user-select: initial;
-	-webkit-user-select: initial;
-	-moz-user-select: initial;
-	-ms-user-select: initial;
-	-o-user-select: initial;
 }
 html body div.scrollBox div.terminal hr {
 	display: block;

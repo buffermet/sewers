@@ -7,7 +7,7 @@
 
 	// Focus input field unless selecting span text
 	self.addEventListener("click", async(event)=>{
-		if (event.target.tagName != "SPAN" && event.target.tagName != "INPUT") {
+		if (event.target.tagName != "SPAN" && event.target.tagName != "INPUT" && event.target.tagName != "STAMP") {
 			app.environment.textarea.focus()
 		}
 	});
@@ -24,9 +24,9 @@
 	});
 
 	// Custom keyboard handler
-	self.addEventListener("keydown", async event=>{
+	self.addEventListener("keydown", async(event)=>{
 		if (!event.ctrlKey) {
-			// If nothing is focused, add new character to stdin field
+			// If nothing is focused, focus stdin field
 			if ( 
 				app.environment.allowedCharacters.includes(event.key) 
 				&& !(
@@ -34,15 +34,10 @@
 					|| app.environment.xssField === document.activeElement
 				) 
 			) {
-				const oldValue = app.environment.textarea.value,
-				      newValue = oldValue + event.key;
-
-				app.environment.textarea.value = newValue;
-
 				app.environment.textarea.focus();
 			}
 
-			// Scroll to bottom on StdIn if applicable
+			// Scroll to bottom on StdIn if preferred
 			if (app.environment.scrollOnInput) {
 				if (document.activeElement !== app.environment.xssField) {
 					app.functions.scrollToBottom();
@@ -58,11 +53,82 @@
 			if (event.keyCode == 9) { // Tab
 				event.preventDefault();
 
-				const command_slice = app.environment.textarea.value.replace(/^\s*/, "").slice(0, app.environment.textarea.selectionEnd);
-				const tabbed_command = command_slice.replace(/.*\s/g, "");
+				const cursor_position = app.environment.textarea.selectionEnd;
+				const command = app.environment.textarea.value;
+				const current_command = app.environment.textarea.value.replace(/^\s*/, "").replace(/\s.*/, "");
+				const tabbed_command = app.environment.textarea.value.slice(0, cursor_position).replace(/.*\s/, "");
+				const pre_cursor = app.environment.textarea.value.slice(0, cursor_position);
+				let choices;
+				if ( !tabbed_command.match(/^\s*$/) ) {
+					if ( command.match( new RegExp( "^\\s*" + await app.functions.escapeRegExp(tabbed_command) + "$" ) ) ) {
+						if (app.streams.current == "") {
+							choices = Object.keys(app.commands.builtin).concat( Object.keys(app.commands.pluggedin) ).sort(function(a,b){
+								return a.length - b.length;
+							});
+						} else {
+							switch (app.streams.active[app.streams.current].type) {
+								case "microphone":
+									choices = Object.keys(app.commands.microphone).sort(function(a,b){
+										return a.length - b.length;
+									});
+									break;
+								case "monitor":
+									choices = Object.keys(app.commands.monitor).sort(function(a,b){
+										return a.length - b.length;
+									});
+									break;
+								case "shell":
+									choices = Object.keys(app.commands.shell).sort(function(a,b){
+										return a.length - b.length;
+									});
+									break;
+								case "webcam":
+									choices = Object.keys(app.commands.webcam).sort(function(a,b){
+										return a.length - b.length;
+									});
+							}
+						}
 
-				if (tabbed_command != "") {
-					app.functions.autoComplete(tabbed_command, command_slice);
+						app.functions.autoComplete(command, tabbed_command, pre_cursor, choices);
+					} else {
+						if (app.streams.current == "") {
+							Object.keys(app.commands.builtin).forEach(async(option)=>{
+								if (current_command == option) {
+									app.commands.builtin[option].autocomplete(command, cursor_position);
+								}
+							});
+						} else {
+							switch (app.streams.active[app.streams.current].type) {
+								case "microphone":
+									Object.keys(app.commands.microphone).forEach(async(option)=>{
+										if (current_command == option) {
+											app.commands.microphone[option].autocomplete(command, cursor_position);
+										}
+									});
+									break;
+								case "monitor":
+									Object.keys(app.commands.monitor).forEach(async(option)=>{
+										if (current_command == option) {
+											app.commands.monitor[option].autocomplete(command, cursor_position);
+										}
+									});
+									break;
+								case "shell":
+									Object.keys(app.commands.shell).forEach(async(option)=>{
+										if (current_command == option) {
+											app.commands.shell[option].autocomplete(command, cursor_position);
+										}
+									});
+									break;
+								case "webcam":
+									Object.keys(app.commands.webcam).forEach(async(option)=>{
+										if (current_command == option) {
+											app.commands.webcam[option].autocomplete(command, cursor_position);
+										}
+									});
+							}
+						}
+					}
 				}
 			} else if (event.keyCode == 13) { // Enter
 				if (document.activeElement === app.environment.textarea) {
@@ -84,12 +150,10 @@
 
 					app.environment.cmdHistoryIndex++;
 
-					setTimeout(async()=>{
-						// todo: make cursor position persistent
-						app.environment.textarea.selectionStart = app.environment.textarea.selectionEnd = app.environment.textarea.value.length;
-					}, 3)
+					// todo: make cursor position persistent
+					app.environment.textarea.selectionStart = app.environment.textarea.selectionEnd = app.environment.textarea.value.length;
 				}
-				app.environment.textarea.focus()
+				app.environment.textarea.focus();
 			} else if (event.keyCode == 40) { // Down arrow
 				event.preventDefault();
 
@@ -116,9 +180,9 @@
 	});
 
 	// Set current command value after keystroke is registered
-	self.addEventListener("keyup", async event => {
+	self.addEventListener("keyup", async(event)=>{
 		if ( !(event.keyCode == 9 || event.keyCode == 13 || event.keyCode == 38 || event.keyCode == 40) ) {
-			app.environment.cmdCurrent = app.environment.textarea.value
+			app.environment.cmdCurrent = app.environment.textarea.value;
 		};
 	});
 

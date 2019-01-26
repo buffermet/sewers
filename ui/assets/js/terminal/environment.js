@@ -49,6 +49,7 @@
 		scrollOnInput: true,
 		scrollOnOutput: false,
 		scrollOnJsInput: false,
+		playSoundOnStdout: false,
 		warnOnRequest: true,
 		warnOnClose: true,
 	};
@@ -59,3 +60,5 @@
 	app.commands = {};
 	app.commands.prototypes = {};
 	app.streams = {};
+	app.streams.active = {};
+	app.streams.current = "";

@@ -16,8 +16,11 @@
 
 		app.functions.printInstructions();
 
-		Object.keys(app.commands.builtin).forEach(async()=>{
-			
+		Object.keys(app.commands.builtin).forEach(async(command)=>{
+			app.commands.builtin[command].load();
+		});
+		Object.keys(app.commands.pluggedin).forEach(async(command)=>{
+			app.commands.pluggedin[command].load();
 		});
 
 		document.title = app.environment.sessionConfig.session_id + ' - ' + app.environment.sessionConfig.hostname;

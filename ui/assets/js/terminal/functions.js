@@ -199,45 +199,6 @@
 		);
 	}
 
-	// Return standard input to HTTP server
-	app.functions.toShell = async url_encoded => {
-		const form = new String(
-			"body=" + url_encoded + 
-			"&session_id=" + app.environment.sessionConfig.session_id + 
-			"&relay_id=" + app.environment.relay
-		);
-
-		app.functions.showUpstreamIndicator();
-		app.http.Request("POST", "/post", [["Content-Type", "application/x-www-form-urlencoded"]], form).then(async(res)=>{
-			setTimeout(app.functions.hideUpstreamIndicator, 320);
-		});
-	}
-
-	// Change fetch rate
-	app.functions.changeFetchRate = async (min, max) => {
-		const form = new String(
-			"body=" + app.environment.sessionConfig.fetch_rate_tag + " " + min + " " + max + 
-			"&session_id=" + app.environment.sessionConfig.session_id + 
-			"&relay_id=" + app.environment.relay
-		);
-
-		app.functions.showUpstreamIndicator();
-		app.http.Request("POST", "/fetchrate", [["Content-Type", "application/x-www-form-urlencoded"]], form).then(async(res)=>{
-			if (res.status == 200) {
-				setTimeout(app.functions.hideUpstreamIndicator, 320);
-
-				app.functions.print("<span>Interpreter will be fetching new packets every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds.<br></span>");
-
-				app.environment.sessionConfig.fetch_rate = min + "-" + max;
-			}
-		});
-	}
-
-	// Stream new data chunk
-	app.functions.stream = async session_id => {
-
-	}
-
 	// Fetch new packets from interpreter
 	app.functions.fetchPackets = async () => {
 		const form = new String(
@@ -248,7 +209,7 @@
 
 		app.functions.showUpstreamIndicator();
 		let res = await app.http.Request("POST", "/get", [["Content-Type", "application/x-www-form-urlencoded"]], form);
-		setTimeout(app.functions.hideUpstreamIndicator, 320);
+		app.functions.hideUpstreamIndicator();
 
 		if (res.status == 200) {
 			let response = res.responseText;
@@ -267,40 +228,42 @@
 
 					app.functions.showUpstreamIndicator();
 					res = await app.http.Request("POST", "/get", [["Content-Type", "application/x-www-form-urlencoded"]], form);
-					setTimeout(app.functions.hideUpstreamIndicator, 320);
+					app.functions.hideUpstreamIndicator();
 
 					response = res.responseText;
 
-					new Audio("../../assets/audio/bell.mp3").play();
+					app.environment.playSoundOnStdout ? new Audio("../../assets/audio/bell.mp3").play() : "";
 
 					const plaintext = atob(response);
 
 					await app.functions.print(app.environment.responseTag + "<span class=\"bold lightgreen\">OK</span> <span>" + await app.functions.timestamp() + "</span><br>");
 
 					if ( plaintext.startsWith("\xff\xd8\xff") || plaintext.startsWith("\xFF\xD8\xFF") ) {
-						const type = "image/jpg";
-						app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
-						app.functions.sleep(0.1).then(async()=>{
-							app.functions.print("<hr>")
-						});
+						app.functions.print("<img style=\"display:inline-block;\" title=\"Packet " + packetID + "\" src=\"data:image/jpg;base64," + await app.functions.escapeHTML(response) + "\" /><br>");
+						setTimeout(async()=>{
+							app.functions.shrinkInputField();
+							app.functions.resetClearBreaks();
+						}, 10);
 					} else if ( plaintext.startsWith("\x89PNG\r\n\x1a\n") || plaintext.startsWith("\x89PNG\r\n\x1A\n") ) {
-						const type = "image/png";
-						app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
-						app.functions.sleep(0.1).then(async()=>{
-							app.functions.print("<hr>")
-						});
+						app.functions.print("<img style=\"display:inline-block;\" title=\"Packet " + packetID + "\" src=\"data:image/png;base64," + await app.functions.escapeHTML(response) + "\" /><br>");
+						setTimeout(async()=>{
+							app.functions.shrinkInputField();
+							app.functions.resetClearBreaks();
+						}, 10);
 					} else if ( plaintext.startsWith("GIF87a") || plaintext.startsWith("GIF89a") ) {
-						const type = "image/gif";
-						app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
-						app.functions.sleep(0.1).then(async()=>{
-							app.functions.print("<hr>")
-						});
-					} else if ( plaintext.startsWith("<?xml") && plaintext.indexOf("<svg") >= 0 || plaintext.startsWith("<svg") ) {
-						const type = "image/svg+xml";
-						app.functions.print("<img title=\"Packet " + packetID + "\" src=\"data:" + type + ";base64," + await app.functions.escapeHTML(response) + "\" /><br>");
-						app.functions.sleep(0.1).then(async()=>{
-							app.functions.print("<hr>")
-						});
+						app.functions.print("<img style=\"display:inline-block;\" title=\"Packet " + packetID + "\" src=\"data:image/gif;base64," + await app.functions.escapeHTML(response) + "\" /><br>");
+						setTimeout(async()=>{
+							app.functions.shrinkInputField();
+							app.functions.resetClearBreaks();
+						}, 10);
+					} else if ( plaintext.startsWith("<?xml") && plaintext.indexOf("<svg") != -1 || plaintext.startsWith("<svg") ) {
+						app.functions.print("<img style=\"display:inline-block;\" title=\"Packet " + packetID + "\" src=\"data:image/svg+xml;base64," + await app.functions.escapeHTML(response) + "\" /><br>");
+						setTimeout(async()=>{
+							app.functions.shrinkInputField();
+							app.functions.resetClearBreaks();
+						}, 10);
+					} else if ( plaintext.startsWith(app.environment.sessionConfig.stream_tag + " ") ) {
+						stopStream()
 					} else {
 						if (plaintext != "") {
 							let stdout = await app.functions.escapeHTML(plaintext);
@@ -432,135 +395,298 @@
 		}
 	}
 
-	// Append new stream to menu
-	app.functions.addStream = async (streamID, streamType) => {
-		if (streamType == "cam") {
-			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon eye\"><div class=\"icon rec blinking\"></div></div></div>");
-		} else if (streamType == "mic") {
-			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?mic&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".wav', 'width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammic\"><div class=\"icon rec blinking\"></div></div></div>");
-		} else if (streamType == "mon") {
-			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?mon&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammon\"><div class=\"icon rec blinking\"></div></div></div>");
-		} else if (streamType == "shell") {
-			document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon eye\"><div class=\"icon rec blinking\"></div></div></div>");
-		}
+	// // Append new stream to menu
+	// app.functions.addStream = async (streamID, streamType) => {
+	// 	if (streamType == "cam") {
+	// 		document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon eye\"><div class=\"icon rec blinking\"></div></div></div>");
+	// 	} else if (streamType == "mic") {
+	// 		document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?mic&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".wav', 'width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammic\"><div class=\"icon rec blinking\"></div></div></div>");
+	// 	} else if (streamType == "mon") {
+	// 		document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?mon&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon streammon\"><div class=\"icon rec blinking\"></div></div></div>");
+	// 	} else if (streamType == "shell") {
+	// 		document.querySelector("html body div.menu").append("<div class=\"item left\" title=\"Stream ID: " + streamID + "\" onclick=\"window.open('" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4', '" + streamFile + ".mp4', 'width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no')\"><div class=\"icon eye\"><div class=\"icon rec blinking\"></div></div></div>");
+	// 	}
+	// }
+
+	// // Start new monitor stream
+	// app.functions.streamMon = async (bitrate, resolution) => {
+	// 	const res = await app.functions.sendRequest("POST", "/", "data=STREAMMON " + bitrate + " " + resolution + "&session_id=" + app.environment.sessionConfig.session_id)
+
+	// 	if (res.status == 200) {
+	// 		let response = res.responseText.split(" ")
+
+	// 		let streamID = response[0]
+	// 		let streamFile = response[1]
+
+	// 		app.functions.print(app.environment.responseTag + " [<span class='green'>OK</span>] " + "<span>" + await app.functions.timestamp() + "</span>")
+
+	// 		if (response[0] == "Usage:") {
+	// 			app.functions.print("<span>" + response + "</span>")
+	// 		} else {
+	// 			app.functions.print("<span>Monitor stream started.</span>")
+	// 			app.functions.print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
+	// 			app.functions.print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.host + "/stream?mon&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.host + "/stream?mon&" + streamID + "&" + streamFile + ".mp4</a></span>")
+
+	// 			addStream(streamID, "STREAMMON")
+	// 		}
+	// 	}
+	// }
+
+	// // Start new microphone stream
+	// app.functions.streamMic = async bitrate => {
+	// 	const res = await app.functions.sendRequest("POST", "/", "data=STREAMMIC " + bitrate + "&session_id=" + app.environment.sessionConfig.session_id)
+
+	// 	if (res.status == 200) {
+	// 		let response = res.responseText.split(" ")
+
+	// 		let streamID = response[0]
+	// 		let streamFile = response[1]
+
+	// 		app.functions.print(app.environment.responseTag + " [<span class='green'>OK</span>] " + "<span>" + await app.functions.timestamp() + "</span>")
+
+	// 		if (response[0] == "Usage:") {
+	// 			app.functions.print("<span>" + response + "</span>")
+	// 		} else {
+	// 			app.functions.print("<span>Microphone stream started.</span>")
+	// 			app.functions.print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
+	// 			app.functions.print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.host + "/stream?mic&" + streamID + "&" + streamFile + ".wav\", \"" + streamFile + ".wav\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.host + "/stream?mic&" + streamID + "&" + streamFile + ".wav</a></span>")
+
+	// 			addStream(streamID, "STREAMMIC")
+	// 		}
+	// 	}
+	// }
+
+	// // Start new webcam stream
+	// app.functions.streamCam = async (bitrate, resolution) => {
+	// 	app.functions.print(app.environment.requestTag + "<span title='" + await app.functions.timestamp() + "'>Streaming webcam...</span>")
+
+	// 	const res = await app.functions.sendRequest("POST", "/", "data=STREAMCAM&session_id=" + app.environment.sessionConfig.session_id)
+
+	// 	if (res.status == 200) {
+	// 		let response = res.responseText.split(" ")
+
+	// 		let streamID = response[0]
+	// 		let streamFile = response[1]
+
+	// 		app.functions.print(app.environment.responseTag + " [<span class='green'>OK</span>] " + "<span>" + await app.functions.timestamp() + "</span>")
+
+	// 		if (response[0] == "Usage:") {
+	// 			app.functions.print("<span>" + response + "</span>")
+	// 		} else {
+	// 			app.functions.print("<span>Webcam stream started.</span>")
+	// 			app.functions.print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
+	// 			app.functions.print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4</a></span>")
+
+	// 			addStream(streamID, "STREAMCAM")
+	// 		}
+	// 	}
+	// }
+
+	// Change fetch rate of interpreter
+	app.functions.changeFetchRate = async (min, max) => {
+		const form = new String(
+			"body=" + app.environment.sessionConfig.fetch_rate_tag + " " + min + " " + max + 
+			"&session_id=" + app.environment.sessionConfig.session_id + 
+			"&relay_id=" + app.environment.relay
+		);
+
+		app.functions.showUpstreamIndicator();
+		app.http.Request("POST", "/fetchrate", [["Content-Type", "application/x-www-form-urlencoded"]], form).then(async(res)=>{
+			if (res.status == 200) {
+				app.functions.hideUpstreamIndicator();
+
+				app.functions.print("<span>Interpreter will be fetching new packets every <span class=\"bold\">" + min + "</span> to <span class=\"bold\">" + max + "</span> seconds.<br></span>");
+
+				app.environment.sessionConfig.fetch_rate = min + "-" + max;
+			}
+		});
 	}
 
-	// Start new monitor stream
-	app.functions.streamMon = async (bitrate, resolution) => {
-		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMMON " + bitrate + " " + resolution + "&session_id=" + app.environment.sessionConfig.session_id)
+	// Return standard input to interpeter shell
+	app.functions.toShell = async url_encoded => {
+		const form = new String(
+			"body=" + url_encoded + 
+			"&session_id=" + app.environment.sessionConfig.session_id + 
+			"&relay_id=" + app.environment.relay
+		);
 
-		// if (res.status == 200) {
-		// 	let response = res.responseText.split(" ")
-
-		// 	let streamID = response[0]
-		// 	let streamFile = response[1]
-
-		// 	app.functions.print(app.environment.responseTag + " [<span class='green'>OK</span>] " + "<span>" + await app.functions.timestamp() + "</span>")
-
-		// 	if (response[0] == "Usage:") {
-		// 		app.functions.print("<span>" + response + "</span>")
-		// 	} else {
-		// 		app.functions.print("<span>Monitor stream started.</span>")
-		// 		app.functions.print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
-		// 		app.functions.print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.host + "/stream?mon&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=640,height=360,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.host + "/stream?mon&" + streamID + "&" + streamFile + ".mp4</a></span>")
-
-		// 		addStream(streamID, "STREAMMON")
-		// 	}
-		// }
+		app.functions.showUpstreamIndicator();
+		app.http.Request("POST", "/post", [["Content-Type", "application/x-www-form-urlencoded"]], form).then(async(res)=>{
+			app.functions.hideUpstreamIndicator();
+		});
 	}
 
-	// Start new microphone stream
-	app.functions.streamMic = async bitrate => {
-		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMMIC " + bitrate + "&session_id=" + app.environment.sessionConfig.session_id)
+	// Return standard input to interpreter stream
+	app.functions.toStream = async (stream_session_id, command) => {
+		return new Promise(async(resolve, reject)=>{
+			const form = new String(
+				"body=" + encodeURIComponent(command) + 
+				"&session_id=" + encodeURIComponent(app.environment.sessionConfig.session_id) + 
+				"&stream_id=" + encodeURIComponent(stream_session_id) + 
+				"&stream_rate=" + encodeURIComponent( app.streams.active[stream_session_id].rate.join(" ") ) + 
+				"&relay_id=" + encodeURIComponent(app.environment.relay)
+			);
 
-		// if (res.status == 200) {
-		// 	let response = res.responseText.split(" ")
+			app.functions.showUpstreamIndicator();
+			app.http.Request("POST", "/stream", [["Content-Type", "application/x-www-form-urlencoded"]], form).then(async(res)=>{
+				app.functions.hideUpstreamIndicator();
 
-		// 	let streamID = response[0]
-		// 	let streamFile = response[1]
-
-		// 	app.functions.print(app.environment.responseTag + " [<span class='green'>OK</span>] " + "<span>" + await app.functions.timestamp() + "</span>")
-
-		// 	if (response[0] == "Usage:") {
-		// 		app.functions.print("<span>" + response + "</span>")
-		// 	} else {
-		// 		app.functions.print("<span>Microphone stream started.</span>")
-		// 		app.functions.print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
-		// 		app.functions.print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.host + "/stream?mic&" + streamID + "&" + streamFile + ".wav\", \"" + streamFile + ".wav\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.host + "/stream?mic&" + streamID + "&" + streamFile + ".wav</a></span>")
-
-		// 		addStream(streamID, "STREAMMIC")
-		// 	}
-		// }
-	}
-
-	// Start new webcam stream
-	app.functions.streamCam = async (bitrate, resolution) => {
-		// app.functions.print(app.environment.requestTag + "<span title='" + await app.functions.timestamp() + "'>Streaming webcam...</span>")
-
-		// const res = await app.functions.sendRequest("POST", "/", "data=STREAMCAM&session_id=" + app.environment.sessionConfig.session_id)
-
-		// if (res.status == 200) {
-		// 	let response = res.responseText.split(" ")
-
-		// 	let streamID = response[0]
-		// 	let streamFile = response[1]
-
-		// 	app.functions.print(app.environment.responseTag + " [<span class='green'>OK</span>] " + "<span>" + await app.functions.timestamp() + "</span>")
-
-		// 	if (response[0] == "Usage:") {
-		// 		app.functions.print("<span>" + response + "</span>")
-		// 	} else {
-		// 		app.functions.print("<span>Webcam stream started.</span>")
-		// 		app.functions.print("<span>&nbsp;&nbsp;├&nbsp;Stream ID&nbsp;&nbsp;: </span><span>" + streamID + "</span>")
-		// 		app.functions.print("<span>&nbsp;&nbsp;└&nbsp;Stream URL&nbsp;: </span><span><a onclick='window.open(\"" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4\", \"" + streamFile + ".mp4\", \"width=180,height=230,status=no,menubar=no,toolbar=no,titlebar=no,location=no\")'>" + location.protocol + "//" + location.host + "/stream?cam&" + streamID + "&" + streamFile + ".mp4</a></span>")
-
-		// 		addStream(streamID, "STREAMCAM")
-		// 	}
-		// }
+				resolve();
+			}).catch(async(err)=>{
+				reject(err);
+			});
+		});
 	}
 
 	// Stream shell session
-	app.functions.startStreamingShell = async stream_session => {
+	app.functions.startStream = async stream_type => {
 		return new Promise(async(resolve, reject)=>{
-			if ( app.environment.activeStreams.indexOf(stream_session) != -1) {
-				reject("<span class=\"red\">stream session " + stream_session + " already exists.</span>");
+			const new_stream_session_id = await app.functions.randomString(4, 8);
+
+			if (app.streams.active[new_stream_session_id]) {
+				reject("<span class=\"red\">stream session " + new_stream_session_id + " already exists.</span>");
 			} else {
-				app.environment.activeStreams.push(stream_session);
-				app.environment.currentStream = stream_session;
+				app.streams.active[new_stream_session_id] = {
+					"buffer": new Uint8Array(),
+					"rate": app.environment.sessionConfig.stream_rate.split("-"),
+					"type": stream_type,
+				};
 
-				app.environment.streamingShell = true;
-
-				const prototype_builtin = app.commands.builtin;
-				const prototype_pluggedin = app.commands.pluggedin;
-
-				app.commands.protoypes = {};
-				app.commands.protoypes.builtin = prototype_builtin;
-				app.commands.protoypes.pluggedin = prototype_pluggedin;
-
-				app.commands.builtin = app.commands.shell;
-				app.commands.pluggedin = {};
+				app.streams.current = new_stream_session_id;
 
 				app.environment.requestTag = "<span class=\"bold\">&dollar;</span>&nbsp;\xBB&nbsp;";
 
-				app.functions.print(app.environment.requestTag + "session <span class=\"bold\">" + stream_session + "</span> started, getting current working directory ...<br>");
-				app.functions.showUpstreamIndicator(); // debug
-				setTimeout(async()=>{ // debug
-					app.functions.hideUpstreamIndicator(); // debug
-				}, 1000); // debug
+				app.functions.print(app.environment.requestTag + "shell stream <span class=\"bold\">" + new_stream_session_id + "</span> started.<br>");
+
+				if (stream_type == "microphone") {
+					Object.keys(app.commands.microphone).forEach(async(command)=>{
+						app.commands.microphone[command].load();
+					});
+				} else if (stream_type == "monitor") {
+					Object.keys(app.commands.monitor).forEach(async(command)=>{
+						app.commands.monitor[command].load();
+					});
+				} else if (stream_type == "shell") {
+					Object.keys(app.commands.shell).forEach(async(command)=>{
+						app.commands.shell[command].load();
+					});
+				} else if (stream_type == "webcam") {
+					Object.keys(app.commands.webcam).forEach(async(command)=>{
+						app.commands.webcam[command].load();
+					});
+				}
+
+				const body = [
+					app.environment.sessionConfig.stream_tag, 
+					new_stream_session_id,
+					app.streams.active[new_stream_session_id].rate[0],
+					app.streams.active[new_stream_session_id].rate[1]
+				];
+
+				const form = new String(
+					"body=" + encodeURIComponent( body.join(" ") ) + 
+					"&session_id=" + encodeURIComponent(app.environment.sessionConfig.session_id) + 
+					"&relay_id=" + encodeURIComponent(app.environment.relay)
+				);
+
+				app.functions.showUpstreamIndicator();
+				app.http.Request("POST", "/post", [["Content-Type", "application/x-www-form-urlencoded"]], form).then(async(res)=>{
+					app.functions.hideUpstreamIndicator();
+
+					app.functions.pipeStream(new_stream_session_id);
+				});
 			}
 		});
 	}
 
 	// Stream shell session
-	app.functions.stopStreamingShell = async stream_session => {
-		app.commands.builtin = app.commands.protoypes.builtin;
-		app.commands.pluggedin = app.commands.protoypes.pluggedin;
+	app.functions.stopStream = async stream_session_id => {
+		const form = new String(
+			"body=" + encodeURIComponent(app.environment.sessionConfig.stream_tag) + 
+			"&session_id=" + encodeURIComponent(app.environment.sessionConfig.session_id) + 
+			"&stream_id=" + encodeURIComponent(stream_session_id) + 
+			"&stream_rate=" + 
+			"&relay_id=" + encodeURIComponent(app.environment.relay)
+		);
 
+		app.functions.showUpstreamIndicator();
+		app.http.Request("POST", "/stream", [["Content-Type", "application/x-www-form-urlencoded"]], form).then(async(res)=>{
+			app.functions.hideUpstreamIndicator();
+
+			app.environment.requestTag = "<span class=\"orange bold\">sewers</span>&nbsp;\xBB&nbsp;";
+
+			app.streams.current == stream_session_id ? app.streams.current = "" : "";
+			delete app.streams.active[stream_session_id];
+
+			app.functions.print(app.environment.requestTag + "shell stream <span class=\"bold\">" + stream_session_id + "</span> terminated.<br>");
+		});
+	}
+
+	// Pipe stream output to destination
+	app.functions.pipeStream = async (stream_session_id) => {
+		if (app.streams.current == stream_session_id) {
+			while (app.streams.current == stream_session_id) {
+				const interval = parseInt(app.streams.active[stream_session_id].rate[0]) + ( Math.random() * parseInt(app.streams.active[stream_session_id].rate[1] - app.streams.active[stream_session_id].rate[0]) );
+
+				const form = new String(
+					"body=" + 
+					"&session_id=" + encodeURIComponent(app.environment.sessionConfig.session_id) + 
+					"&stream_id=" + encodeURIComponent(stream_session_id) + 
+					"&stream_rate=" + encodeURIComponent( app.streams.active[stream_session_id].rate.join(" ") ) + 
+					"&relay_id=" + app.environment.relay
+				);
+
+				app.functions.showUpstreamIndicator();
+				const res = await app.http.Request("POST", "/stream", [["Content-Type", "application/x-www-form-urlencoded"]], form);
+
+				if (res.response) {
+					if (app.streams.active[app.streams.current].type == "shell") {
+						app.functions.print( await app.functions.escapeHTML( atob(res.responseText) ) );
+					} else {
+						const int_array_encoder = new TextEncoder();
+						const chunk = new Uint8Array(res.response);
+						app.streams.active[stream_session_id].buffer.set(chunk, app.streams.active[stream_session_id].buffer.length);
+						console.log(app.streams.active[stream_session_id].buffer) // debug
+					}
+				}
+
+				await app.functions.sleep(interval / 1000);
+			}
+		} else {
+			app.functions.print("ERROR: could not pipe stream output from <span class=\"bold\">" + stream_session_id + "</span> because it is not attached.<br>");
+		}
+	}
+
+	// Attach to shell stream session
+	app.functions.attachStream = async stream_session_id => {
+		switch (app.streams.active[stream_session_id].type) {
+			case "microphone":
+				app.environment.requestTag = "<span class=\"bold\">microphone</span>&nbsp;\xBB&nbsp;";
+				break;
+			case "monitor":
+				app.environment.requestTag = "<span class=\"bold\">monitor</span>&nbsp;\xBB&nbsp;";
+				break;
+			case "shell":
+				app.environment.requestTag = "<span class=\"bold\">&dollar;</span>&nbsp;\xBB&nbsp;";
+				break;
+			case "webcam":
+				app.environment.requestTag = "<span class=\"bold\">webcam</span>&nbsp;\xBB&nbsp;";
+		}
+
+		app.streams.current = stream_session_id;
+
+		app.functions.pipeStream(stream_session_id);
+
+		app.functions.print(app.environment.requestTag + "attached " + app.streams.active[stream_session_id].type + " stream <span class=\"bold\">" + stream_session_id + "</span>.<br>");
+	}
+
+	// Detach from shell stream session
+	app.functions.detachStream = async stream_session_id => {
 		app.environment.requestTag = "<span class=\"orange bold\">sewers</span>&nbsp;\xBB&nbsp;";
 
-		app.environment.activeStreams.splice( app.environment.activeStreams.indexOf( new String(stream_session) ) );
+		app.streams.current = "";
 
-		app.functions.print(app.environment.requestTag + "session <span class=\"bold\">" + stream_session + "</span> terminated.<br>");
+		app.functions.print(app.environment.requestTag + "detached shell stream <span class=\"bold\">" + stream_session_id + "</span>.<br>");
 	}
 
 	// Upstreams activity indicator
@@ -570,19 +696,20 @@
 
 	// Upstreams activity indicator
 	app.functions.hideUpstreamIndicator = async () => {
-		app.environment.upstreamIndicator.setAttribute("data-state", "off");
+		setTimeout(async()=>{		
+			app.environment.upstreamIndicator.setAttribute("data-state", "off");
+		}, 320);
 	}
 
 	// Autocomplete stdin
-	app.functions.autoComplete = async (tabbed_command, pre_cursor) => {
+	app.functions.autoComplete = async (command, tabbed_command, pre_cursor, choices) => {
 		const tabbed_command_regexp = await app.functions.escapeRegExp(tabbed_command);
-		const commands = Object.keys(app.commands.builtin).concat( Object.keys(app.commands.pluggedin) ).sort();
-		const commands_string = commands.join(" ");
+		const choices_string = choices.join(" ");
 
 		let regexp = new RegExp("(?:^|\\s)" + tabbed_command_regexp + "\\S*", "ig");
 
-		if ( commands_string.match(regexp) ) {
-			let matches = commands_string.match(regexp);
+		if ( choices_string.match(regexp) ) {
+			let matches = choices_string.match(regexp);
 
 			for (let i = 0; i < matches.length; i++) {
 				matches[i] = await app.functions.strip(matches[i]);
@@ -590,8 +717,8 @@
 
 			let replacement;
 
-			for (let a = 0; a < commands.length; a++) {
-				if ( commands[a].match(regexp) ) {
+			for (let a = 0; a < choices.length; a++) {
+				if ( choices[a].match(regexp) ) {
 					if (matches.length > 1) {
 						let longest_matching_substring = await app.functions.unescapeRegExp(tabbed_command_regexp);
 						let longest_matching_substring_length = 0;
@@ -603,7 +730,7 @@
 						let matching_substring_count = matches.length;
 
 						for (let b = 0; b < longest_matching_substring_length; b++) {
-							const r = new RegExp("^" + await app.functions.escapeRegExp( longest_matching_substring + commands[a].charAt(longest_matching_substring.length) ), "ig" );
+							const r = new RegExp("^" + await app.functions.escapeRegExp( longest_matching_substring + choices[a].charAt(longest_matching_substring.length) ), "ig" );
 
 							matching_substring_count = 0;
 							matches.forEach(async(match)=>{
@@ -611,7 +738,7 @@
 							});
 
 							if (matching_substring_count == matches.length) {
-								longest_matching_substring = longest_matching_substring + commands[a].charAt(longest_matching_substring.length);
+								longest_matching_substring = longest_matching_substring + choices[a].charAt(longest_matching_substring.length);
 							} else {
 								break;
 							}
@@ -632,7 +759,7 @@
 						break;
 					} else {
 						regexp = new RegExp(tabbed_command_regexp + "$", "i");
-						replacement = pre_cursor.replace(regexp, commands[a]) + " ";
+						replacement = pre_cursor.replace(regexp, choices[a]) + " ";
 
 						break;
 					}
@@ -668,29 +795,54 @@
 
 			// Parse command
 			if ( !cmd.match(/^#/) ) {
-				const command = cmd.split(" ")[0];
-				const args = await app.functions.strip( cmd.replace(/^\S+/, "") );
+				const command = cmd.split(" ")[0],
+				      args = await app.functions.strip( cmd.replace(/^\S+/, "") );
 
-				const commands = Object.keys(app.commands.builtin).concat( Object.keys(app.commands.pluggedin) );
-
-				for (let i = 0; i < commands.length; i++) {
-					regexp = new RegExp("^" + await app.functions.escapeRegExp(command) + "$", "i");
-
-					if ( commands[i].match(regexp) ) {
-						if (app.commands.builtin[ commands[i] ]) {
-							app.commands.builtin[ commands[i] ].launch(args);
-						} else {
-							app.commands.pluggedin[ commands[i] ].launch(args);
-						}
-
-						return;
+				if (app.streams.current == "") {
+					if (app.commands.builtin[command]) {
+						app.commands.builtin[command].launch(args);
+					} else if (app.commands.pluggedin[command]) {
+						app.commands.pluggedin[command].launch(args);
+					} else {
+						app.functions.print( await app.functions.escapeHTML(command) + ": command not found. Type <span class=\"bold orange\">help</span> to see a list of commands.<br>" );
+					}
+				} else {
+					switch (app.streams.active[app.streams.current].type) {
+						case "microphone":
+							if (app.commands.microphone[command]) {
+								app.commands.microphone[command].launch(args);
+								break;
+							} else {
+								app.functions.print( await app.functions.escapeHTML(command) + ": command not found. Type <span class=\"bold orange\">help</span> to see a list of commands.<br>" );
+								break;
+							}
+						case "monitor":
+							if (app.commands.monitor[command]) {
+								app.commands.monitor[command].launch(args);
+								break;
+							} else {
+								app.functions.print( await app.functions.escapeHTML(command) + ": command not found. Type <span class=\"bold orange\">help</span> to see a list of commands.<br>" );
+								break;
+							}
+						case "shell":
+							if (app.commands.shell[command]) {
+								app.commands.shell[command].launch(args);
+								break;
+							} else {
+								app.functions.toStream(app.streams.current, cmd);
+								break;
+							}
+						case "webcam":
+							if (app.commands.webcam[command]) {
+								app.commands.webcam[command].launch(args);
+							} else {
+								app.functions.print( await app.functions.escapeHTML(command) + ": command not found. Type <span class=\"bold orange\">help</span> to see a list of commands.<br>" );
+							}
 					}
 				}
 			} else {
 				return;
 			}
-
-			app.functions.print( await app.functions.escapeHTML(cmd) + ": command not found. Type <span class=\"bold orange\">help</span> to see a list of commands.<br>" );
 		}
 
 		app.environment.textarea.focus();

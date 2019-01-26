@@ -7,68 +7,106 @@
 
 	app.commands.builtin = {
 		"?": {
-			"arguments": [],
-			"button": "",
-			"category": "terminal",
-			"description": "Show help menu.",
-			"text": "Show help",
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Show help menu.",
+			text: "Show help",
 			launch: async args => {
 				app.functions.printHelp();
 			},
 			load: async () => {},
-			"os": [".*"],
+			os: [".*"],
+		},
+		"activestreams": {
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "interpreter",
+			default: "",
+			description: "Show active stream sessions.",
+			text: "Show active streams",
+			launch: async args => {
+				const active_streams = Object.keys(app.streams.active);
+				if (active_streams.length > 0) {
+					active_streams.forEach(async(active_stream_id)=>{
+						await app.functions.print( await app.functions.escapeHTML(active_stream_id) + "<br>" );
+					});
+				} else {
+					app.functions.print("There are no streams.<br>")
+				}
+			},
+			load: async () => {},
+		},
+		"attach": {
+			arguments: ["SESSION ID"],
+			autocomplete: async (command, cursor_position) => {
+				const tabbed_command = command.slice(0, cursor_position).replace(/.*\s/, "");
+				const pre_cursor = command.slice(0, cursor_position);
+				const choices = Object.keys(app.streams.active);
+console.log(tabbed_command)
+				app.functions.autoComplete(command, tabbed_command, pre_cursor, choices);
+			},
+			button: "",
+			category: "interpreter",
+			default: "",
+			description: "Attach to a stream session.",
+			text: "Attach stream",
+			launch: async args => {
+				const stream_session_id = args.replace(/^\s*/, "").replace(/\s.*/, "");
+				app.functions.attachStream(stream_session_id);
+			},
+			load: async () => {},
 		},
 		"clear": {
-			"arguments": [],
-			"button": "",
-			"category": "terminal",
-			"description": "Clear the terminal.",
-			"text": "Clear",
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Clear the terminal.",
+			text: "Clear",
 			launch: async args => {
 				app.functions.clear();
 			},
 			load: async () => {},
 		},
-		"commands": {
-			"arguments": [],
-			"button": "",
-			"category": "terminal",
-			"description": "Show help menu.",
-			"text": "Show help",
-			launch: async args => {
-				app.functions.printHelp();
-			},
-			load: async () => {},
-			"os": [".*"],
-		},
 		"exit": {
-			"arguments": [],
-			"button": "",
-			"category": "terminal",
-			"description": "Exit the terminal.",
-			"text": "Exit",
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Exit the terminal.",
+			text: "Exit",
 			launch: async args => {
 				self.close() || alert("You can only use this in pop-up windows.");
 			},
 			load: async () => {},
 		},
 		"fetch": {
-			"arguments": [],
-			"button": "",
-			"category": "interpreter",
-			"description": "Fetch new packets from interpreter.",
-			"text": "Fetch",
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "interpreter",
+			default: "",
+			description: "Fetch new packets from interpreter.",
+			text: "Fetch",
 			launch: async args => {
 				app.functions.fetchPackets();
 			},
 			load: async () => {},
 		},
 		"fetchrate": {
-			"arguments": ["MIN SECONDS", "MAX SECONDS"],
-			"button": "",
-			"category": "interpreter",
-			"description": "Set automatic fetch rate of interpreter.",
-			"text": "Change fetchrate",
+			arguments: ["MIN SECONDS", "MAX SECONDS"],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "interpreter",
+			default: "",
+			description: "Set automatic fetch rate of interpreter.",
+			text: "Change fetchrate",
 			launch: async args => {
 				const arguments = args.replace(/^\s*/, "").replace(/\s*$/, "").replace(/\s{2,}/g, " ").split(" ");
 				if (arguments[2]) {
@@ -98,49 +136,57 @@
 				}
 			},
 			load: async () => {},
-			"os": [".*"],
+			os: [".*"],
 		},
 		"h": {
-			"arguments": [],
-			"button": "",
-			"category": "terminal",
-			"description": "Show help menu.",
-			"text": "Show help",
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Show help menu.",
+			text: "Show help",
 			launch: async args => {
 				app.functions.printHelp();
 			},
 			load: async () => {},
-			"os": [".*"],
+			os: [".*"],
 		},
 		"help": {
-			"arguments": [],
-			"button": "",
-			"category": "terminal",
-			"description": "Show help menu.",
-			"text": "Show help",
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Show help menu.",
+			text: "Show help",
 			launch: async args => {
 				app.functions.printHelp();
 			},
 			load: async () => {},
-			"os": [".*"],
+			os: [".*"],
 		},
 		"info": {
-			"arguments": [],
-			"button": "",
-			"category": "terminal",
-			"description": "Show help menu.",
-			"text": "Show help",
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Show help menu.",
+			text: "Show help",
 			launch: async args => {
 				app.functions.printHelp();
 			},
 			load: async () => {},
-			"os": [".*"],
+			os: [".*"],
 		},
 		"reset": {
-			"arguments": [],
-			"category": "terminal",
-			"description": "",
-			"text": "",
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			category: "terminal",
+			default: "",
+			description: "",
+			text: "",
 			launch: async args => {
 				if (app.environment.warnOnReset) {
 					self.location = location.href;
@@ -153,22 +199,16 @@
 			load: async () => {},
 		},
 		"sh": {
-			"arguments": ["COMMAND"],
-			"button": "",
-			"category": "terminal",
-			"description": "Execute shell command/start shell stream.",
-			"text": "Shell",
+			arguments: ["COMMAND"],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Execute shell command/start shell stream.",
+			text: "Shell",
 			launch: async args => {
 				if (args == "") {
-					let new_stream_session = {
-						"session_id": await app.functions.randomString(4, 8),
-						"syncrate": "1-2",
-					};
-					Object.keys(app.streams.active).forEach(async(active_stream)=>{
-						active_stream_session == new String(new_stream_session) ? new_stream_session++ : "";
-					});
-					new_stream_session = new String(new_stream_session);
-					app.functions.startStreamingShell(new_stream_session).catch(async(err)=>{
+					app.functions.startStream("shell").catch(async(err)=>{
 						app.functions.print("ERROR: " + err + "<br>");
 					});
 				} else {
@@ -176,22 +216,19 @@
 				}
 			},
 			load: async () => {},
-			"os": [".*"],
+			os: [".*"],
 		},
 		"shell": {
-			"arguments": ["COMMAND"],
-			"button": "",
-			"category": "terminal",
-			"description": "Execute shell command/start shell stream.",
-			"text": "Shell",
+			arguments: ["COMMAND"],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Execute shell command/start shell stream.",
+			text: "Shell",
 			launch: async args => {
 				if (args == "") {
-					let new_stream_session = 0;
-					app.environment.activeStreams.forEach(async(active_stream_session)=>{
-						active_stream_session == new String(new_stream_session) ? new_stream_session++ : "";
-					});
-					new_stream_session = new String(new_stream_session);
-					app.functions.startStreamingShell(new_stream_session).catch(async(err)=>{
+					app.functions.startStream("shell").catch(async(err)=>{
 						app.functions.print("ERROR: " + err + "<br>");
 					});
 				} else {
@@ -199,43 +236,37 @@
 				}
 			},
 			load: async () => {},
-			"os": [".*"],
+			os: [".*"],
 		},
 		"startautofetching": {
-			"arguments": ["COMMAND"],
-			"button": "",
-			"category": "terminal",
-			"description": "Start auto fetching.",
-			"text": "Start auto fetching",
+			arguments: ["COMMAND"],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Start auto fetching.",
+			text: "Start auto fetching",
 			launch: async args => {
 				const arguments = args.replace(/^\s*/, "").replace(/\s*$/, "").replace(/\s{2,}/g, " ").split(" ");
 				if (arguments[2]) {
 					app.functions.print(
-						new String( 
-							"Too many arguments.<br>" + 
-							"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
-						)
+						"Too many arguments.<br>" + 
+						"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>"
 					);
 				} else if (!arguments[1]) {
 					app.functions.print(
-						new String( 
-							"Not enough arguments.<br>" + 
-							"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
-						)
+						"Not enough arguments.<br>" + 
+						"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>"
 					);
 				} else if ( parseInt(arguments[0]) >= parseInt(arguments[1]) ) {
 					app.functions.print(
-						new String( 
-							"Minimum value must be less than maximum.<br>" + 
-							"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
-						)
+						"Minimum value must be less than maximum.<br>" + 
+						"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>"
 					);
 				} else if ( parseInt(arguments[0]) < 1 ) {
 					app.functions.print(
-						new String( 
-							"Minimum value must be at least 1.<br>" + 
-							"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
-						)
+						"Minimum value must be at least 1.<br>" + 
+						"Usage: <span class=\"tan\">startautofetching</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>"
 					);
 				} else {
 					const min = parseInt(arguments[0]);
@@ -244,49 +275,57 @@
 				}
 			},
 			load: async () => {},
-			"os": [".*"],
+			os: [".*"],
 		},
 		"stopautofetching": {
-			"arguments": ["COMMAND"],
-			"button": "",
-			"category": "terminal",
-			"description": "Stop auto fetching.",
-			"text": "Stop auto fetching",
+			arguments: ["COMMAND"],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Stop auto fetching.",
+			text: "Stop auto fetching",
 			launch: async args => {
 				app.functions.stopAutoFetching();
 			},
 			load: async () => {},
-			"os": [".*"],
+			os: [".*"],
 		},
 		"telemetry": {
-			"arguments": [],
-			"button": "",
-			"category": "terminal",
-			"description": "Show telemetry data of current session.",
-			"text": "Telemetry",
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Show telemetry data of current session.",
+			text: "Telemetry",
 			launch: async args => {
 				app.functions.printTelemetry()
 			},
 			load: async () => {},
-			"os": [".*"],
+			os: [".*"],
 		},
 		"usage": {
-			"arguments": [],
-			"button": "",
-			"category": "terminal",
-			"description": "Show help menu.",
-			"text": "Show help",
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Show help menu.",
+			text: "Show help",
 			launch: async args => {
 				app.functions.printHelp();
 			},
 			load: async () => {},
-			"os": [".*"],
+			os: [".*"],
 		},
 		"xss": {
-			"arguments": ["JAVASCRIPT"],
-			"category": "terminal",
-			"description": "Execute JavaScript in the terminal.",
-			"text": "Execute JavaScript",
+			arguments: ["JAVASCRIPT"],
+			autocomplete: async (args, cursor_position) => {},
+			category: "terminal",
+			default: "",
+			description: "Execute JavaScript in the terminal.",
+			text: "Execute JavaScript",
 			launch: async args => {
 				app.functions.parseXSSCommand(args);
 			},
@@ -296,75 +335,86 @@
 
 	app.commands.pluggedin = {
 		"snapmon": {
-			"arguments": [],
-			"button": "html body div.menu div.subitem[name=yungtravla-terminal-linux-gnome-screenshot]",
-			"category": "interpreter",
-			"description": "Take a screenshot.",
-			"text": "Capture screenshot",
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "html body div.menu div.subitem[name=yungtravla-terminal-linux-gnome-screenshot]",
+			category: "interpreter",
+			default: "",
+			description: "Take a screenshot.",
+			text: "Capture screenshot",
 			launch: async args => {
 				const os_string = app.environment.sessionConfig.os;
-				if ( os_string.match("GNU/Linux") ) {
-					const filename = await app.functions.randomString(8, 16);
-					const command = "sh gnome-screenshot -p -f ./" + filename + ".png &> /dev/null && cat ./" + filename + ".png && rm ./" + filename + ".png";
-					app.functions.parseCommand(command);
-				}
+				const filename = await app.functions.randomString(8, 16);
+				const command = "gnome-screenshot -p -f ./" + filename + ".png &> /dev/null && cat ./" + filename + ".png && rm ./" + filename + ".png";
+				app.functions.print(app.environment.requestTag + "sh " + command + "<br>");
+				app.functions.toShell( encodeURIComponent(command) );
 			},
 			load: async () => {},
-			"os": ["GNU[/]Linux$"],
+			os: ["Linux"],
 		},
-		// "your-command": {
-		// 	"arguments": [],
-		// 	"button": "html body div.menu div.subitem[name=name-of-your-command-button]",
-		// 	"category": "",
-		// 	"description": "Describe your command.",
-		// 	"text": "Text of your command button",
-		// 	launch: async args => {
-		// 		// your code
-		// 	},
-		// 	"os": ["RegularExpression|[wW]indows|[mM][aA][cC][oO][sS]|[aA]ndroid|..."],
-		// },
-	}
+	};
 
-	app.commands.shell = {
-		"stream.clear": {
-			"arguments": [],
-			"button": "",
-			"category": "terminal",
-			"description": "Clear the terminal.",
-			"text": "Clear",
+	app.commands.microphone = {};
+
+	app.commands.monitor = {
+		"stream.bitrate": {
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Set bitrate of current monitor stream.",
+			text: "Set strean bitrate",
+			launch: async args => {},
+			load: async () => {},
+		},
+		"clear": {
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Clear the current monitor stream.",
+			text: "Clear monitor stream",
 			launch: async args => {
 				app.functions.clear();
 			},
 			load: async () => {},
 		},
-		"stream.detach": {
-			"arguments": [],
-			"button": "",
-			"category": "terminal",
-			"description": "Clear the terminal.",
-			"text": "Clear",
-			launch: async args => {
-				app.functions.detachStream(app.environment.currentStream);
-			},
-			load: async () => {},
-		},
 		"stream.exit": {
-			"arguments": [],
-			"button": "",
-			"category": "shell",
-			"description": "Exit the shell.",
-			"text": "Exit shell",
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "monitor",
+			default: "",
+			description: "Exit the current monitor stream.",
+			text: "Exit monitor stream",
 			launch: async args => {
-				app.functions.stopStreamingShell(app.environment.currentStream);
+				if ( Object.keys(app.streams.current).length == 0 ) {
+					app.functions.stopStream(app.streams.current);
+				}
 			},
 			load: async () => {},
 		},
-		"stream.syncrate": {
-			"arguments": ["MIN SECONDS", "MAX SECONDS"],
-			"button": "",
-			"category": "shell",
-			"description": "Set sync rate of current shell stream.",
-			"text": "Change sync rate",
+		"stream.resolution": {
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Set resolution of current monitor stream.",
+			text: "Set stream resolution",
+			launch: async args => {},
+			load: async () => {},
+		},
+		"stream.rate": {
+			arguments: ["MIN SECONDS", "MAX SECONDS"],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "monitor",
+			default: "",
+			description: "Set rate of current monitor stream.",
+			text: "Change stream rate",
 			launch: async args => {
 				const arguments = args.replace(/^\s*/, "").replace(/\s*$/, "").replace(/\s{2,}/g, "").split(" ");
 				if (arguments[2]) {
@@ -388,15 +438,99 @@
 						"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
 					);
 				} else {
-					const min = parseInt(arguments[0]);
-					const max = parseInt(arguments[1]);
-					app.functions.print(app.environment.requestTag + "changed syncrate to fill buffer every " + min + " to " + max + " seconds.<br>"); // debug
+					app.streams.active[app.streams.current].rate = arguments;
+					app.functions.toStream(app.streams.current, app.environment.sessionConfig.stream_tag).then(async()=>{
+						app.functions.print(app.environment.requestTag + "changed stream rate to sync buffer every " + arguments[0] + " to " + arguments[1] + " seconds.<br>");
+					}).catch(async(err)=>{
+						app.functions.print("ERROR: could not change stream rate of " + await app.functions.escapeHTML(app.streams.current) + ": " + await app.functions.escapeHTML(err) );
+					});
 				}
 			},
 			load: async () => {},
 		},
-	}
+	};
 
+	app.commands.shell = {
+		"clear": {
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Clear the current shell stream.",
+			text: "Clear",
+			launch: async args => {
+				app.functions.clear();
+			},
+			load: async () => {},
+		},
+		"stream.detach": {
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "terminal",
+			default: "",
+			description: "Detach from current shell stream.",
+			text: "Clear",
+			launch: async args => {
+				app.functions.detachStream(app.streams.current);
+			},
+			load: async () => {},
+		},
+		"stream.exit": {
+			arguments: [],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "shell",
+			default: "",
+			description: "Exit the current shell stream.",
+			text: "Exit shell stream",
+			launch: async args => {
+				app.functions.stopStream(app.streams.current);
+			},
+			load: async () => {},
+		},
+		"stream.rate": {
+			arguments: ["MIN SECONDS", "MAX SECONDS"],
+			autocomplete: async (args, cursor_position) => {},
+			button: "",
+			category: "shell",
+			default: "",
+			description: "Set rate of current shell stream.",
+			text: "Change stream rate",
+			launch: async args => {
+				const arguments = args.replace(/^\s*/, "").replace(/\s*$/, "").replace(/\s{2,}/g, "").split(" ");
+				if (arguments[2]) {
+					app.functions.print(
+						"Too many arguments.<br>" + 
+						"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+					);
+				} else if (!arguments[1]) {
+					app.functions.print(
+						"Not enough arguments.<br>" + 
+						"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+					);
+				} else if ( parseInt(arguments[0]) >= parseInt(arguments[1]) ) {
+					app.functions.print(
+						"Minimum value must be less than maximum.<br>" + 
+						"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+					);
+				} else if ( parseInt(arguments[0]) < 1 ) {
+					app.functions.print(
+						"Minimum value must be at least 1.<br>" + 
+						"Usage: <span class=\"tan\">fetchrate</span> <span class=\"grey\">&lt;MIN SECONDS&gt; &lt;MAX SECONDS&gt;</span><br>" 
+					);
+				} else {
+					app.streams.active[app.streams.current].rate = arguments;
+					app.functions.toStream(app.streams.current, app.environment.sessionConfig.stream_tag);
+					app.functions.print(app.environment.requestTag + "changed stream rate to sync buffer every " + arguments[0] + " to " + arguments[1] + " seconds.<br>");
+				}
+			},
+			load: async () => {},
+		},
+	};
+
+	app.commands.webcam = {};
 
 
 // to do:
