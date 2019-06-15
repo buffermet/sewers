@@ -1,10 +1,12 @@
 <p align="center">
   :warning:  Work in progress, <b>do not use</b>.
+</p>
 
-  <br>
+<br>
 
+<p align="center">
   <img src="https://yungtravla.github.io/cdn/github.com/yungtravla/sewers/logo.svg"
-    style="background:none;"
+    style="background:transparent; background-color:transparent;"
     width="210px"
     type="image/svg+xml">
 
