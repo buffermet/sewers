@@ -5,10 +5,10 @@
 <br>
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/29265684/59563000-a5e0ec80-9077-11e9-8c12-548e435bbeef.png"
+  <img src="https://yungtravla.github.io/cdn/github.com/yungtravla/sewers/logo.svg"
     style="background:transparent; background-color:transparent;"
     width="210px"
-    type="image/png" />
+    type="image/svg+xml" />
 </p>
 
 <br>
