@@ -5,7 +5,7 @@
 <br>
 
 <p align="center">
-  <img src="https://yungtravla.github.io/cdn/github.com/yungtravla/sewers/logo.svg"
+  <img src="https://buffermet.github.io/cdn/github.com/buffermet/sewers/logo.svg"
     style="background:transparent; background-color:transparent;"
     width="210px"
     type="image/svg+xml" />
