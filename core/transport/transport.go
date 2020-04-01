@@ -7,8 +7,8 @@ package transport
 */
 
 import (
-	"strings"
 	"net/http"
+	"strings"
 
 	"github.com/buffermet/sewers/core/log"
 )
@@ -17,7 +17,10 @@ func SendHTTPRequest(relay_address, request_type, user_agent, session_id, payloa
 	body := request_type + "\n" + session_id + "\n" + payload
 	reader := strings.NewReader(body)
 
-  req, err := http.NewRequest("POST", relay_address, reader)
+  req, err := http.NewRequest(
+    "POST",
+    relay_address,
+    reader)
 	if err != nil {
 		log.Error(err.Error(), true)
 	}
