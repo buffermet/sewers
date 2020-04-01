@@ -1,21 +1,21 @@
 package obfuscation
 
 /*
-*	
-*	Handles payload obfuscation.
-*	
+
+	Handles payload obfuscation.
+
 */
 
 import(
-	"time"
-	"regexp"
-	"math/rand"
+  "math/rand"
+  "regexp"
+  "time"
 
-	"github.com/yungtravla/sewers/core/log"
+  "github.com/buffermet/sewers/core/log"
 )
 
 func RandomString(length int) string {
-	rand.Seed( time.Now().UnixNano() )
+	rand.Seed(time.Now().UnixNano())
 
 	chars := []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	buffer := ""
@@ -40,10 +40,10 @@ func ObfuscateRandom(payload *[]byte, min_length, max_length int) ([]byte) {
 	p := payload
 
 	for i := 0; i < len(matches); i++ {
-		r = regexp.MustCompile( string(matches[i]) )
+		r = regexp.MustCompile(string(matches[i]))
 
-		if len( r.FindAll(p, -1) ) > 0 {
-			p = r.ReplaceAll( p, []byte("") )
+		if len(r.FindAll(p, -1)) > 0 {
+			p = r.ReplaceAll(p, []byte(""))
 
 			obfuscatable_count += 1
 		}
@@ -55,13 +55,13 @@ func ObfuscateRandom(payload *[]byte, min_length, max_length int) ([]byte) {
 	} else {
 		// Obfuscate payload with random strings
 		for i := 0; i < len(matches); i++ {
-			r = regexp.MustCompile( string(matches[i]) )
+			r = regexp.MustCompile(string(matches[i]))
 
-			rand.Seed( time.Now().UnixNano() )
+			rand.Seed(time.Now().UnixNano())
 
-			obf := RandomString( min_length + rand.Intn(max_length - min_length) )
+			obf := RandomString(min_length + rand.Intn(max_length - min_length))
 
-			payload = r.ReplaceAll( payload, []byte(obf) )
+			payload = r.ReplaceAll(payload, []byte(obf))
 		}
 	}
 
@@ -79,10 +79,10 @@ func ObfuscateWordlist(payload []byte, wordlist []string, shuffle bool) ([]byte,
 	p := payload
 
 	for i := 0; i < len(obf_matches); i++ {
-		r = regexp.MustCompile( string(obf_matches[i]) )
+		r = regexp.MustCompile(string(obf_matches[i]))
 
-		if len( r.FindAll(p, -1) ) > 0 {
-			p = r.ReplaceAll( p, []byte("") )
+		if len(r.FindAll(p, -1)) > 0 {
+			p = r.ReplaceAll(p, []byte(""))
 
 			count += 1
 		}
@@ -96,9 +96,9 @@ func ObfuscateWordlist(payload []byte, wordlist []string, shuffle bool) ([]byte,
 		}
 
 		for i := 0; i < len(obf_matches); i++ {
-			r = regexp.MustCompile( string(obf_matches[i]) )
+			r = regexp.MustCompile(string(obf_matches[i]))
 
-			payload = r.ReplaceAll( payload, []byte(wordlist[i]) )
+			payload = r.ReplaceAll(payload, []byte(wordlist[i]))
 		}
 	}
 

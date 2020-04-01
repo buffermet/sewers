@@ -1,9 +1,9 @@
 package environment
 
 /*
-*	
-*	Handles present sewer environment.
-*	
+
+	Handles installed environment.
+
 */
 
 import (
@@ -13,17 +13,16 @@ import (
 )
 
 var (
-	PATH_UI     = ""
+	PATH_UI = ""
 	PATH_RELAYS = ""
-	PATH_MODULES_RELAYS       = ""
-	PATH_MODULES_STAGERS      = ""
+	PATH_MODULES_RELAYS = ""
+	PATH_MODULES_STAGERS = ""
 	PATH_MODULES_INTERPRETERS = ""
-	PATH_MODULES_PLUGINS      = ""
+	PATH_MODULES_PLUGINS = ""
 
 	PWD = ""
 	WHOAMI = ""
 	VERSION = "1.0"
-	USER_AGENT = "Sewers/" + VERSION + " HTTP Test Session"
 )
 
 func whoAmI() string {

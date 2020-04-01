@@ -1,23 +1,24 @@
 package encryption
 
 /*
-*	
-*	>> Use noise-protocol.
-*	
-*	Handles data encryption.
-*	Keys are loaded from session configs.
-*	
+
+	Handles encryption protocol.
+
 */
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/rand"
+	"encoding/base64"
+	"errors"
 	"io"
 	"log"
-	"errors"
-	"crypto/aes"
-	"crypto/rand"
-	"crypto/cipher"
-	"encoding/base64"
 )
+
+func NewKey() []byte {
+  return []byte("")
+}
 
 func Encrypt(key, payload []byte) ([]byte, error) {
 	blockcipher, err := aes.NewCipher(key)
@@ -26,7 +27,7 @@ func Encrypt(key, payload []byte) ([]byte, error) {
 	}
 
 	encoded_payload := base64.StdEncoding.EncodeToString(payload)
-	ciphertext := make( []byte, aes.BlockSize + len(encoded_payload) )
+	ciphertext := make([]byte, aes.BlockSize + len(encoded_payload))
 
 	iv := ciphertext[:aes.BlockSize]
 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
@@ -34,9 +35,9 @@ func Encrypt(key, payload []byte) ([]byte, error) {
 	}
 
 	cfb := cipher.NewCFBEncrypter(blockcipher, iv)
-	cfb.XORKeyStream( ciphertext[aes.BlockSize:], []byte(encoded_payload) )
+	cfb.XORKeyStream(ciphertext[aes.BlockSize:], []byte(encoded_payload))
 
-	return []byte( base64.StdEncoding.EncodeToString(ciphertext) ), nil
+	return []byte(base64.StdEncoding.EncodeToString(ciphertext)), nil
 }
 
 func Decrypt(key, payload []byte) ([]byte, error) {
@@ -45,7 +46,7 @@ func Decrypt(key, payload []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	payload, err = base64.StdEncoding.DecodeString( string(payload) )
+	payload, err = base64.StdEncoding.DecodeString(string(payload))
 	if err != nil {
 		log.Fatal(err)
 	}

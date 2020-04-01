@@ -1,34 +1,35 @@
 package relay
 
 /*
-*	
-*	Manages and generates relays.
-*	
+
+  Relay config handlers.
+
 */
 
-import(
-	"strings"
-	"io/ioutil"
+import (
 	"encoding/json"
+  "errors"
+	"io/ioutil"
+	"strings"
 
-	"github.com/yungtravla/sewers/core/log"
-	"github.com/yungtravla/sewers/core/transport"
-	"github.com/yungtravla/sewers/core/environment"
+	"github.com/buffermet/sewers/core/environment"
+	"github.com/buffermet/sewers/core/log"
+	"github.com/buffermet/sewers/core/transport"
 )
 
 type Relay struct {
-	RelayID string
-	RelayAddress string
 	InterpreterGetTag string
 	InterpreterPostTag string
+	RelayAddress string
+	RelayID string
 	SewersGetTag string
 	SewersPostTag string
 	Sessions []string
 }
 
 func Get(relay_id string) string {
-	encoded_json, e := ioutil.ReadFile(environment.PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json")
-	if e != nil {
+	encoded_json, err := ioutil.ReadFile(environment.PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json")
+	if err != nil {
 		log.Error("could not read relay config " + log.BOLD + environment.PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json" + log.RESET, true)
 	}
 
@@ -40,32 +41,32 @@ func GetAll() string {
 
 	// Read relay configs.
 	var relay_configs []string
-	config_list, e := ioutil.ReadDir(environment.PATH_RELAYS)
-	if e != nil {
-		log.Error( e.Error(), true )
+	config_list, err := ioutil.ReadDir(environment.PATH_RELAYS)
+	if err != nil {
+		log.Error(err.Error(), true)
 		return "{{cannot_read_relay_dir}}"
 	}
 	for _, file := range config_list {
-		relay_configs = append( relay_configs, file.Name() )
+		relay_configs = append(relay_configs, file.Name())
 	}
 
 	// Parse relay data
 	if len(relay_configs) < 1 {
-		log.Info( "did not find any relay configurations in sewers", true )
+		log.Info("did not find any relay configurations in sewers", true)
 
 		return ""
 	} else {
 		for i := 0; i < len(relay_configs); i++ {
 			relay_path := environment.PATH_RELAYS + "/" + relay_configs[i] + "/" + relay_configs[i] + ".json"
 
-			json_encoded, e := ioutil.ReadFile(relay_path)
-			if e != nil {
-				log.Error( e.Error(), true )
+			json_encoded, err := ioutil.ReadFile(relay_path)
+			if err != nil {
+				log.Error(err.Error(), true)
 			}
 
 			var json_decoded map[string]interface{}
-			if e := json.Unmarshal( []byte(json_encoded), &json_decoded ); e != nil {
-				log.Error( "invalid JSON file: " + log.BOLD + relay_path + log.RESET + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error(), true )
+			if err := json.Unmarshal([]byte(json_encoded), &json_decoded); err != nil {
+				log.Error("invalid JSON file: " + log.BOLD + relay_path + log.RESET + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + err.Error(), true)
 			}
 
 			if json_decoded["relay_address"] != nil && json_decoded["sewers_post_tag"] != nil && json_decoded["sewers_get_tag"] != nil {
@@ -76,25 +77,41 @@ func GetAll() string {
 
 				relays = append(relays, relay)
 			} else {
-				log.Error( log.BOLD + relay_path + log.RESET + " is missing one of the following parameters: 'relay_address', 'sewers_post_tag' or 'sewers_get_tag'" + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error(), true )
+				log.Error(log.BOLD + relay_path + log.RESET + " is missing one of the following parameters: 'relay_address', 'sewers_post_tag' or 'sewers_get_tag'" + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error(), true)
 			}
 		}
 	}
 
-	return_bytes, _ := json.MarshalIndent(relays, "", "\t")
+	indented, _ := json.MarshalIndent(relays, "", "\t")
 
-	return string(return_bytes)
+	return string(indented)
 }
 
-func GetSessions(relay string) string {
-	json_encoded, e := ioutil.ReadFile(environment.PATH_RELAYS + "/" + relay + "/" + relay + ".json")
-	if e != nil {
-		log.Error( "unable to retrieve relay configuration: " + log.BOLD + relay + ".json" + log.RESET + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error(), true )
+func GetAddress(relay_id string) (string, error) {
+  relay_path := environment.PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json"
+  encoded, err := ioutil.ReadFile(relay_path)
+  if err != nil {
+    return "", errors.New("could not read relay config: " + relay_path)
+  }
+
+  var decoded map[string]interface{}
+  err = json.Unmarshal(encoded, &decoded)
+  if err != nil {
+    return "", errors.New("could not decode relay config: " + relay_path)
+  }
+
+  return decoded["relay_address"].(string), nil
+}
+
+func FetchSessions(relay string) (string, error) {
+	json_encoded, err := ioutil.ReadFile(environment.PATH_RELAYS + "/" + relay + "/" + relay + ".json")
+	if err != nil {
+		return "", errors.New("cannot read relay config: " + log.BOLD + relay + ".json" + log.RESET + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + err.Error())
 	}
 
 	var json_decoded map[string]interface{}
-	if e := json.Unmarshal( []byte(json_encoded), &json_decoded ); e != nil {
-		log.Error( "invalid JSON file: " + log.BOLD + environment.PATH_RELAYS + "/" + relay + "/" + relay + ".json" + log.RESET + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error(), true )
+	if err := json.Unmarshal([]byte(json_encoded), &json_decoded); err != nil {
+		log.Error("invalid JSON file: " + log.BOLD + environment.PATH_RELAYS + "/" + relay + "/" + relay + ".json" + log.RESET + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + err.Error(), true)
 	}
 
 	sessions := ""
@@ -107,26 +124,39 @@ func GetSessions(relay string) string {
 
 		response := transport.SendHTTPRequest(relay_address, get_tag, user_agent, "", "")
 
-		body, e := ioutil.ReadAll(response.Body)
-		if e != nil {
-			log.Error( "could not read response body (" + e.Error() + ")", true )
+		body, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			log.Error("could not read response body (" + err.Error() + ")", true)
 		}
 
 		defer response.Body.Close()
 
 		sessions = string(body)
 	} else {
-		log.Error( log.BOLD + relay + ".json" + log.RESET + " is missing a \"relay_address\" and/or \"get_tag\" property.", true )
+		log.Error(log.BOLD + relay + ".json" + log.RESET + " is missing a \"relay_address\" and/or \"get_tag\" property.", true)
 	}
 
-	return sessions
+	return sessions, nil
 }
 
-func Generate(payload_type string) []byte {
-	raw_payload, e := ioutil.ReadFile(environment.PATH_RELAYS + "/" + payload_type + "/raw." + payload_type)
-	if e != nil {
-		log.Error( "unable to retrieve raw relay payload: " + log.BOLD + environment.PATH_RELAYS + "/" + payload_type + "/" + "raw." + payload_type + log.RESET + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error(), true )
+func New() *Relay {
+  return &Relay {
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    []string{},
+  }
+}
+
+func NewPayload(payload_type string) ([]byte, error) {
+	payload_path := environment.PATH_RELAYS + "/" + payload_type + "/raw." + payload_type
+  payload, err := ioutil.ReadFile(environment.PATH_RELAYS + "/" + payload_type + "/raw." + payload_type)
+	if err != nil {
+	  return []byte(""), errors.New("could not read relay payload, filetype is removed or doesn't exist: " + payload_path)
 	}
 
-	return raw_payload
+	return payload, nil
 }

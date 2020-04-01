@@ -1,14 +1,8 @@
 package main
 
-/*
-*	
-*	Launcher.
-*	
-*/
-
 import(
-	"github.com/yungtravla/sewers/core/ui"
-	"github.com/yungtravla/sewers/core/environment"
+	"github.com/buffermet/sewers/core/ui"
+	"github.com/buffermet/sewers/core/environment"
 )
 
 func main() {

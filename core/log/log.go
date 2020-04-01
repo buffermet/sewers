@@ -1,19 +1,19 @@
 package log
 
 /*
-*
-*	Handles StdOut and HTML console output.
-*
+
+  Handles StdOut and HTML console output.
+
 */
 
-import(
-	"os"
-	"fmt"
-	"time"
-	"strings"
-	"io/ioutil"
+import (
+  "fmt"
+  "io/ioutil"
+  "os"
+  "strings"
+  "time"
 
-	"github.com/yungtravla/sewers/core/environment"
+	"github.com/buffermet/sewers/core/environment"
 )
 
 const(
@@ -44,7 +44,7 @@ const(
 )
 
 func Timestamp() string {
-	return string( time.Now().Format("02-01-2006 15:04:05") )
+	return string(time.Now().Format("02-01-2006 15:04:05"))
 }
 
 func Info(message string, log_to_console bool) {
@@ -111,22 +111,22 @@ func logToConsole(message string) {
 	html_string = strings.Replace(html_string, BOLD_BLACK_ON_GREY, HTML_BOLD_BLACK_ON_GREY, -1)
 	html_string += "\n"
 
-	logfile, e := os.OpenFile(environment.PATH_UI + "/console_log.html", os.O_APPEND|os.O_WRONLY, 0600)
-	if e != nil {
-		fmt.Println( e.Error() )
+	logfile, err := os.OpenFile(environment.PATH_UI + "/console_log.html", os.O_APPEND|os.O_WRONLY, 0600)
+	if err != nil {
+		fmt.Println(err.Error())
 	}
 
 	defer logfile.Close()
 
-	if _, e = logfile.WriteString(html_string); e != nil {
-		fmt.Println( e.Error() )
+	if _, err = logfile.WriteString(html_string); err != nil {
+		fmt.Println(err.Error())
 	}
 }
 
 func ClearConsole(ip string) {
-	e := ioutil.WriteFile(environment.PATH_UI + "/console_log.html", []byte(""), 0600)
-	if e != nil {
-		fmt.Println( e.Error() )
+	err := ioutil.WriteFile(environment.PATH_UI + "/console_log.html", []byte(""), 0600)
+	if err != nil {
+		fmt.Println(err.Error())
 	}
 
 	Info(ip + " cleared the console log.", true)

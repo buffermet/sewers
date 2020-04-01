@@ -10,7 +10,7 @@ import (
 	"io/ioutil"
 	"encoding/json"
 
-	"github.com/yungtravla/sewers/core/log"
+	"github.com/buffermet/sewers/core/log"
 )
 
 func Configure(json_path string, new_json_data map[string][]string) {

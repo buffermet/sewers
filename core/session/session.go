@@ -1,16 +1,17 @@
 package session
 
 /*
-*	
-*	Handles session payload generation and configuration.
-*	
+
+  Session config handlers.
+
 */
 
-import(
+import (
+	"errors"
+	"encoding/json"
 	"io/ioutil"
 
-	"github.com/yungtravla/sewers/core/log"
-	"github.com/yungtravla/sewers/core/environment"
+	"github.com/buffermet/sewers/core/environment"
 )
 
 type Session struct {
@@ -31,20 +32,58 @@ type Session struct {
 	PauseTerminal bool
 }
 
-func Get(relay_id, session_id string) string {
-	encoded, e := ioutil.ReadFile(environment.PATH_RELAYS + "/" + relay_id + "/sessions/" + session_id + ".json")
+func Get(relay_id, session_id string) (*Session, error) {
+  encoded, err := GetEncoded(relay_id, session_id)
+  if err != nil {
+    return nil, err
+  }
+
+	s := New()
+  err = json.Unmarshal(encoded, &s)
+  if err != nil {
+    session_path := environment.PATH_RELAYS + "/" + relay_id + "/sessions/" + session_id + ".json"
+    return nil, errors.New("could not decode JSON file: " + session_path)
+  }
+
+  return s, nil
+}
+
+func GetEncoded(relay_id, session_id string) ([]byte, error) {
+  session_path := environment.PATH_RELAYS + "/" + relay_id + "/sessions/" + session_id + ".json"
+	encoded, e := ioutil.ReadFile(session_path)
 	if e != nil {
-		log.Warn("unknown session connected to relay: " + log.BOLD + session_id + log.RESET, true)
-		return ""
+		return nil, errors.New("could not read session config: " + session_id)
 	}
 
-	return string(encoded)
+  return encoded, nil
 }
 
-func Set(relay_id, session_id, encoded_json string) {
-	ioutil.WriteFile( environment.PATH_RELAYS + "/" + relay_id + "/sessions/" + session_id + ".json", []byte(encoded_json), 600 )
+func Set(relay_id, session_id, encoded string) error {
+  filepath := environment.PATH_RELAYS + "/" + relay_id + "/sessions/" + session_id + ".json"
+ 	err := ioutil.WriteFile(environment.PATH_RELAYS + "/" + relay_id + "/sessions/" + session_id + ".json", []byte(encoded), 600)
+  if err != nil {
+    return errors.New("could not write file: " + filepath + "\n" + err.Error())
+  }
+
+  return nil
 }
 
-func New(relay, session, encoded string) {
-	
+func New() *Session {
+  return &Session {
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    []string{},
+    false,
+  }
 }
