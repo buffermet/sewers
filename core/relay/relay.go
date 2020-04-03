@@ -36,6 +36,22 @@ func Get(relay_id string) string {
 	return string(encoded_json)
 }
 
+func GetAddress(relay_id string) (string, error) {
+  relay_path := environment.PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json"
+  encoded, err := ioutil.ReadFile(relay_path)
+  if err != nil {
+    return "", errors.New("could not read relay config: " + relay_path)
+  }
+
+  var decoded map[string]interface{}
+  err = json.Unmarshal(encoded, &decoded)
+  if err != nil {
+    return "", errors.New("could not decode relay config: " + relay_path)
+  }
+
+  return decoded["relay_address"].(string), nil
+}
+
 func GetAll() string {
 	relays := []Relay{}
 
@@ -85,22 +101,6 @@ func GetAll() string {
 	indented, _ := json.MarshalIndent(relays, "", "\t")
 
 	return string(indented)
-}
-
-func GetAddress(relay_id string) (string, error) {
-  relay_path := environment.PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json"
-  encoded, err := ioutil.ReadFile(relay_path)
-  if err != nil {
-    return "", errors.New("could not read relay config: " + relay_path)
-  }
-
-  var decoded map[string]interface{}
-  err = json.Unmarshal(encoded, &decoded)
-  if err != nil {
-    return "", errors.New("could not decode relay config: " + relay_path)
-  }
-
-  return decoded["relay_address"].(string), nil
 }
 
 func FetchSessions(relay string) (string, error) {
