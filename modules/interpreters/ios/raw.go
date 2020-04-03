@@ -81,8 +81,8 @@ func obf_func_buffer(obf_stream *obf_struct_stream, obf_var_scanner *bufio.Scann
 				obf_stream.obf_var_lock = false
 			} else {
 				for obf_stream.obf_var_lock {
-          time.Sleep(100 * time.Millisecond)
-        }
+					time.Sleep(100 * time.Millisecond)
+				}
 				continue
 			}
 		} else {
@@ -140,8 +140,8 @@ func obf_func_stream(obf_stream *obf_struct_stream) {
 			}
 		} else {
 			for obf_stream.obf_var_lock {
-        time.Sleep(100 * time.Millisecond)
-      }
+				time.Sleep(100 * time.Millisecond)
+			}
 			continue
 		}
 		rand.Seed(time.Now().UnixNano())
@@ -225,8 +225,8 @@ func main() {
 						}()
 					}
 				}
-			  time.Sleep(100 * time.Millisecond)
-      }
+				time.Sleep(100 * time.Millisecond)
+			}
 		}
 		if obf_var_rate != 0 {
 			time.Sleep(time.Duration(obf_var_rate) * time.Second)
