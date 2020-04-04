@@ -6,9 +6,11 @@
 */
 
 	// Quit button
+	/*
 	document.querySelector("html body div.menu div[name=quit]").addEventListener("click", async()=>{
 		// 
 	});
+	*/
 
 	// Preferences button
 	document.querySelector("html body div.menu div.item[name=settings]").addEventListener("click", async()=>{

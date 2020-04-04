@@ -4,9 +4,9 @@ html body div.menu {
 	top: 0px;
 	height: 26px;
 	width: 100%;
-	background-color: rgba(0,0,0,0.8);
-	user-select: none;
+	background-color: #313236;
 	text-align: center;
+	user-select: none;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;

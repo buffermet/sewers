@@ -32,6 +32,32 @@ type Session struct {
 	PauseTerminal bool
 }
 
+func Encode(s *Session) (*[]byte, error) {
+  var encoded map[string]interface{}
+  encoded["session_id"] = s.SessionID
+  encoded["os"] = s.OS
+  encoded["device"] = s.Device
+  encoded["hostname"] = s.Hostname
+  encoded["encryption_key"] = s.EncryptKey
+  encoded["relay_address"] = s.RelayAddress
+  encoded["interpreter_get_tag"] = s.InterpreterGetTag
+  encoded["interpreter_post_tag"] = s.InterpreterPostTag
+  encoded["sewers_get_tag"] = s.SewersGetTag
+  encoded["sewers_post_tag"] = s.SewersPostTag
+  encoded["fetch_rate"] = s.FetchRate
+  encoded["fetch_rate_tag"] = s.FetchRateTag
+  encoded["terminal_size"] = s.TerminalSize
+  encoded["fetch_schedule"] = s.FetchSchedule
+  encoded["pause_terminal"] = s.PauseTerminal
+
+  b, err := json.Marshal(encoded)
+  if err != nil {
+    return nil, errors.New("could not JSON encode session config with session ID " + encoded["session_id"].(string))
+  }
+
+  return &b, nil
+}
+
 func Get(relay_id, session_id string) (*Session, error) {
   encoded, err := GetEncoded(relay_id, session_id)
   if err != nil {
@@ -58,6 +84,10 @@ func GetEncoded(relay_id, session_id string) ([]byte, error) {
   return encoded, nil
 }
 
+func New() *Session {
+  return &Session{}
+}
+
 func Set(relay_id, session_id, encoded string) error {
   filepath := environment.PATH_RELAYS + "/" + relay_id + "/sessions/" + session_id + ".json"
  	err := ioutil.WriteFile(environment.PATH_RELAYS + "/" + relay_id + "/sessions/" + session_id + ".json", []byte(encoded), 600)
@@ -66,24 +96,4 @@ func Set(relay_id, session_id, encoded string) error {
   }
 
   return nil
-}
-
-func New() *Session {
-  return &Session {
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    []string{},
-    false,
-  }
 }

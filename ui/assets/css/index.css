@@ -7,7 +7,7 @@ html body {
 	max-height: 100%;
 	margin: 0;
 	padding: 0;
-	background: #0c0d11;
+	background: #313236;
 	overflow: hidden;
 	user-select: none;
 	-webkit-user-select: none;
@@ -341,7 +341,7 @@ html body div.scrollcontainer div.container div.sessionlist div.space {
 html body div.console {
 	position: absolute;
 	bottom: 0;
-	background: rgba(0,0,0,0.5);
+	background: #000;
 	height: 142px;
 	width: 100%;
 	box-shadow: 0 0 6px 0 rgba(0,0,0,.75);
@@ -423,8 +423,8 @@ html body div.console div.consolecontainer {
 	height: calc(100% - 6px);
 	padding: 3px;
 	color: #FFF;
-	font-family: monospace;
-	font-size: 1em;
+	font-family: "ubuntu monospace";
+	font-size: 10pt;
 	overflow: hidden;
 	overflow-y: scroll;
 	word-break: break-all;

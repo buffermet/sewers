@@ -52,7 +52,7 @@ func GetAddress(relay_id string) (string, error) {
   return decoded["relay_address"].(string), nil
 }
 
-func GetAll() string {
+func GetAllConfigs() string {
 	relays := []Relay{}
 
 	// Read relay configs.
@@ -60,21 +60,19 @@ func GetAll() string {
 	config_list, err := ioutil.ReadDir(environment.PATH_RELAYS)
 	if err != nil {
 		log.Error(err.Error(), true)
-		return "{{cannot_read_relay_dir}}"
+		return "{}"
 	}
 	for _, file := range config_list {
 		relay_configs = append(relay_configs, file.Name())
 	}
 
 	// Parse relay data
-	if len(relay_configs) < 1 {
+	if len(relay_configs) == 0 {
 		log.Info("did not find any relay configurations in sewers", true)
-
-		return ""
+		return "{}"
 	} else {
 		for i := 0; i < len(relay_configs); i++ {
 			relay_path := environment.PATH_RELAYS + "/" + relay_configs[i] + "/" + relay_configs[i] + ".json"
-
 			json_encoded, err := ioutil.ReadFile(relay_path)
 			if err != nil {
 				log.Error(err.Error(), true)
@@ -87,10 +85,8 @@ func GetAll() string {
 
 			if json_decoded["relay_address"] != nil && json_decoded["sewers_post_tag"] != nil && json_decoded["sewers_get_tag"] != nil {
 				relay := Relay{}
-
 				relay.RelayID = strings.Replace(relay_configs[i], ".json", "", 1)
 				relay.RelayAddress = json_decoded["relay_address"].(string)
-
 				relays = append(relays, relay)
 			} else {
 				log.Error(log.BOLD + relay_path + log.RESET + " is missing one of the following parameters: 'relay_address', 'sewers_post_tag' or 'sewers_get_tag'" + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + err.Error(), true)
@@ -122,33 +118,27 @@ func FetchSessions(relay string) (string, error) {
 		get_tag := json_decoded["sewers_get_tag"].(string)
 		user_agent := json_decoded["user_agent"].(string)
 
-		response := transport.SendHTTPRequest(relay_address, get_tag, user_agent, "", "")
-
+		response := transport.SendHTTPRequest(
+      relay_address,
+      get_tag,
+      user_agent,
+      "",
+      "")
 		body, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			log.Error("could not read response body (" + err.Error() + ")", true)
+			return "", errors.New("could not read response body (" + err.Error() + ")")
 		}
-
 		defer response.Body.Close()
-
 		sessions = string(body)
 	} else {
-		log.Error(log.BOLD + relay + ".json" + log.RESET + " is missing a \"relay_address\" and/or \"get_tag\" property.", true)
+		return "", errors.New("relay " + log.BOLD + relay + log.RESET + " is missing a \"relay_address\" and/or \"sewers_get_tag\" property.")
 	}
 
 	return sessions, nil
 }
 
 func New() *Relay {
-  return &Relay {
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    []string{},
-  }
+  return &Relay{}
 }
 
 func NewPayload(payload_type string) ([]byte, error) {
