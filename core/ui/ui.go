@@ -33,10 +33,10 @@ var (
   UI_PORT = "8042"
 )
 
-func successBody(res *http.Response)string {
+func successBody(res *http.Response) string {
   encoded := "{\"response\":\"\",\"responseType\":\"success\"}"
   var decoded map[string]interface{}
-  json.Unmarshal([]byte(encoded), &decoded )
+  json.Unmarshal([]byte(encoded), &decoded)
 
   defer res.Body.Close()
   body, e := ioutil.ReadAll(res.Body)
@@ -54,10 +54,10 @@ func successBody(res *http.Response)string {
   return string(json_body)
 }
 
-func errorBody(res *http.Response)string {
+func errorBody(res *http.Response) string {
   encoded := "{\"response\":\"\",\"responseType\":\"error\"}"
   var decoded map[string]interface{}
-  json.Unmarshal([]byte(encoded), &decoded )
+  json.Unmarshal([]byte(encoded), &decoded)
 
   defer res.Body.Close()
   body, e := ioutil.ReadAll(res.Body)
@@ -174,7 +174,7 @@ func serve(res http.ResponseWriter, req *http.Request){
       path := regexp.MustCompile(`^/`).ReplaceAllString(req.URL.Path, "")
       split_path := strings.Split(path, "/")
       json_path := ""
-      if len(split_path)> 2 {
+      if len(split_path) > 2 {
         // Request is intended for a session config.
         json_path = environment.PATH_RELAYS + "/" + split_path[1] + "/sessions/" + split_path[2] + ".json"
       } else if len(split_path)== 2 {
@@ -187,7 +187,7 @@ func serve(res http.ResponseWriter, req *http.Request){
         }
       }
       req.ParseForm()
-      if len(req.Form)> 0 {
+      if len(req.Form) > 0 {
         config.Configure(json_path, req.Form)
         res.Header().Set("Content-Type", "text/plain")
         fmt.Fprintf(res, "")
@@ -333,7 +333,7 @@ func serve(res http.ResponseWriter, req *http.Request){
           log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " Could not encrypt payload.\nData: " + body + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error())
         }
         enc_payload_string := string(enc_payload)
-        response := transport.SendHTTPRequest(cfg["relay_address"].(string), cfg["sewers_post_tag"].(string), cfg["user_agent"].(string), session_id, enc_payload_string )
+        response := transport.SendHTTPRequest(cfg["relay_address"].(string), cfg["sewers_post_tag"].(string), cfg["user_agent"].(string), session_id, enc_payload_string)
         res.Header().Set("Content-Type", "text/plain")
         if response.StatusCode == 200 {
           fmt.Fprint(res, successBody(response))
@@ -385,9 +385,9 @@ func serve(res http.ResponseWriter, req *http.Request){
             log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " Could not encrypt payload.\nData: " + body + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error())
           }
           enc_payload_string := string(enc_payload)
-          response = transport.SendHTTPRequest(cfg["relay_address"].(string), cfg["sewers_stream_tag"].(string), cfg["user_agent"].(string), session_id, stream_id + "\n" + enc_payload_string )
+          response = transport.SendHTTPRequest(cfg["relay_address"].(string), cfg["sewers_stream_tag"].(string), cfg["user_agent"].(string), session_id, stream_id + "\n" + enc_payload_string)
         } else {
-          response = transport.SendHTTPRequest(cfg["relay_address"].(string), cfg["sewers_stream_tag"].(string), cfg["user_agent"].(string), session_id, stream_id + "\n" )
+          response = transport.SendHTTPRequest(cfg["relay_address"].(string), cfg["sewers_stream_tag"].(string), cfg["user_agent"].(string), session_id, stream_id + "\n")
         }
         res.Header().Set("Content-Type", "text/plain")
         body, e := ioutil.ReadAll(response.Body)
@@ -442,7 +442,7 @@ func serve(res http.ResponseWriter, req *http.Request){
           log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " Could not encrypt payload.\nData: " + body + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error())
         }
         enc_payload_string := string(enc_payload)
-        response := transport.SendHTTPRequest(cfg["relay_address"].(string), cfg["sewers_post_tag"].(string), cfg["user_agent"].(string), session_id, enc_payload_string )
+        response := transport.SendHTTPRequest(cfg["relay_address"].(string), cfg["sewers_post_tag"].(string), cfg["user_agent"].(string), session_id, enc_payload_string)
         res.Header().Set("Content-Type", "text/plain")
         if response.StatusCode == 200 {
           cfg["fetch_rate"] = new_fetch_rate
