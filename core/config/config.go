@@ -1,9 +1,9 @@
 package config
 
 /*
-*	
-*	Handles JSON configuration files.
-*	
+
+  Handles JSON configuration files.
+
 */
 
 import (
@@ -17,13 +17,13 @@ func Configure(json_path string, new_json_data map[string][]string) {
 	// Read old config
 	json_encoded, e := ioutil.ReadFile(json_path)
 	if e != nil {
-		log.Fatal( e.Error(), true)
+		log.Fatal(e.Error())
 	}
 
 	// Encode old config
 	var json_decoded map[string]interface{}
-	if e := json.Unmarshal( []byte(json_encoded), &json_decoded ); e != nil {
-		log.Error( "invalid JSON file: " + log.BOLD + json_path + log.RESET + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]" + "\n" + e.Error(), true )
+	if e := json.Unmarshal([]byte(json_encoded), &json_decoded); e != nil {
+		log.Error("invalid JSON file: " + log.BOLD + json_path + log.RESET + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]" + "\n" + e.Error())
 	}
 
 	// Set new config
@@ -34,7 +34,7 @@ func Configure(json_path string, new_json_data map[string][]string) {
 	// Indent config
 	json_indented, e := json.MarshalIndent(json_decoded, "", "\t")
 	if e != nil {
-		log.Error( "could not indent JSON data.\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]" + "\n" + e.Error(), true )
+		log.Error("could not indent JSON data.\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]" + "\n" + e.Error())
 	}
 
 	// Write new config

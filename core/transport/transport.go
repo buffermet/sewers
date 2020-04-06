@@ -22,7 +22,7 @@ func SendHTTPRequest(relay_address, request_type, user_agent, session_id, payloa
     relay_address,
     reader)
 	if err != nil {
-		log.Error(err.Error(), true)
+		log.Error(err.Error())
 	}
 
   if user_agent != "" {
@@ -32,7 +32,7 @@ func SendHTTPRequest(relay_address, request_type, user_agent, session_id, payloa
 	client := &http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
-		log.Error(err.Error(), true)
+		log.Error(err.Error())
 	}
 
 	return res

@@ -47,52 +47,33 @@ func Timestamp() string {
 	return string(time.Now().Format("02-01-2006 15:04:05"))
 }
 
-func Info(message string, log_to_console bool) {
-	timestamp := " " + BOLD_GREY + Timestamp() + RESET + " "
-
+func Info(message string) {
+	timestamp := BOLD_GREY + Timestamp() + RESET + " "
 	fmt.Println(timestamp + message)
-
-	if log_to_console {
-		logToConsole(timestamp + message)
-	}
+	logToConsole(timestamp + message)
 }
 
-func Warn(message string, log_to_console bool) {
-	timestamp := " " + BOLD_GREY + Timestamp() + RESET + " "
-
+func Warn(message string) {
+	timestamp := BOLD_GREY + Timestamp() + RESET + " "
 	fmt.Println(timestamp + BLACK_ON_YELLOW + "WARNING" + RESET + " " + message)
-
-	if log_to_console {
-		logToConsole(timestamp + BLACK_ON_YELLOW + "WARNING" + RESET + " " + message)
-	}
+	logToConsole(timestamp + BLACK_ON_YELLOW + "WARNING" + RESET + " " + message)
 }
 
-func Error(message string, log_to_console bool) {
-	timestamp := " " + BOLD_GREY + Timestamp() + RESET + " "
-
+func Error(message string) {
+	timestamp := BOLD_GREY + Timestamp() + RESET + " "
 	fmt.Println(timestamp + BOLD_RED + "ERROR" + RESET + " " + message)
-
-	if log_to_console {
-		logToConsole(timestamp + BOLD_RED + "ERROR" + RESET + " " + message)
-	}
+	logToConsole(timestamp + BOLD_RED + "ERROR" + RESET + " " + message)
 }
 
-func Fatal(message string, log_to_console bool) {
+func Fatal(message string) {
 	fmt.Println(WHITE_ON_RED + "!!!" + RESET + " " + message)
-
-	if log_to_console {
-		logToConsole(WHITE_ON_RED + "!!!" + RESET + " " + message)
-	}
-
+	logToConsole(WHITE_ON_RED + "!!!" + RESET + " " + message)
 	os.Exit(1)
 }
 
-func Raw(message string, log_to_console bool) {
+func Raw(message string) {
 	fmt.Println(message)
-
-	if log_to_console {
-		logToConsole(message)
-	}
+	logToConsole(message)
 }
 
 func logToConsole(message string) {
@@ -129,5 +110,5 @@ func ClearConsole(ip string) {
 		fmt.Println(err.Error())
 	}
 
-	Info(ip + " cleared the console log.", true)
+	Info(ip + " cleared the console log.")
 }

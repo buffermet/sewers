@@ -41,14 +41,14 @@ func successBody(res *http.Response)string {
   defer res.Body.Close()
   body, e := ioutil.ReadAll(res.Body)
   if e != nil {
-    log.Error("could not read response body (" + e.Error()+ ")", true )
+    log.Error("could not read response body (" + e.Error()+ ")")
   }
 
   decoded["response"] = body
 
   json_body, e := json.Marshal(decoded)
   if e != nil {
-    log.Error("invalid JSON data (" + e.Error()+ ")", true )
+    log.Error("invalid JSON data (" + e.Error()+ ")")
   }
 
   return string(json_body)
@@ -62,14 +62,14 @@ func errorBody(res *http.Response)string {
   defer res.Body.Close()
   body, e := ioutil.ReadAll(res.Body)
   if e != nil {
-    log.Error("could not read response body (" + e.Error()+ ")", true )
+    log.Error("could not read response body (" + e.Error()+ ")")
   }
 
   decoded["response"] = body
 
   json_body, e := json.Marshal(decoded)
   if e != nil {
-    log.Error("invalid JSON data (" + e.Error()+ ")", true )
+    log.Error("invalid JSON data (" + e.Error()+ ")")
   }
 
   return string(json_body)
@@ -89,10 +89,10 @@ func stream(ws *websocket.Conn){
 
   if auth == false {
     // Received unauthenticated request.
-    log.Warn(ip_string + " tried to open a websocket", true)
+    log.Warn(ip_string + " tried to open a websocket")
   } else {
     // Handle request.
-    log.Info(ip_string + " tried to open a websocket", true)
+    log.Info(ip_string + " tried to open a websocket")
   }
 }
 
@@ -100,7 +100,7 @@ func serve(res http.ResponseWriter, req *http.Request){
   var auth bool
   var ip_string string
 
-  if strings.HasPrefix(req.RemoteAddr, "127.0.0.1:"){
+  if strings.HasPrefix(req.RemoteAddr, "127.0.0.1:") {
     auth = true
     ip_string = log.BOLD_GREEN + req.RemoteAddr + log.RESET
   } else {
@@ -110,22 +110,22 @@ func serve(res http.ResponseWriter, req *http.Request){
 
   if auth == false {
     // Received unauthenticated request.
-    log.Warn(ip_string + " requested " + req.RequestURI, true)
+    log.Warn(ip_string + " requested " + req.RequestURI)
     res.WriteHeader(http.StatusNotFound)
   } else {
     // Handle request
     res.Header().Set("Cache-Control", "no-cache, no-store")
     res.Header().Set("Pragma", "no-cache")
 
-    if strings.Contains(req.URL.Path, ".."){
-      log.Warn(ip_string + " tried to access a level up /.. (" + req.RequestURI + ")", true)
+    if strings.Contains(req.URL.Path, "..") {
+      log.Warn(ip_string + " tried to access a level up /.. (" + req.RequestURI + ")")
     }
 
     if req.URL.Path == "/" {
-      log.Info(ip_string + " requested " + req.RequestURI, true)
+      log.Info(ip_string + " requested " + req.RequestURI)
       http.ServeFile(res, req, environment.PATH_UI + "/index.html")
     } else if strings.HasPrefix(req.URL.Path, "/terminal"){
-      log.Info(ip_string + " requested " + req.RequestURI, true)
+      log.Info(ip_string + " requested " + req.RequestURI)
       http.ServeFile(res, req, environment.PATH_UI + "/terminal.html")
     } else if strings.HasSuffix(req.URL.Path, ".html") ||
               strings.HasSuffix(req.URL.Path, ".css") ||
@@ -142,22 +142,22 @@ func serve(res http.ResponseWriter, req *http.Request){
       res.Header().Set("Content-Type", "application/json")
       fmt.Fprintf(res, relays)
     } else if strings.HasPrefix(req.URL.Path, "/relay/"){
-      log.Info(ip_string + " requested " + req.RequestURI, true)
+      log.Info(ip_string + " requested " + req.RequestURI)
       relay_id := strings.Replace(req.URL.Path, "/relay/", "", 1)
       body, err := relay.FetchSessions(relay_id)
       if err != nil {
-        log.Error(err.Error(), true)
+        log.Error(err.Error())
       }
       fmt.Fprintf(res, body)
     } else if strings.HasPrefix(req.URL.Path, "/session/"){
-      log.Info(ip_string + " requested " + req.RequestURI, true)
+      log.Info(ip_string + " requested " + req.RequestURI)
       r := regexp.MustCompile(`/session/([^/]*)/([^/]*)`)
       relay_id := r.ReplaceAllString(req.URL.Path, "$1")
       session_id := r.ReplaceAllString(req.URL.Path, "$2")
       session_path := environment.PATH_RELAYS + "/" + relay_id + "/sessions/" + session_id + ".json"
       body, err := ioutil.ReadFile(session_path)
       if err != nil {
-        log.Error(err.Error(), true)
+        log.Error(err.Error())
       }
       res.Header().Set("Content-Type", "text/plain")
       fmt.Fprintf(res, string(body))
@@ -194,7 +194,7 @@ func serve(res http.ResponseWriter, req *http.Request){
       } else {
         body, e := ioutil.ReadFile(json_path)
         if e != nil {
-          log.Error("unable to read " + log.BOLD + json_path + log.RESET, true)
+          log.Error("unable to read " + log.BOLD + json_path + log.RESET)
         }
         res.Header().Set("Content-Type", "application/json")
         fmt.Fprintf(res, string(body))
@@ -205,34 +205,31 @@ func serve(res http.ResponseWriter, req *http.Request){
       s.SessionID = obfuscation.RandomString(1 + rand.Int())
       encoded, err := session.Encode(s)
       if err != nil {
-        log.Error(err.Error(), true)
+        log.Error(err.Error())
         return
       }
-      fmt.Fprint(res, *encoded)        
-    } else if strings.HasPrefix(req.URL.Path, "/new/interpreter/android") {
-      p, err := session.NewInterpreter("android")
+      fmt.Fprint(res, *encoded)
+    } else if strings.HasPrefix(req.URL.Path, "/new/interpreter/") {
+      platform := regexp.MustCompile(`.*([^/]{0,16})$`).ReplaceAllString(req.URL.Path, "$1")
+      p, err := session.NewInterpreter(platform)
       if err != nil {
-        log.Error(err.Error(), true)
+        log.Error(err.Error())
         return
       }
       fmt.Fprint(res, *p)
-    } else if strings.HasPrefix(req.URL.Path, "/new/interpreter/ios") {
-    } else if strings.HasPrefix(req.URL.Path, "/new/interpreter/linux") {
-    } else if strings.HasPrefix(req.URL.Path, "/new/interpreter/macos") {
-    } else if strings.HasPrefix(req.URL.Path, "/new/interpreter/windows") {
     } else if req.URL.Path == "/host" {
-      fmt.Fprintf(res, environment.WHOAMI )
+      fmt.Fprintf(res, environment.WHOAMI)
     } else if strings.HasPrefix(req.URL.Path, "/useragent") {
       relay_id := regexp.MustCompile(`^/useragent/`).ReplaceAllString(req.URL.Path, "")
-      if regexp.MustCompile(`^[a-zA-Z0-9._-]+$`).FindString(relay_id)!= "" {
+      if regexp.MustCompile(`^[a-zA-Z0-9._-]+$`).FindString(relay_id) != "" {
         enc_config := relay.Get(relay_id)
         var cfg map[string]interface{}
-        if e := json.Unmarshal([]byte(enc_config), &cfg ); e != nil {
-          log.Error("could not decode JSON file " + log.BOLD + environment.PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json" + log.RESET + "\n" + e.Error(), true )
+        if e := json.Unmarshal([]byte(enc_config), &cfg); e != nil {
+          log.Error("could not decode JSON file " + log.BOLD + environment.PATH_RELAYS + "/" + relay_id + "/" + relay_id + ".json" + log.RESET + "\n" + e.Error())
         }
         fmt.Fprintf(res, cfg["user_agent"].(string))
       }
-    } else if strings.HasPrefix(req.URL.Path, "/get"){
+    } else if strings.HasPrefix(req.URL.Path, "/get") {
       req.ParseForm()
       var (
         packet_id string
@@ -252,28 +249,38 @@ func serve(res http.ResponseWriter, req *http.Request){
       if session_id != "" && relay_id != "" {
         encoded, err := session.GetEncoded(relay_id, session_id)
         if err != nil {
-          log.Error(err.Error(), true)
+          log.Error(err.Error())
         }
         var cfg map[string]interface{}
         if err := json.Unmarshal(encoded, &cfg); err != nil {
-          log.Error(err.Error(), true )
+          log.Error(err.Error())
         }
         res.Header().Set("Content-Type", "text/plain")
         if packet_id == "" {
-          log.Info(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + log.BOLD + "GET" + log.RESET + " " + ip_string + " tried to fetch packet list from interpreter " + log.BOLD_YELLOW + session_id + "." + relay_id + log.RESET, true)
-          response := transport.SendHTTPRequest(cfg["relay_address"].(string), cfg["sewers_get_tag"].(string), cfg["user_agent"].(string), session_id, "" )
+          log.Info(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + log.BOLD + "GET" + log.RESET + " " + ip_string + " tried to fetch packet list from interpreter " + log.BOLD_YELLOW + session_id + "." + relay_id + log.RESET)
+          response := transport.SendHTTPRequest(
+            cfg["relay_address"].(string),
+            cfg["sewers_get_tag"].(string),
+            cfg["user_agent"].(string),
+            session_id,
+            "")
           body, e := ioutil.ReadAll(response.Body)
           if e != nil {
-            log.Error("could not read response body (" + e.Error()+ ")", true )
+            log.Error("could not read response body (" + e.Error() + ")")
           }
           defer response.Body.Close()
           fmt.Fprintf(res, string(body))
         } else {
-          log.Info(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " tried to fetch packet " + log.BOLD_YELLOW + packet_id + log.RESET + " from interpreter " + log.BOLD_YELLOW + session_id + "." + relay_id + log.RESET, true)
-          response := transport.SendHTTPRequest(cfg["relay_address"].(string), cfg["sewers_get_tag"].(string), cfg["user_agent"].(string), session_id, packet_id )
+          log.Info(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " tried to fetch packet " + log.BOLD_YELLOW + packet_id + log.RESET + " from interpreter " + log.BOLD_YELLOW + session_id + "." + relay_id + log.RESET)
+          response := transport.SendHTTPRequest(
+            cfg["relay_address"].(string),
+            cfg["sewers_get_tag"].(string),
+            cfg["user_agent"].(string),
+            session_id,
+            packet_id)
           body, e := ioutil.ReadAll(response.Body)
           if e != nil {
-            log.Error("could not read response body (" + e.Error()+ ")", true )
+            log.Error("could not read response body (" + e.Error()+ ")")
           }
           defer response.Body.Close()
           key := []byte(cfg["encryption_key"].(string))
@@ -281,16 +288,16 @@ func serve(res http.ResponseWriter, req *http.Request){
           if len(body)> 0 {
             dec_response, e = encryption.Decrypt(key, body)
             if e != nil {
-              log.Error(log.BOLD_BLUE + "RESPONSE" + log.RESET + " " + ip_string + " was unable to decrypt response from interpreter.\npacket_id: " + packet_id + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\nrequest_tag: " + cfg["sewers_get_tag"].(string)+ "\nlength: " + strconv.Itoa(len(body))+ "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error(), true )
+              log.Error(log.BOLD_BLUE + "RESPONSE" + log.RESET + " " + ip_string + " was unable to decrypt response from interpreter.\npacket_id: " + packet_id + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\nrequest_tag: " + cfg["sewers_get_tag"].(string)+ "\nlength: " + strconv.Itoa(len(body))+ "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error())
               fmt.Fprintf(res, "")
               return
             }
           }
-          log.Info(log.BOLD_BLUE + "RESPONSE" + log.RESET + " fetched by " + ip_string + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\npacket_id: " + packet_id + "\nencrypted response length: " + strconv.Itoa(len(body))+ "\ndecrypted response length: " + strconv.Itoa(len(dec_response)), true )
+          log.Info(log.BOLD_BLUE + "RESPONSE" + log.RESET + " fetched by " + ip_string + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\npacket_id: " + packet_id + "\nencrypted response length: " + strconv.Itoa(len(body))+ "\ndecrypted response length: " + strconv.Itoa(len(dec_response)))
           fmt.Fprintf(res, string(dec_response))
         }
       } else {
-        log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " tried to send a malformed packet.\npacket_id: " + packet_id + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id, true)
+        log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " tried to send a malformed packet.\npacket_id: " + packet_id + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id)
       }
     } else if strings.HasPrefix(req.URL.Path, "/post"){
       req.ParseForm()
@@ -312,18 +319,18 @@ func serve(res http.ResponseWriter, req *http.Request){
       if body != "" && session_id != "" && relay_id != "" {
         encoded, err := session.GetEncoded(relay_id, session_id)
         if err != nil {
-          log.Error(err.Error(), true)
+          log.Error(err.Error())
         }
         var cfg map[string]interface{}
         if err := json.Unmarshal(encoded, &cfg); err != nil {
-          log.Error(err.Error(), true)
+          log.Error(err.Error())
         }
-        log.Info(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + log.BOLD + "POST" + log.RESET + " " + ip_string + " sent a packet to " + log.BOLD_YELLOW + session_id + log.RESET + "\ncommand: " + body + "\nrelay_address: " + cfg["relay_address"].(string)+ "\nrequest_tag: " + cfg["sewers_post_tag"].(string), true )
+        log.Info(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + log.BOLD + "POST" + log.RESET + " " + ip_string + " sent a packet to " + log.BOLD_YELLOW + session_id + log.RESET + "\ncommand: " + body + "\nrelay_address: " + cfg["relay_address"].(string)+ "\nrequest_tag: " + cfg["sewers_post_tag"].(string))
         encrypt_key_bytes := []byte(cfg["encryption_key"].(string))
         payload_bytes := []byte(body)
         enc_payload, e := encryption.Encrypt(encrypt_key_bytes, payload_bytes)
         if e != nil {
-          log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " Could not encrypt payload.\nData: " + body + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error(), true )
+          log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " Could not encrypt payload.\nData: " + body + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error())
         }
         enc_payload_string := string(enc_payload)
         response := transport.SendHTTPRequest(cfg["relay_address"].(string), cfg["sewers_post_tag"].(string), cfg["user_agent"].(string), session_id, enc_payload_string )
@@ -334,7 +341,7 @@ func serve(res http.ResponseWriter, req *http.Request){
           fmt.Fprint(res, errorBody(response))
         }
       } else {
-        log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id, true)
+        log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id)
       }
     } else if req.URL.Path == "/stream" {
       req.ParseForm()
@@ -362,20 +369,20 @@ func serve(res http.ResponseWriter, req *http.Request){
       if session_id != "" && stream_id != "" && relay_id != "" {
         encoded, err := session.GetEncoded(relay_id, session_id)
         if err != nil {
-          log.Error(err.Error(), true)
+          log.Error(err.Error())
         }
         var cfg map[string]interface{}
         if e := json.Unmarshal(encoded, &cfg); e != nil {
-          log.Error(e.Error(), true)
+          log.Error(e.Error())
         }
         var response *http.Response
         if body != "" {
-          log.Info(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + log.BOLD + "POST" + log.RESET + " " + ip_string + " sent a packet to stream " + log.BOLD_YELLOW + stream_id + "." + session_id + "." + stream_id + log.RESET + "\ncommand: " + body + "\nrelay_address: " + cfg["relay_address"].(string)+ "\nrequest_tag: " + cfg["sewers_stream_tag"].(string)+ "\nstream_rate: " + stream_rate, true )
+          log.Info(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + log.BOLD + "POST" + log.RESET + " " + ip_string + " sent a packet to stream " + log.BOLD_YELLOW + stream_id + "." + session_id + "." + stream_id + log.RESET + "\ncommand: " + body + "\nrelay_address: " + cfg["relay_address"].(string)+ "\nrequest_tag: " + cfg["sewers_stream_tag"].(string)+ "\nstream_rate: " + stream_rate)
           encrypt_key_bytes := []byte(cfg["encryption_key"].(string))
           payload_bytes := []byte(body + " " + stream_rate)
           enc_payload, e := encryption.Encrypt(encrypt_key_bytes, payload_bytes)
           if e != nil {
-            log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " Could not encrypt payload.\nData: " + body + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error(), true )
+            log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " Could not encrypt payload.\nData: " + body + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error())
           }
           enc_payload_string := string(enc_payload)
           response = transport.SendHTTPRequest(cfg["relay_address"].(string), cfg["sewers_stream_tag"].(string), cfg["user_agent"].(string), session_id, stream_id + "\n" + enc_payload_string )
@@ -385,7 +392,7 @@ func serve(res http.ResponseWriter, req *http.Request){
         res.Header().Set("Content-Type", "text/plain")
         body, e := ioutil.ReadAll(response.Body)
         if e != nil {
-          log.Error("could not read response body (" + e.Error()+ ")", true )
+          log.Error("could not read response body (" + e.Error()+ ")")
         }
         defer response.Body.Close()
         key := []byte(cfg["encryption_key"].(string))
@@ -394,10 +401,10 @@ func serve(res http.ResponseWriter, req *http.Request){
           fmt.Fprintf(res, "")
           return
         }
-        log.Info(log.BOLD_BLUE + "RESPONSE" + log.RESET + " fetched by " + ip_string + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\nencrypted response length: " + strconv.Itoa(len(body))+ "\ndecrypted response length: " + strconv.Itoa(len(dec_response)), true )
+        log.Info(log.BOLD_BLUE + "RESPONSE" + log.RESET + " fetched by " + ip_string + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id + "\nencrypted response length: " + strconv.Itoa(len(body))+ "\ndecrypted response length: " + strconv.Itoa(len(dec_response)))
         fmt.Fprintf(res, string(dec_response))
       } else {
-        log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nstream_id: " + stream_id + "\nrelay_id: " + relay_id, true)
+        log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nstream_id: " + stream_id + "\nrelay_id: " + relay_id)
       }
     } else if req.URL.Path == "/fetchrate" {
       req.ParseForm()
@@ -420,19 +427,19 @@ func serve(res http.ResponseWriter, req *http.Request){
       if regexp.MustCompile(`^[1-9][0-9]*-[1-9][0-9]*$`).FindString(new_fetch_rate)!= "" && session_id != "" && relay_id != "" {
         encoded, err := session.GetEncoded(relay_id, session_id)
         if err != nil {
-          log.Error(err.Error(), true)
+          log.Error(err.Error())
         }
         var cfg map[string]interface{}
         if err := json.Unmarshal(encoded, &cfg); err != nil {
-          log.Error("could not change fetch rate of interpreter " + log.BOLD_YELLOW + relay_id + log.RESET + "." + log.BOLD_YELLOW + session_id + log.RESET +  "(" + err.Error()+ ")", true)
+          log.Error("could not change fetch rate of interpreter " + log.BOLD_YELLOW + relay_id + log.RESET + "." + log.BOLD_YELLOW + session_id + log.RESET +  "(" + err.Error()+ ")")
         }
         old_fetch_rate := cfg["fetch_rate"].(string)
-        log.Info(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + log.BOLD + "POST" + log.RESET + " " + ip_string + " tried to change the fetch rate of " + log.BOLD_YELLOW + relay_id + "." + session_id + log.RESET + " from " + log.BOLD + old_fetch_rate + log.RESET + " to " + log.BOLD + new_fetch_rate + log.RESET, true)
+        log.Info(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + log.BOLD + "POST" + log.RESET + " " + ip_string + " tried to change the fetch rate of " + log.BOLD_YELLOW + relay_id + "." + session_id + log.RESET + " from " + log.BOLD + old_fetch_rate + log.RESET + " to " + log.BOLD + new_fetch_rate + log.RESET)
         encrypt_key_bytes := []byte(cfg["encryption_key"].(string))
         payload_bytes := []byte(body)
         enc_payload, e := encryption.Encrypt(encrypt_key_bytes, payload_bytes)
         if e != nil {
-          log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " Could not encrypt payload.\nData: " + body + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error(), true )
+          log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " Could not encrypt payload.\nData: " + body + "\n[" + log.BOLD_RED + "STACK TRACE" + log.RESET + "]\n" + e.Error())
         }
         enc_payload_string := string(enc_payload)
         response := transport.SendHTTPRequest(cfg["relay_address"].(string), cfg["sewers_post_tag"].(string), cfg["user_agent"].(string), session_id, enc_payload_string )
@@ -441,7 +448,7 @@ func serve(res http.ResponseWriter, req *http.Request){
           cfg["fetch_rate"] = new_fetch_rate
           new_config, e := json.MarshalIndent(cfg, "", "\t")
           if e != nil {
-            log.Error("invalid JSON data (" + e.Error()+ ")", true )
+            log.Error("invalid JSON data (" + e.Error()+ ")")
           }
           session.Set(relay_id, session_id, string(new_config))
           fmt.Fprint(res, successBody(response))
@@ -449,19 +456,19 @@ func serve(res http.ResponseWriter, req *http.Request){
           fmt.Fprint(res, errorBody(response))
         }
       } else {
-        log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id, true)
+        log.Error(log.BOLD_YELLOW + "REQUEST" + log.RESET + " " + ip_string + " tried to send a malformed packet.\ncommand: " + body + "\nsession_id: " + session_id + "\nrelay_id: " + relay_id)
       }
     } else if req.URL.Path == "/quit" {
-      log.Info(ip_string + " has shut down sewers.", true)
+      log.Info(ip_string + " has shut down sewers.")
       os.Exit(1)
     } else {
-      log.Info(ip_string + " requested " + req.RequestURI, true)
+      log.Info(ip_string + " requested " + req.RequestURI)
     }
   }
 }
 
 func Start(){
-  log.Info("Server started on " + log.BOLD + "http://0.0.0.0:" + UI_PORT + log.RESET + " by " + log.BOLD + environment.WHOAMI + log.RESET, true )
+  log.Info("Server started on " + log.BOLD + "http://0.0.0.0:" + UI_PORT + log.RESET + " by " + log.BOLD + environment.WHOAMI + log.RESET)
 
   // server := &http.Server{
   //  ReadTimeout: (5 * time.Second),
@@ -471,5 +478,5 @@ func Start(){
 
   http.Handle("/websocket", websocket.Handler(stream))
   http.HandleFunc("/", serve)
-  log.Fatal(http.ListenAndServe(":" + UI_PORT, nil).Error(), true )
+  log.Fatal(http.ListenAndServe(":" + UI_PORT, nil).Error())
 }

@@ -51,7 +51,7 @@ func ObfuscateRandom(payload *[]byte, min_length, max_length int) ([]byte) {
 
   // Warn if payload is not obfuscatable
   if len(matches) == 0 {
-    log.Warn("payload has no strings that can be obfuscated", true)
+    log.Warn("payload has no strings that can be obfuscated")
   } else {
     // Obfuscate payload with random strings
     for i := 0; i < len(matches); i++ {
