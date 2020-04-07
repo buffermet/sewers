@@ -26,11 +26,11 @@ html body div.menu div.item {
 }
 html body div.menu div.item.left {
 	float: left;
-	border-right: 1px solid rgba(255,255,255,0.05);
+	border-right: 1px solid rgba(0,0,0,0.16);
 }
 html body div.menu div.item.right {
 	float: right;
-	border-left: 1px solid rgba(255,255,255,0.05);
+	border-left: 1px solid rgba(0,0,0,0.16);
 }
 html body div.menu div.item[name=backbutton] {
 	margin-left: -33px;
@@ -331,6 +331,26 @@ html body div.menu div.item div.submenu div.icon {
 	top: 1.5px;
 	margin: 0px 3px 0px 3px;
 	display: inline-block;
+}
+
+@media (max-width: 100vh) {
+	html body div.menu,
+	html body div.menu div.item {
+		height: 32pt;
+	}
+	html body div.menu div.item {
+		padding: 0 12pt;
+		line-height: 32pt;
+	}
+	html body div.menu div.item[name=backbutton] {
+		margin-left: calc(-32pt - 7px);
+	}
+	html body div.menu div.item div.icon{
+		top: 10pt;
+	}
+	html body div.menu div.userlist div.item span.ip div.status {
+		margin-top: 11.5pt;
+	}
 }
 
 /* Credit: loading.io css loader */
