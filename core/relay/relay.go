@@ -68,7 +68,7 @@ func GetAllConfigs() string {
 
 	// Parse relay data
 	if len(relay_configs) == 0 {
-		log.Info("did not find any relay configurations in sewers")
+		log.Info("no relays found")
 		return "{}"
 	} else {
 		for i := 0; i < len(relay_configs); i++ {

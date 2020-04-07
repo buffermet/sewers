@@ -115,5 +115,5 @@ func ClearConsole(ip string) {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	Info(ip + " cleared the console log.")
+	Info(ip + " cleared the console log")
 }
