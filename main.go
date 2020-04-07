@@ -2,10 +2,10 @@ package main
 
 import(
 	"github.com/buffermet/sewers/core/environment"
-	"github.com/buffermet/sewers/core/ui"
+  "github.com/buffermet/sewers/core/ui"
 )
 
 func main() {
-	environment.Configure()
+  environment.Init()
 	ui.Start()
 }

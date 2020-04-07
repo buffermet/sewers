@@ -2,7 +2,7 @@ package ui
 
 /*
 
-  UI server.
+  UI server & websocket.
 
 */
 
@@ -16,6 +16,7 @@ import (
   "regexp"
   "strconv"
   "strings"
+  "time"
 
   "github.com/buffermet/sewers/core/config"
   "github.com/buffermet/sewers/core/encryption"
@@ -470,13 +471,14 @@ func serve(res http.ResponseWriter, req *http.Request){
 func Start(){
   log.Info("Server started on " + log.BOLD + "http://0.0.0.0:" + UI_PORT + log.RESET + " by " + log.BOLD + environment.WHOAMI + log.RESET)
 
-  // server := &http.Server{
-  //  ReadTimeout: (5 * time.Second),
-  //  WriteTimeout: (10 * time.Second),
-  //  Addr: ":" + UI_PORT,
-  // }
+  server := &http.Server {
+    Handler: http.HandlerFunc(serve),
+    ReadHeaderTimeout: (5 * time.Second),
+    ReadTimeout: (5 * time.Second),
+    WriteTimeout: (10 * time.Second),
+    Addr: "0.0.0.0:" + UI_PORT,
+  }
 
   http.Handle("/websocket", websocket.Handler(stream))
-  http.HandleFunc("/", serve)
-  log.Fatal(http.ListenAndServe(":" + UI_PORT, nil).Error())
+  log.Fatal(server.ListenAndServe().Error())
 }
