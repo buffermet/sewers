@@ -17,6 +17,7 @@ import (
 
 var (
 	GOPATH string
+	SEWERSPATH = "/src/github.com/buffermet/sewers"
 	PATH_UI string
 	PATH_RELAYS string
 	PATH_MODULES_RELAYS string
@@ -43,7 +44,7 @@ func goPath() string {
 			fmt.Println("error: could not determine GOPATH: " + err.Error())
 			os.Exit(1)
 		}
-		stdout_bytes = regexp.MustCompile(`.*GOPATH=["]([^"]*)["].*`).Find(stdout_bytes)
+		stdout_bytes = regexp.MustCompile(`(?s).*GOPATH="([^"]+)".*`).ReplaceAll(stdout_bytes, []byte("${1}"))
 		if len(stdout_bytes) == 0 {
 			fmt.Println("error: could not find GOPATH of go environment")
 			os.Exit(1)
@@ -61,11 +62,11 @@ func whoAmI() string {
 
 func Init() {
 	GOPATH = goPath()
-	PATH_UI                   = GOPATH + "/ui"
-	PATH_RELAYS               = GOPATH + "/relays"
-	PATH_MODULES_RELAYS       = GOPATH + "/modules/relays"
-	PATH_MODULES_STAGERS      = GOPATH + "/modules/stagers"
-	PATH_MODULES_INTERPRETERS = GOPATH + "/modules/interpreters"
-	PATH_MODULES_PLUGINS      = GOPATH + "/modules/plugins"
+	PATH_UI                   = GOPATH + SEWERSPATH + "/ui"
+	PATH_RELAYS               = GOPATH + SEWERSPATH + "/relays"
+	PATH_MODULES_RELAYS       = GOPATH + SEWERSPATH + "/modules/relays"
+	PATH_MODULES_STAGERS      = GOPATH + SEWERSPATH + "/modules/stagers"
+	PATH_MODULES_INTERPRETERS = GOPATH + SEWERSPATH + "/modules/interpreters"
+	PATH_MODULES_PLUGINS      = GOPATH + SEWERSPATH + "/modules/plugins"
 	WHOAMI = whoAmI()
 }
