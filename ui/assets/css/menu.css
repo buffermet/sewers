@@ -4,7 +4,7 @@ html body div.menu {
 	top: 0px;
 	height: 26px;
 	width: 100%;
-	background-color: #313236;
+	background-color: rgb(48,49,54);
 	text-align: center;
 	user-select: none;
 	-webkit-user-select: none;
@@ -47,7 +47,7 @@ html body div.menu div.item.center:last-of-type {
 	border-right: none;
 }
 html body div.menu div.item:active {
-	background-color: rgba(255,255,255,0.03);
+	background-color: rgb(6,6,8,0.8);
 }
 html body div.menu div.item.no-click:active {
 	background-color: transparent !important;
@@ -301,7 +301,7 @@ html body div.menu div.item div.submenu div.subitem {
 	width: 100%;
 	line-height: 29px;
 	text-align: left;
-	background-color: rgba(0,0,0,0.8);
+	background-color: rgb(48,49,54);
 	color: #FFF;
 	cursor: pointer;
 }
@@ -312,7 +312,7 @@ html body div.menu div.item div.submenu div.submodule {
 	line-height: 29px;
 	text-align: left;
 	cursor: default;
-	background-color: rgba(0,0,0,0.8);
+	background-color: rgb(48,49,54);
 	border-radius: 0px 0px 4px 4px;
 }
 html body div.menu div.item div.submenu div.subitem:active {
