@@ -34,7 +34,7 @@ func goPath() string {
 		var err error
 		if runtime.GOOS == "android" {
 			stdout_bytes, err = exec.Command("/system/bin/sh", "-c", "go env").Output()
-		if runtime.GOOS == "windows" {
+		} else if runtime.GOOS == "windows" {
 			stdout_bytes, err = exec.Command("cmd", "/C", "go env").Output()
 		} else {
 			stdout_bytes, err = exec.Command("/usr/bin/env", "sh", "-c", "go env").Output()
