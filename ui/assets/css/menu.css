@@ -81,13 +81,13 @@ html body div.menu div.item.left span.ip div.status {
 	display: inline-block;
 	float: left;
 	margin-top: 7px;
-	margin-right: 6px;f
+	margin-right: 6px;
 }
 html body div.menu div.item.left span.ip div.status.active {
 	background-color: rgb(33, 255, 0);
 }
 html body div.menu div.item.left span.ip div.status.inactive {
-	background-color: rgba(120,120,120,1)
+	background-color: rgba(120,120,120,1);
 }
 html body div.menu div.userlist div.item {
 	min-width: 25px;
