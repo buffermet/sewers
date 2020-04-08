@@ -1,9 +1,8 @@
 package main
 
 import (
-  "ioutil"
+  "io/ioutil"
   "net/http"
-  "runtime"
   "time"
 )
 
@@ -22,17 +21,17 @@ const (
 
 func obf_func_serve(res http.ResponseWriter, req *http.Request) {
   defer req.Body.Close()
-  var obf_var_body []byte
-  req.Body.Read(obf_var_body)
+  obf_var_body, _ := ioutil.ReadAll(req.Body)
+  println(string(obf_var_body))
 }
 
 func main() {
   obf_var_server := &http.Server {
     Addr:              ":" + obf_const_Port,
-    Handler:           http.HandleFunc("/", obf_func_serve),
-    ReadTimeout:       5 * time.Second,
-    ReadHeaderTimeout: 5 * time.Second,
+    Handler:           http.HandlerFunc(obf_func_serve),
+    ReadTimeout:       10 * time.Second,
+    ReadHeaderTimeout: 10 * time.Second,
     WriteTimeout:      5 * time.Second,
   }
-  obf_var_server.ListenAndServe()
+  println(obf_var_server.ListenAndServe().Error())
 }

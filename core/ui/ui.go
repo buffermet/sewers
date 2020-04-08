@@ -115,6 +115,8 @@ func serve(res http.ResponseWriter, req *http.Request){
     res.WriteHeader(http.StatusNotFound)
   } else {
     // Handle request
+    defer req.Body.Close()
+
     res.Header().Set("Cache-Control", "no-cache, no-store")
     res.Header().Set("Pragma", "no-cache")
 
