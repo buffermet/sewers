@@ -181,7 +181,7 @@ func serve(res http.ResponseWriter, req *http.Request){
       } else if len(split_path)== 2 {
         if split_path[1] == "sewers" {
           // Request is intended for sewers config.
-          json_path = "./config.json"
+          json_path = environment.PATH_GO + environment.PATH_SEWERS + "/config.json"
         } else {
           // Request is intended for a relay config.
           json_path = environment.PATH_RELAYS + "/" + split_path[1] + "/" + split_path[1] + ".json"

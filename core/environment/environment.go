@@ -12,18 +12,19 @@ import (
 	"os/exec"
 	"regexp"
 	"runtime"
-	"strings"	
+
+	"github.com/buffermet/sewers/core/shell"
 )
 
 var (
-	GOPATH string
-	SEWERSPATH = "/src/github.com/buffermet/sewers"
-	PATH_UI string
+	PATH_GO string
 	PATH_RELAYS string
 	PATH_MODULES_RELAYS string
 	PATH_MODULES_STAGERS string
 	PATH_MODULES_INTERPRETERS string
 	PATH_MODULES_PLUGINS string
+	PATH_SEWERS = "/src/github.com/buffermet/sewers"
+	PATH_UI string
 	VERSION = "1.0"
 	WHOAMI string
 )
@@ -55,18 +56,21 @@ func goPath() string {
 }
 
 func whoAmI() string {
-	user, _ := exec.Command("whoami").Output()
-	hostname, _ := exec.Command("hostname").Output()
-	return strings.TrimSpace(string(user)) + "@" + strings.TrimSpace(string(hostname))
+	user, _ := shell.Output("whoami")
+	hostname, _ := shell.Output("hostname")
+	regexp_whitespace := regexp.MustCompile(`(?s)\s`)
+	user = regexp_whitespace.ReplaceAll(user, []byte(""))
+	hostname = regexp_whitespace.ReplaceAll(hostname, []byte(""))
+	return string(user) + "@" + string(hostname)
 }
 
 func Init() {
-	GOPATH = goPath()
-	PATH_UI                   = GOPATH + SEWERSPATH + "/ui"
-	PATH_RELAYS               = GOPATH + SEWERSPATH + "/relays"
-	PATH_MODULES_RELAYS       = GOPATH + SEWERSPATH + "/modules/relays"
-	PATH_MODULES_STAGERS      = GOPATH + SEWERSPATH + "/modules/stagers"
-	PATH_MODULES_INTERPRETERS = GOPATH + SEWERSPATH + "/modules/interpreters"
-	PATH_MODULES_PLUGINS      = GOPATH + SEWERSPATH + "/modules/plugins"
+	PATH_GO = goPath()
+	PATH_UI                   = PATH_GO + PATH_SEWERS + "/ui"
+	PATH_RELAYS               = PATH_GO + PATH_SEWERS + "/relays"
+	PATH_MODULES_RELAYS       = PATH_GO + PATH_SEWERS + "/modules/relays"
+	PATH_MODULES_STAGERS      = PATH_GO + PATH_SEWERS + "/modules/stagers"
+	PATH_MODULES_INTERPRETERS = PATH_GO + PATH_SEWERS + "/modules/interpreters"
+	PATH_MODULES_PLUGINS      = PATH_GO + PATH_SEWERS + "/modules/plugins"
 	WHOAMI = whoAmI()
 }
