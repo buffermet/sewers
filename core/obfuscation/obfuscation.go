@@ -17,8 +17,9 @@ import (
 type codeSet struct {
   AfterSets  []int
   BeforeSets []int
-  Code       string
   ID         int
+  Imports    map[int]string
+  Source     string
   Variants   []string
 }
 
