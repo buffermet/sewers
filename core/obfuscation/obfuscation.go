@@ -10,8 +10,6 @@ import (
   "math/rand"
   "regexp"
   "time"
-
-  "github.com/buffermet/sewers/core/log"
 )
 
 type codeSet struct {
@@ -19,7 +17,6 @@ type codeSet struct {
   BeforeSets []int
   ID         int
   Imports    map[int]string
-  Source     string
   Variants   []string
 }
 
@@ -50,38 +47,38 @@ func RandomString(length int) string {
   return buffer
 }
 
-func ObfuscateRandom(payload *[]byte, min_length, max_length int) ([]byte) {
-  // Count amount of obfuscatable strings
-  r := regexp.MustCompile(`obf_[a-zA-Z_]+`)
-  matches := r.FindAll(*payload, -1)
+// func ObfuscateSourceRandom(payload *[]byte, min_length, max_length int) ([]byte) {
+//   // Count amount of obfuscatable strings
+//   r := regexp.MustCompile(`obf_[a-zA-Z_]+`)
+//   matches := r.FindAll(*payload, -1)
 
-  obfuscatable_count := 0
-  p := *payload
-  for i := 0; i < len(matches); i++ {
-    r = regexp.MustCompile(string(matches[i]))
-    if len(r.FindAll(p, -1)) > 0 {
-      p = r.ReplaceAll(p, []byte(""))
-      obfuscatable_count += 1
-    }
-  }
+//   obfuscatable_count := 0
+//   p := *payload
+//   for i := 0; i < len(matches); i++ {
+//     r = regexp.MustCompile(string(matches[i]))
+//     if len(r.FindAll(p, -1)) > 0 {
+//       p = r.ReplaceAll(p, []byte(""))
+//       obfuscatable_count += 1
+//     }
+//   }
 
-  // Warn if payload has no variable names to obfuscate
-  if len(matches) == 0 {
-    log.Warn("payload has no variable names to obfuscate, prefix with obf_")
-  } else {
-    // Obfuscate payload's variable names with random ones
-    for i := 0; i < len(matches); i++ {
-      r = regexp.MustCompile(string(matches[i]))
-      rand.Seed(time.Now().UnixNano())
-      obf := RandomString(min_length + rand.Intn(max_length - min_length))
-      p = r.ReplaceAll(p, []byte(obf))
-    }
-  }
+//   // Warn if payload has no variable names to obfuscate
+//   if len(matches) == 0 {
+//     log.Warn("payload has no variable names to obfuscate, prefix with obf_")
+//   } else {
+//     // Obfuscate payload's variable names with random ones
+//     for i := 0; i < len(matches); i++ {
+//       r = regexp.MustCompile(string(matches[i]))
+//       rand.Seed(time.Now().UnixNano())
+//       obf := RandomString(min_length + rand.Intn(max_length - min_length))
+//       p = r.ReplaceAll(p, []byte(obf))
+//     }
+//   }
 
-  return p
-}
+//   return p
+// }
 
-func ObfuscateWordlist(payload []byte, wordlist []string, shuffle bool) ([]byte, error) {
+func ObfuscateSource(payload []byte, wordlist []string, shuffle bool) ([]byte, error) {
   // Count amount of obfuscatable strings
   r := regexp.MustCompile("obf_[a-zA-Z_]*")
   obf_matches := r.FindAll(payload, -1)
@@ -110,3 +107,27 @@ func ObfuscateWordlist(payload []byte, wordlist []string, shuffle bool) ([]byte,
 
   return payload, nil
 }
+
+  // AfterSets  []int
+  // BeforeSets []int
+  // CodeSets   []int
+  // ID         int
+  // Imports    map[int]string
+  // Variants   []string
+
+func ShuffleSource(codeSets []*codeSet) ([]byte, error) {
+
+
+  return nil, nil
+}
+
+/*
+
+[0]
+[0]
+[]
+1
+["errors"]
+["func ShuffleSource(codeSets []codeSet) ([]byte, error) {\n{{NESTED_CODE}}\n}"]
+
+*/
