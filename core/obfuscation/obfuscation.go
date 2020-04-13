@@ -17,30 +17,31 @@ import (
 type CodeSet struct {
   AfterSets  []int
   BeforeSets []int
+  ChildSets  []int
   ID         int
-  Imports    map[int]string
-  NestedSets []int
+  Imports    []string
+  ParentSet  int
   Variants   []string
 }
 
 var (
-  CodeSetInterpreterAndroid []codeSet
-  CodeSetInterpreterIOS     []codeSet
-  CodeSetInterpreterLinux   []codeSet
-  CodeSetInterpreterMacOS   []codeSet
-  CodeSetInterpreterWindows []codeSet
-  CodeSetRelayPhp           []codeSet
-  CodeSetStagerAndroid      []codeSet
-  CodeSetStagerIOS          []codeSet
-  CodeSetStagerLinux        []codeSet
-  CodeSetStagerMacOS        []codeSet
-  CodeSetStagerWindows      []codeSet
+  CodeSetInterpreterAndroid []CodeSet
+  CodeSetInterpreterIOS     []CodeSet
+  CodeSetInterpreterLinux   []CodeSet
+  CodeSetInterpreterMacOS   []CodeSet
+  CodeSetInterpreterWindows []CodeSet
+  CodeSetRelayPhp           []CodeSet
+  CodeSetStagerAndroid      []CodeSet
+  CodeSetStagerIOS          []CodeSet
+  CodeSetStagerLinux        []CodeSet
+  CodeSetStagerMacOS        []CodeSet
+  CodeSetStagerWindows      []CodeSet
 )
 
 func RandomString(length int) string {
   rand.Seed(time.Now().UnixNano())
 
-  chars := []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+  chars := []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
   buffer := ""
   for i := 0; i < length; i++ {
     index := rand.Intn(length)
@@ -49,37 +50,6 @@ func RandomString(length int) string {
 
   return buffer
 }
-
-// func ObfuscateSourceRandom(payload *[]byte, min_length, max_length int) ([]byte) {
-//   // Count amount of obfuscatable strings
-//   r := regexp.MustCompile(`obf_[a-zA-Z_]+`)
-//   matches := r.FindAll(*payload, -1)
-
-//   obfuscatable_count := 0
-//   p := *payload
-//   for i := 0; i < len(matches); i++ {
-//     r = regexp.MustCompile(string(matches[i]))
-//     if len(r.FindAll(p, -1)) > 0 {
-//       p = r.ReplaceAll(p, []byte(""))
-//       obfuscatable_count += 1
-//     }
-//   }
-
-//   // Warn if payload has no variable names to obfuscate
-//   if len(matches) == 0 {
-//     log.Warn("payload has no variable names to obfuscate, prefix with obf_")
-//   } else {
-//     // Obfuscate payload's variable names with random ones
-//     for i := 0; i < len(matches); i++ {
-//       r = regexp.MustCompile(string(matches[i]))
-//       rand.Seed(time.Now().UnixNano())
-//       obf := RandomString(min_length + rand.Intn(max_length - min_length))
-//       p = r.ReplaceAll(p, []byte(obf))
-//     }
-//   }
-
-//   return p
-// }
 
 func ObfuscateSource(payload []byte, wordlist []string, shuffle bool) ([]byte, error) {
   // Count amount of obfuscatable strings
@@ -111,136 +81,139 @@ func ObfuscateSource(payload []byte, wordlist []string, shuffle bool) ([]byte, e
   return payload, nil
 }
 
-func ShuffleSource(codeSets []*CodeSet) ([]byte, error) {
-  for a := 0; a < len(codeSets); a++ {
-    this_set := codeSets[a]
-
-    rand.Seed(time.Now().UnixNano())
-    index := rand.Intn(len(this_set.NestedSets) + 1)
-    nested_code := this_set.NestedSets[index]
-
-    return nil, errors.New("code set " + strconv.Itoa(this_set.ID) + " is missing the following nested set of code: " + strconv.Itoa(this_nested_code.ID))
+func getCodeSet(codeSets []*CodeSet, id int) (*CodeSet, error) {
+  for i := 0; i < len(codeSets); i++ {
+    this_set := codeSets[i]
+    if this_set.ID == id {
+      return this_set, nil
+    }
   }
-
-  return nil, nil
+  return nil, errors.New("sets of code did not include set " + strconv.Itoa(id))
 }
 
-// func RandomString(length int) string {
-//   rand.Seed(time.Now().UnixNano())
-//   chars := []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-//   buffer := ""
-//   for i := 0; i < length; i++ {
-//     index := rand.Intn(length)
-//     buffer += string(chars[index])
-//   }
-//   return buffer
-// }
+func getMainSets(codeSets []*CodeSet) []int {
+  var main_sets []int
+  for i := 0; i < len(codeSets); i++ {
+    if codeSets[i].ParentSet != -1 {
+      
+    }
+  }
+}
+
+func assemble(codeSets []*CodeSet, order []int, thisSet *CodeSet) string {
+  index := rand.Intn(len(thisSet.ChildSets) + 1)
+  child_id := thisSet.ChildSets[index]
+  child_set, err := getCodeSet(codeSets, child_id)
+  if err != nil {
+    if len(child_set.ChildSets) > 0 {
+      
+    }
+  }
+}
+
+  // AfterSets  []int
+  // BeforeSets []int
+  // ChildSets  []int
+  // ID         int
+  // Imports    []string
+  // ParentSet  int
+  // Variants   []string
+
+func ShuffleSource(codeSets []*CodeSet) ([]byte, error) {
+  var assembled []byte
+  var imports []string
+  source_prefix := []byte("package main\n\nimport (\n{{IMPORTS}}\n)\n\n{{ASSEMBLED}}")
+
+  rand.Seed(time.Now().UnixNano())
+  this_set := codeSets[a]
+
+  this_source := assemble(codeSets, this_set)
+
+  // return nil, errors.New("code set " + strconv.Itoa(this_set.ID) + " is missing the following nested set of code: " + strconv.Itoa(...))
+
+  return b, nil
+}
 
 /*
 
 []
 []
-i
-[]
-[]
-[""]
-
-[]
 []
 i
 []
-[]
-[""]
-
-[]
-[]
-i
-[]
-[]
-[""]
-
-[]
-[]
-i
-[]
-[]
-[""]
-
-[]
-[]
-i
-[]
-[]
-[""]
-
-[]
-[]
-i
-[]
-[]
+-
 [""]
 
 [2,3,4,5,6,7]
 []
+[]
 8
 []
-[]
+[1]
 ["return buffer;"]
 
-[]
+[6]
 [8]
+[]
 7
 []
-[]
+[5]
 ["buffer += string(chars[index]);"]
 
 []
-[8]
+[7,8]
+[]
 6
 ["math/rand"]
-[]
+[5]
 ["index := rand.Intn(length);","index := int(rand.Float64() * length);","index := int(length * rand.Float64());"]
 
 []
 [8]
+[6,7]
 5
 []
-[6,7]
+[1]
 ["for i := 0; i < length; i++ {\n{{NESTED_CODE}}\n};"]
 
 [2,3]
 [2,3,8]
+[]
 4
 []
-[]
+[1]
 ["buffer := \"\";"]
 
 [2,4]
 [2,4,8]
+[]
 3
 []
-[]
+[1]
 ["chars := []byte(\"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\");"]
 
 [3,4]
 [3,4,8]
+[]
 2
 ["math/rand","time"]
-[]
+[1]
 ["rand.Seed(time.Now().UnixNano());"]
 
 [0]
 [0]
+[2,3,4,8]
 1
 ["math/rand","time"]
-[2,3,4]
+[]
 ["func RandomString(length int) string {\n{{NESTED_CODE}}\n};"]
 
 [1]
 [1]
+[]
 0
 ["errors"]
 []
-["func ShuffleSource(codeSets []codeSet) ([]byte, error) {\n{{NESTED_CODE}}\n};"]
+["func ShuffleSource(codeSets []CodeSet) ([]byte, error) {\n{{NESTED_CODE}}\n};"]
 
 */
