@@ -1,12 +1,12 @@
 {
-	"connections": {
-		"127.0.0.1": {
-			"active": "07-02-2018 11:14:12",
-			"user-agents": []
-		}
-	},
-	"console_height": "137",
-	"idle_timeout": "600",
-	"open_browser": false,
-	"scroll_on_output": true
+  "connections": {
+    "127.0.0.1": {
+      "active": "07-02-2018 11:14:12",
+      "user-agents": []
+    }
+  },
+  "console_height": "137",
+  "idle_timeout": "600",
+  "open_browser": false,
+  "scroll_on_output": true
 }
