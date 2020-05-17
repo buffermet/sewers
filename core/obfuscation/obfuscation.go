@@ -7,10 +7,10 @@ package obfuscation
 */
 
 import (
-  "errors"
+//  "errors"
   "math/rand"
   "regexp"
-  "strconv"
+//  "strconv"
   "time"
 )
 
@@ -80,7 +80,7 @@ func ObfuscateSource(payload []byte, wordlist []string, shuffle bool) ([]byte, e
 
   return payload, nil
 }
-
+/* <<<<<<<<<<<<<<<
 func getCodeSet(codeSets []*CodeSet, id int) (*CodeSet, error) {
   for i := 0; i < len(codeSets); i++ {
     this_set := codeSets[i]

@@ -21,6 +21,7 @@ import (
   "github.com/buffermet/sewers/core/config"
   "github.com/buffermet/sewers/core/encryption"
   "github.com/buffermet/sewers/core/environment"
+  "github.com/buffermet/sewers/core/interpreter"
   "github.com/buffermet/sewers/core/log"
   "github.com/buffermet/sewers/core/obfuscation"
   "github.com/buffermet/sewers/core/relay"
@@ -214,7 +215,7 @@ func serve(res http.ResponseWriter, req *http.Request){
       fmt.Fprint(res, *encoded)
     } else if strings.HasPrefix(req.URL.Path, "/new/interpreter/") {
       platform := regexp.MustCompile(`.*([^/]{0,16})$`).ReplaceAllString(req.URL.Path, "$1")
-      p, err := session.NewInterpreter(platform)
+      p, err := interpreter.New(platform)
       if err != nil {
         log.Error(err.Error())
         return
